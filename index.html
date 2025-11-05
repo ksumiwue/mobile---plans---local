@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Planes Móviles</title>
+    
+    <!-- CDN Dependencies -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/themes.css">
+    <link rel="stylesheet" href="./css/animations.css">
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        'movistar': '#00579A',
+                        'vodafone': '#E60000',
+                        'orange': '#FF7900'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Contenedor principal de la aplicación Vue -->
+    <div id="mobile-plans-app">
+        <!-- Loading inicial -->
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="text-center">
+                <div class="loading-spinner"></div>
+                <p class="mt-4 text-xl text-gray-600">Cargando catálogo...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zonas dinámicas para shortcodes de WordPress -->
+    <div id="mobile-plans-shortcode-movistar" class="mobile-plans-shortcode-zone" style="display: none;">
+        [wbcr_html_snippet id="35785"]
+    </div>
+    <div id="mobile-plans-shortcode-vodafone-individuales" class="mobile-plans-shortcode-zone" style="display: none;">
+        [wbcr_html_snippet id="35826"]
+    </div>
+    <div id="mobile-plans-shortcode-vodafone-familiares" class="mobile-plans-shortcode-zone" style="display: none;">
+        [wbcr_html_snippet id="35834"]
+    </div>
+    <div id="mobile-plans-shortcode-orange-individuales" class="mobile-plans-shortcode-zone" style="display: none;">
+        [wbcr_html_snippet id="35839"]
+    </div>
+    <div id="mobile-plans-shortcode-orange-familiares" class="mobile-plans-shortcode-zone" style="display: none;">
+        [wbcr_html_snippet id="35844"]
+    </div>
+
+    <!-- Aplicación principal (ES6 Modules) -->
+    <script type="module" src="./js/app.js"></script>
+</body>
+</html>

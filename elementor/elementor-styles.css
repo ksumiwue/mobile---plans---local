@@ -1,0 +1,385 @@
+/* ===== ESTILOS ESPECÍFICOS PARA ELEMENTOR ===== */
+
+/* Wrapper del widget en Elementor */
+.mobile-plans-elementor-widget {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+}
+
+/* Prevenir conflictos con estilos de Elementor */
+.mobile-plans-elementor-widget * {
+  box-sizing: border-box;
+}
+
+/* Override de estilos conflictivos de Elementor */
+.mobile-plans-elementor-widget .elementor-widget-container {
+  padding: 0 !important;
+}
+
+.mobile-plans-elementor-widget .elementor-element {
+  margin: 0 !important;
+}
+
+/* Estados de loading para Elementor */
+.mobile-plans-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.mobile-plans-loading .spinner-dual {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.mobile-plans-loading .spinner-dual::before,
+.mobile-plans-loading .spinner-dual::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #3b82f6;
+}
+
+.mobile-plans-loading .spinner-dual::before {
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+.mobile-plans-loading .spinner-dual::after {
+  width: 35px;
+  height: 35px;
+  top: 7.5px;
+  left: 7.5px;
+  border-top-color: #8b5cf6;
+  animation: spin 0.7s linear infinite reverse;
+}
+
+.mobile-plans-loading p {
+  margin: 0;
+  color: #64748b;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Estados de error */
+.mobile-plans-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-radius: 12px;
+  border: 2px solid #fecaca;
+}
+
+.mobile-plans-error .error-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.mobile-plans-error h3 {
+  margin: 0 0 12px 0;
+  color: #dc2626;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.mobile-plans-error p {
+  margin: 0 0 20px 0;
+  color: #7f1d1d;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.mobile-plans-error .retry-button {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mobile-plans-error .retry-button:hover {
+  background: #b91c1c;
+}
+
+/* Preview en el editor de Elementor */
+.mobile-plans-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.mobile-plans-preview h3 {
+  margin: 0 0 8px 0;
+  color: #334155;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.mobile-plans-preview p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Ajustes para el contenedor principal en Elementor */
+.elementor-widget-mobile_plans_catalog .mobile-plans-container {
+  background: transparent !important;
+  min-height: auto !important;
+}
+
+/* Responsive específico para Elementor */
+@media (max-width: 768px) {
+  .mobile-plans-elementor-widget {
+    min-height: 250px;
+  }
+  
+  .mobile-plans-loading {
+    min-height: 250px;
+    padding: 30px 15px;
+  }
+  
+  .mobile-plans-error {
+    min-height: 250px;
+    padding: 30px 15px;
+  }
+}
+
+/* Integración con el editor de Elementor */
+.elementor-editor-active .mobile-plans-elementor-widget {
+  pointer-events: none;
+}
+
+.elementor-editor-active .mobile-plans-preview {
+  pointer-events: auto;
+}
+
+/* Animaciones específicas para Elementor */
+@keyframes elementor-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-plans-elementor-widget.elementor-invisible {
+  visibility: hidden;
+}
+
+.mobile-plans-elementor-widget.elementor-animation-fadeIn {
+  animation: elementor-fadeIn 0.6s ease-out;
+}
+
+/* Soporte para modo RTL */
+.rtl .mobile-plans-elementor-widget {
+  direction: rtl;
+}
+
+.rtl .mobile-plans-loading,
+.rtl .mobile-plans-error {
+  text-align: right;
+}
+
+/* Integración con los colores del tema de Elementor */
+.elementor-kit-active .mobile-plans-elementor-widget {
+  --elementor-color-primary: var(--e-global-color-primary, #3b82f6);
+  --elementor-color-secondary: var(--e-global-color-secondary, #8b5cf6);
+  --elementor-color-text: var(--e-global-color-text, #333333);
+  --elementor-color-accent: var(--e-global-color-accent, #10b981);
+}
+
+/* Usar colores del kit de Elementor si están disponibles */
+.elementor-kit-active .mobile-plans-container {
+  color: var(--elementor-color-text);
+}
+
+.elementor-kit-active .btn-contract {
+  background: var(--elementor-color-primary) !important;
+}
+
+.elementor-kit-active .btn-compare {
+  border-color: var(--elementor-color-primary) !important;
+  color: var(--elementor-color-primary) !important;
+}
+
+.elementor-kit-active .price-amount {
+  color: var(--elementor-color-primary) !important;
+}
+
+/* Ajustes para widgets dentro de secciones con fondo */
+.elementor-section-stretched .mobile-plans-elementor-widget {
+  max-width: 100%;
+}
+
+.elementor-section-boxed .mobile-plans-elementor-widget {
+  margin: 0 auto;
+}
+
+/* Mejoras para la accessibility en Elementor */
+.mobile-plans-elementor-widget:focus {
+  outline: 2px solid var(--elementor-color-primary, #3b82f6);
+  outline-offset: 2px;
+}
+
+.mobile-plans-elementor-widget [tabindex="0"]:focus {
+  outline: 2px solid var(--elementor-color-primary, #3b82f6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Compatibilidad con Hello Theme */
+.hello-elementor .mobile-plans-elementor-widget {
+  font-family: inherit;
+}
+
+/* Compatibilidad con Astra */
+.ast-theme .mobile-plans-elementor-widget {
+  font-family: inherit;
+}
+
+/* Compatibilidad con GeneratePress */
+.generate-theme .mobile-plans-elementor-widget {
+  font-family: inherit;
+}
+
+/* Compatibilidad con OceanWP */
+.oceanwp-theme .mobile-plans-elementor-widget {
+  font-family: inherit;
+}
+
+/* Override para popups de Elementor Pro */
+.elementor-popup-modal .mobile-plans-elementor-widget {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.elementor-popup-modal .mobile-plans-container {
+  padding: 20px;
+}
+
+/* Ajustes para modo print */
+@media print {
+  .mobile-plans-elementor-widget {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .mobile-plans-loading,
+  .mobile-plans-error {
+    display: none !important;
+  }
+  
+  .tech-particles,
+  .tech-background {
+    display: none !important;
+  }
+}
+
+/* Configuraciones específicas para el Customizer de WordPress */
+.customize-preview .mobile-plans-elementor-widget {
+  transition: all 0.3s ease;
+}
+
+/* Mejoras para rendimiento en dispositivos móviles */
+@media (max-width: 768px) {
+  .mobile-plans-elementor-widget .product-card {
+    transform: none !important;
+  }
+  
+  .mobile-plans-elementor-widget .hover-effects {
+    display: none !important;
+  }
+  
+  .mobile-plans-elementor-widget .tech-particles {
+    display: none !important;
+  }
+}
+
+/* Soporte para modos de alto contraste */
+@media (prefers-contrast: high) {
+  .mobile-plans-elementor-widget {
+    --border-color: #000000;
+    --text-color: #000000;
+    --bg-color: #ffffff;
+  }
+  
+  .mobile-plans-loading {
+    background: #ffffff;
+    border: 2px solid #000000;
+    color: #000000;
+  }
+  
+  .mobile-plans-error {
+    background: #ffffff;
+    border: 2px solid #cc0000;
+    color: #cc0000;
+  }
+}
+
+/* Soporte para usuarios que prefieren movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-plans-elementor-widget * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .mobile-plans-loading .spinner-dual::before,
+  .mobile-plans-loading .spinner-dual::after {
+    animation: none !important;
+  }
+}
+
+/* Optimizaciones para carga lazy */
+.mobile-plans-elementor-widget[data-lazy="true"] {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-plans-elementor-widget[data-lazy="true"].loaded {
+  opacity: 1;
+}
+
+/* Indicador de widget activo para debugging */
+.mobile-plans-debug .mobile-plans-elementor-widget {
+  position: relative;
+}
+
+.mobile-plans-debug .mobile-plans-elementor-widget::before {
+  content: 'Mobile Plans Widget - ' attr(data-widget-id);
+  position: absolute;
+  top: -20px;
+  left: 0;
+  background: #333;
+  color: white;
+  padding: 2px 8px;
+  font-size: 10px;
+  border-radius: 3px;
+  z-index: 10000;
+}
