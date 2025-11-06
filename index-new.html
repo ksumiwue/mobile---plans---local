@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planes Móviles - Encuentra tu plan ideal</title>
+    
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/neutral-theme.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <!-- Metadatos -->
+    <meta name="description" content="Compara planes móviles de Movistar, Vodafone y Orange. Encuentra el plan perfecto para ti con nuestra calculadora inteligente.">
+    <meta name="keywords" content="planes móviles, movistar, vodafone, orange, comparar, tarifas">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Planes Móviles - Encuentra tu plan ideal">
+    <meta property="og:description" content="Compara planes móviles y encuentra el mejor para ti">
+    <meta property="og:type" content="website">
+</head>
+<body>
+    <!-- Navegación Principal -->
+    <header id="navigation-container"></header>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        
+        <!-- Página de Inicio -->
+        <section id="home-section" class="page-section">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Encuentra el plan móvil perfecto</h1>
+                    <p class="hero-subtitle">Compara precios, datos y características de los mejores operadores</p>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Planes disponibles</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">Operadores principales</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Actualizado</span>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-actions">
+                        <button class="cta-primary" onclick="window.navigation.navigateTo('plans')">
+                            Ver Todos los Planes
+                        </button>
+                        <button class="cta-secondary" onclick="window.navigation.navigateTo('calculator')">
+                            Calculadora de Uso
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="hero-visual">
+                    <div class="floating-cards">
+                        <!-- Tarjetas flotantes animadas -->
+                        <div class="floating-card" style="--delay: 0s;">
+                            <div class="mini-operator-logo movistar"></div>
+                            <div class="mini-price">24,99€</div>
+                        </div>
+                        <div class="floating-card" style="--delay: 0.5s;">
+                            <div class="mini-operator-logo vodafone"></div>
+                            <div class="mini-price">29,99€</div>
+                        </div>
+                        <div class="floating-card" style="--delay: 1s;">
+                            <div class="mini-operator-logo orange"></div>
+                            <div class="mini-price">19,99€</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Planes Destacados -->
+            <div class="featured-section">
+                <div class="section-header">
+                    <h2>Planes Más Populares</h2>
+                    <p>Los planes más elegidos por nuestros usuarios</p>
+                </div>
+                <div id="featured-plans-container"></div>
+            </div>
+        </section>
+
+        <!-- Página de Planes -->
+        <section id="plans-section" class="page-section" style="display: none;">
+            <div class="plans-header">
+                <h1>Todos los Planes Móviles</h1>
+                <div class="results-counter">Cargando planes...</div>
+            </div>
+            
+            <!-- Sistema de Filtros -->
+            <div id="filters-container"></div>
+            
+            <!-- Ordenamiento y Visualización -->
+            <div class="sort-controls">
+                <div class="sort-group">
+                    <label for="sort-select">Ordenar por:</label>
+                    <select id="sort-select" class="sort-select">
+                        <option value="price-asc">Precio: Menor a Mayor</option>
+                        <option value="price-desc">Precio: Mayor a Menor</option>
+                        <option value="data-desc">Más Datos</option>
+                        <option value="data-asc">Menos Datos</option>
+                        <option value="operator">Operador</option>
+                    </select>
+                </div>
+                <div class="view-group">
+                    <label for="items-select">Mostrar:</label>
+                    <select id="items-select" class="items-select">
+                        <option value="6">6 planes</option>
+                        <option value="12" selected>12 planes</option>
+                        <option value="18">18 planes</option>
+                        <option value="all">Todos</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Grid de Productos -->
+            <div id="products-container"></div>
+            
+        </section>
+
+        <!-- Página de Comparación -->
+        <section id="compare-section" class="page-section" style="display: none;">
+            <div class="compare-header">
+                <h1>Comparar Planes</h1>
+                <p>Compara hasta 3 planes lado a lado</p>
+            </div>
+            <div id="comparison-container"></div>
+        </section>
+
+        <!-- Página de Calculadora -->
+        <section id="calculator-section" class="page-section" style="display: none;">
+            <div class="calculator-header">
+                <h1>Calculadora de Planes</h1>
+                <p>Encuentra el plan perfecto según tu uso</p>
+            </div>
+            
+            <div class="calculator-form">
+                <div class="form-group">
+                    <label>¿Cuántos GB necesitas al mes?</label>
+                    <div class="slider-container">
+                        <input type="range" id="data-slider" min="1" max="100" value="20" class="slider">
+                        <div class="slider-value">
+                            <span id="data-value">20</span> GB
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Cuántas llamadas haces?</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="calls" value="few">
+                            <span>Pocas (menos de 100 min)</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="calls" value="normal" checked>
+                            <span>Normales (100-300 min)</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="calls" value="many">
+                            <span>Muchas (ilimitadas)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Cuál es tu presupuesto máximo?</label>
+                    <div class="slider-container">
+                        <input type="range" id="budget-slider" min="10" max="80" value="40" class="slider">
+                        <div class="slider-value">
+                            <span id="budget-value">40</span> €/mes
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="cta-primary" onclick="calculateBestPlan()">
+                    Encontrar Mi Plan Ideal
+                </button>
+            </div>
+            
+            <div id="calculator-results" class="calculator-results" style="display: none;"></div>
+        </section>
+
+        <!-- Página de Ayuda -->
+        <section id="help-section" class="page-section" style="display: none;">
+            <div class="help-header">
+                <h1>Ayuda y Preguntas Frecuentes</h1>
+            </div>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">¿Cómo puedo comparar planes?</div>
+                    <div class="faq-answer">
+                        Puedes agregar hasta 3 planes a la comparación haciendo clic en el botón "Comparar" de cada tarjeta.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">¿Los precios están actualizados?</div>
+                    <div class="faq-answer">
+                        Sí, actualizamos los precios y ofertas regularmente para mantenerte informado.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">¿Puedo contratar directamente desde aquí?</div>
+                    <div class="faq-answer">
+                        Te redirigimos a la página oficial de cada operador para completar la contratación.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Botón flotante de comparación -->
+    <div class="compare-floating-btn" style="display: none;" onclick="window.navigation.navigateTo('compare')">
+        Comparar (0)
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Cargando planes...</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/components/ProductCardNew.js"></script>
+    <script src="js/components/FilterSystemNew.js"></script>
+    <script src="js/components/NavigationMinimal.js"></script>
+    <script src="js/utils/api.js"></script>
+    <script src="js/utils/cache.js"></script>
+    <script src="js/app-new.js"></script>
+    
+    <style>
+        /* Estilos específicos para la nueva implementación */
+        
+        /* Hero Section */
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+            min-height: 60vh;
+        }
+        
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--neutral-800);
+            line-height: 1.1;
+            margin: 0;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--neutral-600);
+            margin: 0;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--accent-primary);
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--neutral-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .cta-primary, .cta-secondary {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .cta-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .cta-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        
+        .cta-secondary {
+            background: white;
+            color: var(--accent-primary);
+            border: 2px solid var(--accent-primary);
+        }
+        
+        .cta-secondary:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        /* Floating Cards Animation */
+        .hero-visual {
+            position: relative;
+            height: 400px;
+        }
+        
+        .floating-cards {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .floating-card {
+            position: absolute;
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            animation: float 3s ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+        
+        .floating-card:nth-child(1) {
+            top: 20%;
+            left: 10%;
+        }
+        
+        .floating-card:nth-child(2) {
+            top: 50%;
+            right: 20%;
+        }
+        
+        .floating-card:nth-child(3) {
+            bottom: 20%;
+            left: 30%;
+        }
+        
+        .mini-operator-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .mini-operator-logo.movistar {
+            background: var(--movistar-color);
+        }
+        
+        .mini-operator-logo.vodafone {
+            background: var(--vodafone-color);
+        }
+        
+        .mini-operator-logo.orange {
+            background: var(--orange-color);
+        }
+        
+        .mini-price {
+            font-weight: 700;
+            color: var(--neutral-800);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        /* Featured Section */
+        .featured-section {
+            padding: 4rem 2rem;
+            background: var(--neutral-100);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--neutral-800);
+            margin: 0 0 1rem 0;
+        }
+        
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--neutral-600);
+            margin: 0;
+        }
+        
+        /* Plans Header */
+        .plans-header {
+            text-align: center;
+            padding: 2rem;
+            background: var(--neutral-50);
+        }
+        
+        .plans-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--neutral-800);
+            margin: 0 0 1rem 0;
+        }
+        
+        .results-counter {
+            font-size: 1rem;
+            color: var(--neutral-600);
+        }
+        
+        /* Sort Controls */
+        .sort-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem;
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: 12px;
+            margin: 0 auto 2rem auto;
+            max-width: 1200px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sort-group,
+        .view-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sort-group label,
+        .view-group label {
+            font-weight: 600;
+            color: var(--neutral-700);
+            font-size: 0.875rem;
+        }
+
+        .sort-select,
+        .items-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--neutral-300);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sort-select:hover,
+        .items-select:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .sort-select:focus,
+        .items-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        /* Calculator Styles */
+        .calculator-form {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--neutral-700);
+            margin-bottom: 1rem;
+        }
+        
+        .slider-container {
+            position: relative;
+            margin: 1rem 0;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--neutral-200);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        
+        /* FAQ Styles */
+        .faq-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .faq-item {
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            font-weight: 600;
+            color: var(--neutral-800);
+            cursor: pointer;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+        
+        .faq-answer {
+            padding: 1.5rem;
+            color: var(--neutral-600);
+            line-height: 1.6;
+        }
+        
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--neutral-200);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Botón flotante de comparación */
+        .compare-floating-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent-primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: var(--shadow-xl);
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .compare-floating-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 2rem 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+            }
+            
+            .hero-visual {
+                height: 300px;
+            }
+            
+            .floating-card {
+                position: static;
+                margin: 1rem;
+                display: inline-block;
+            }
+        }
+    </style>
+</body>
+</html>

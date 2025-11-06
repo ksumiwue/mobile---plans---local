@@ -20,6 +20,17 @@
     
     <!-- Tailwind Configuration -->
     <script>
+        // Suprimir advertencia de Tailwind en desarrollo local
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            const originalWarn = console.warn;
+            console.warn = function(message) {
+                if (message && typeof message === 'string' && message.includes('cdn.tailwindcss.com')) {
+                    return; // Suprimir advertencia de Tailwind CDN
+                }
+                originalWarn.apply(console, arguments);
+            };
+        }
+        
         tailwind.config = {
             theme: {
                 extend: {

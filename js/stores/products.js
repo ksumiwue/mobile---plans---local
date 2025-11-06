@@ -178,12 +178,104 @@ export function createProductStore() {
     state.error = null;
 
     try {
-      const response = await axios.get('https://ipv6-informatica.es/cart/data/products.json', {
-        timeout: 10000,
-        headers: {
-          'Cache-Control': 'no-cache'
-        }
-      });
+      let response;
+      
+      // Si estamos en localhost, usar datos embebidos para evitar problemas de CORS
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        console.log('Entorno local detectado - usando datos embebidos');
+        
+        // Datos de ejemplo embebidos
+        const localData = {
+          "movistarPlans": [
+            {
+              "id": "mov_ind_1",
+              "data": "20 GB",
+              "price": 25.00,
+              "description": "Plan Individual 20GB"
+            },
+            {
+              "id": "mov_ind_2", 
+              "data": "50 GB",
+              "price": 35.00,
+              "description": "Plan Individual 50GB"
+            },
+            {
+              "id": "mov_ind_3",
+              "data": "Ilimitado",
+              "price": 45.00,
+              "description": "Plan Individual Ilimitado"
+            }
+          ],
+          "vodafoneIndividualPlans": [
+            {
+              "id": "vod_ind_1",
+              "data": "15 GB", 
+              "price": 22.00,
+              "description": "Plan Individual 15GB"
+            },
+            {
+              "id": "vod_ind_2",
+              "data": "40 GB",
+              "price": 32.00,
+              "description": "Plan Individual 40GB"
+            },
+            {
+              "id": "vod_ind_3",
+              "data": "Ilimitado",
+              "price": 42.00,
+              "description": "Plan Individual Ilimitado"
+            }
+          ],
+          "vodafoneFamiliarPlans": [
+            {
+              "id": "vod_fam_1",
+              "data": "60 GB",
+              "price": 55.00,
+              "description": "Plan Familiar 60GB"
+            },
+            {
+              "id": "vod_fam_2",
+              "data": "100 GB",
+              "price": 65.00,
+              "description": "Plan Familiar 100GB"
+            }
+          ],
+          "orangeIndividualPlans": [
+            {
+              "id": "ora_ind_1",
+              "data": "25 GB",
+              "price": 28.00,
+              "description": "Plan Individual 25GB"
+            },
+            {
+              "id": "ora_ind_2",
+              "data": "60 GB",
+              "price": 38.00,
+              "description": "Plan Individual 60GB"
+            }
+          ],
+          "orangeFamiliarPlans": [
+            {
+              "id": "ora_fam_1",
+              "data": "80 GB",
+              "price": 58.00,
+              "description": "Plan Familiar 80GB"
+            }
+          ]
+        };
+        
+        // Simular respuesta de axios
+        response = { data: localData };
+        
+      } else {
+        // En producción, usar la API real
+        response = await axios.get('https://ipv6-informatica.es/cart/data/products.json', {
+          timeout: 10000,
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
+      }
 
       if (!response.data) {
         throw new Error('No se recibieron datos del servidor');

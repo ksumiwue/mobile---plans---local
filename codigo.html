@@ -1,0 +1,968 @@
+<!-- CATÁLOGO DE PLANES MÓVILES - VERSIÓN TECH MEJORADA -->
+
+<!-- Cargar fuente Montserrat + Inter para un look más tech -->
+<link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;700;900&family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet">
+
+<style>
+    #mobile-plans-root-widget * {
+        box-sizing: border-box;
+    }
+
+    /* Animación de carga mejorada */
+    .mobile-plans-spinner {
+        width: 60px;
+        height: 60px;
+        position: relative;
+        margin: 0 auto;
+    }
+
+    .mobile-plans-spinner::before,
+    .mobile-plans-spinner::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #3b82f6;
+    }
+
+    .mobile-plans-spinner::before {
+        width: 60px;
+        height: 60px;
+        animation: mobile-plans-spin 1s linear infinite;
+    }
+
+    .mobile-plans-spinner::after {
+        width: 40px;
+        height: 40px;
+        top: 10px;
+        left: 10px;
+        border-top-color: #8b5cf6;
+        animation: mobile-plans-spin 0.7s linear infinite reverse;
+    }
+
+    @keyframes mobile-plans-spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Fondo tecnológico con grid animado */
+    .tech-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        overflow: hidden;
+    }
+
+    .tech-grid {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+        animation: tech-grid-move 20s linear infinite;
+    }
+
+    @keyframes tech-grid-move {
+        0% {
+            transform: translate(0, 0);
+        }
+
+        100% {
+            transform: translate(50px, 50px);
+        }
+    }
+
+    .tech-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .tech-particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        animation: float-particle 15s infinite ease-in-out;
+    }
+
+    @keyframes float-particle {
+
+        0%,
+        100% {
+            transform: translate(0, 0);
+            opacity: 0;
+        }
+
+        10%,
+        90% {
+            opacity: 1;
+        }
+
+        50% {
+            transform: translate(100px, -100px);
+        }
+    }
+
+    /* Glassmorphism para tarjetas */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Efectos de brillo en hover */
+    .glow-effect {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .glow-effect::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent);
+        transform: rotate(45deg);
+        transition: all 0.6s;
+    }
+
+    .glow-effect:hover::before {
+        left: 100%;
+    }
+
+    /* Estilos base mejorados */
+    .mobile-plans-h1 {
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 2.5rem !important;
+        line-height: 1.1 !important;
+        font-weight: 200 !important;
+        margin-bottom: 1rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        color: #00579A !important;
+    }
+
+    .mobile-plans-h1-bold {
+        font-weight: 700 !important;
+    }
+
+    .mobile-plans-subtitle {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.25rem !important;
+        line-height: 1.4 !important;
+        font-weight: 400 !important;
+    }
+
+    .mobile-plans-section-title {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.5rem !important;
+        line-height: 1.3 !important;
+        font-weight: 700 !important;
+    }
+
+    .mobile-plans-button {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.125rem !important;
+        line-height: 1.4 !important;
+        font-weight: 700 !important;
+        padding: 1rem 2rem !important;
+        width: 100% !important;
+        max-width: 300px !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mobile-plans-button::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg,
+                transparent,
+                rgba(255, 255, 255, 0.8),
+                transparent);
+        transform: rotate(45deg);
+        transition: all 0.6s;
+    }
+
+    .mobile-plans-button:hover::before {
+        left: 100%;
+    }
+
+    .mobile-plans-card-title {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 2rem !important;
+        line-height: 1.3 !important;
+        font-weight: 700 !important;
+    }
+
+    .mobile-plans-price {
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 4.5rem !important;
+        line-height: 1 !important;
+        font-weight: 900 !important;
+    }
+
+    .mobile-plans-price-suffix {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.5rem !important;
+        vertical-align: super !important;
+        margin-left: 0.25rem !important;
+    }
+
+    .mobile-plans-description {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.25rem !important;
+        line-height: 1.6 !important;
+    }
+
+    .mobile-plans-includes {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.25rem !important;
+        line-height: 1.5 !important;
+        font-weight: 600 !important;
+    }
+
+    .mobile-plans-cta {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.25rem !important;
+        line-height: 1.5 !important;
+        font-weight: 700 !important;
+        padding: 1.25rem 1.5rem !important;
+        transition: all 0.3s ease !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mobile-plans-cta::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+        z-index: 0;
+    }
+
+    .mobile-plans-cta:hover::before {
+        width: 400px;
+        height: 400px;
+    }
+
+    .mobile-plans-cta:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+        color: #000000 !important;
+    }
+
+    .mobile-plans-cta span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .mobile-plans-type-badge {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.25rem !important;
+        font-weight: 700 !important;
+    }
+
+    .mobile-plans-phone-image {
+        width: 150px !important;
+        height: 187px !important;
+        max-width: 100% !important;
+        transition: transform 0.3s ease;
+    }
+
+    .mobile-plans-phone-image:hover {
+        transform: scale(1.05) rotate(-2deg);
+    }
+
+    .mobile-plans-footer {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.375rem !important;
+        line-height: 1.6 !important;
+    }
+
+    @media (min-width: 768px) {
+        .mobile-plans-footer {
+            font-size: 1.5rem !important;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .mobile-plans-footer {
+            font-size: 1.75rem !important;
+        }
+    }
+
+    /* Card hover effect mejorado */
+    .product-card {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .product-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* Responsive mejorado */
+    @media (min-width: 768px) {
+        .mobile-plans-h1 {
+            font-size: 4rem !important;
+        }
+
+        .mobile-plans-subtitle {
+            font-size: 1.5rem !important;
+        }
+
+        .mobile-plans-section-title {
+            font-size: 1.875rem !important;
+        }
+
+        .mobile-plans-button {
+            font-size: 1.25rem !important;
+            padding: 1.25rem 2.5rem !important;
+            width: auto !important;
+            max-width: none !important;
+        }
+
+        .mobile-plans-card-title {
+            font-size: 2.5rem !important;
+        }
+
+        .mobile-plans-price {
+            font-size: 5.5rem !important;
+        }
+
+        .mobile-plans-price-suffix {
+            font-size: 1.75rem !important;
+        }
+
+        .mobile-plans-phone-image {
+            width: 175px !important;
+            height: 218px !important;
+        }
+
+        .mobile-plans-description {
+            font-size: 1.5rem !important;
+        }
+
+        .mobile-plans-includes {
+            font-size: 1.375rem !important;
+        }
+
+        .mobile-plans-type-badge {
+            font-size: 1.5rem !important;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .mobile-plans-h1 {
+            font-size: 5.5rem !important;
+        }
+
+        .mobile-plans-subtitle {
+            font-size: 1.75rem !important;
+        }
+
+        .mobile-plans-section-title {
+            font-size: 2rem !important;
+        }
+
+        .mobile-plans-button {
+            font-size: 1.375rem !important;
+            padding: 1.5rem 3rem !important;
+        }
+
+        .mobile-plans-card-title {
+            font-size: 3rem !important;
+        }
+
+        .mobile-plans-price {
+            font-size: 6.5rem !important;
+        }
+
+        .mobile-plans-price-suffix {
+            font-size: 2rem !important;
+        }
+
+        .mobile-plans-phone-image {
+            width: 200px !important;
+            height: 250px !important;
+        }
+
+        .mobile-plans-description {
+            font-size: 1.625rem !important;
+        }
+
+        .mobile-plans-includes {
+            font-size: 1.5rem !important;
+        }
+
+        .mobile-plans-type-badge {
+            font-size: 1.75rem !important;
+        }
+    }
+</style>
+
+<!-- Contenedor principal -->
+<div id="mobile-plans-root-widget"></div>
+
+<!-- Zonas dinámicas para cada familia - COLOCA AQUÍ TUS SHORTCODES -->
+<div id="mobile-plans-shortcode-movistar" class="mobile-plans-shortcode-zone"
+    style="display: none; position: relative; z-index: 10; margin-top: 2rem;">
+    [wbcr_html_snippet id="35785"]
+</div>
+
+<div id="mobile-plans-shortcode-vodafone-individuales" class="mobile-plans-shortcode-zone"
+    style="display: none; position: relative; z-index: 10; margin-top: 2rem;">
+    [wbcr_html_snippet id="35826"]
+</div>
+
+<div id="mobile-plans-shortcode-vodafone-familiares" class="mobile-plans-shortcode-zone"
+    style="display: none; position: relative; z-index: 10; margin-top: 2rem;">
+    [wbcr_html_snippet id="35834"]
+</div>
+
+<div id="mobile-plans-shortcode-orange-individuales" class="mobile-plans-shortcode-zone"
+    style="display: none; position: relative; z-index: 10; margin-top: 2rem;">
+    [wbcr_html_snippet id="35839"]
+</div>
+
+<div id="mobile-plans-shortcode-orange-familiares" class="mobile-plans-shortcode-zone"
+    style="display: none; position: relative; z-index: 10; margin-top: 2rem;">
+    [wbcr_html_snippet id="35844"]
+</div>
+
+<!-- Cargar Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Código JavaScript mejorado -->
+<script>
+    (function () {
+        // Datos y estado global
+        let appState = {
+            selectedFamily: 'movistar',
+            selectedType: 'individual',
+            productsData: null,
+            loading: true,
+            error: null,
+            imageAssignments: {}
+        };
+
+        const families = {
+            movistar: {
+                name: 'Movistar',
+                color: '#00579A'
+            },
+            vodafone: {
+                name: 'Vodafone',
+                color: '#E60000'
+            },
+            orange: {
+                name: 'Orange',
+                color: '#FF7900'
+            }
+        };
+
+        // Banco de imágenes completo
+        const IMAGE_BANK = {
+            individual: [
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/mov_ora_1.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/mov_ora_2.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/mov_ora_5.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_1.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_2.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_3.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_4.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_5.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_6.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_vod_3.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_vod_5.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_vod_7.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_vod_12.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_vod_14.jpg?w=300&h=375&fit=crop'
+            ],
+            familiar: [
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/mov_ora_fam_1.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/mov_ora_fam_3.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_8.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_vod_1.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_vod_2.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_vod_4.jpg?w=300&h=375&fit=crop',
+                'https://ipv6-informatica.es/wp-content/uploads/2025/03/movil_vod_6.jpg?w=300&h=375&fit=crop'
+            ]
+        };
+
+        function assignImagesToProducts(products, type, familyKey) {
+            const availableImages = [...IMAGE_BANK[type]];
+            const key = familyKey + '_' + type;
+
+            if (!appState.imageAssignments[key]) {
+                appState.imageAssignments[key] = {};
+            }
+
+            for (let i = availableImages.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [availableImages[i], availableImages[j]] = [availableImages[j], availableImages[i]];
+            }
+
+            products.forEach(function (product, index) {
+                if (!appState.imageAssignments[key][product.id]) {
+                    const imageIndex = index % availableImages.length;
+                    appState.imageAssignments[key][product.id] = availableImages[imageIndex];
+                }
+            });
+        }
+
+        function getProductImage(productId, type, familyKey) {
+            const key = familyKey + '_' + type;
+            return appState.imageAssignments[key]?.[productId] || IMAGE_BANK[type][0];
+        }
+
+        function loadProducts() {
+            const jsonUrl = 'https://ipv6-informatica.es/cart/data/products.json';
+
+            fetch(jsonUrl)
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('Error HTTP ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(function (data) {
+                    appState.productsData = data;
+
+                    Object.keys(families).forEach(function (familyKey) {
+                        const familyData = {
+                            movistar: {
+                                individual: data.movistarPlans || [],
+                                familiar: []
+                            },
+                            vodafone: {
+                                individual: data.vodafoneIndividualPlans || [],
+                                familiar: data.vodafoneFamiliarPlans || []
+                            },
+                            orange: {
+                                individual: data.orangeIndividualPlans || [],
+                                familiar: data.orangeFamiliarPlans || []
+                            }
+                        };
+
+                        if (familyData[familyKey].individual.length > 0) {
+                            assignImagesToProducts(familyData[familyKey].individual, 'individual', familyKey);
+                        }
+                        if (familyData[familyKey].familiar.length > 0) {
+                            assignImagesToProducts(familyData[familyKey].familiar, 'familiar', familyKey);
+                        }
+                    });
+
+                    appState.loading = false;
+                    render();
+                })
+                .catch(function (err) {
+                    appState.error = err.message;
+                    appState.loading = false;
+                    render();
+                });
+        }
+
+        function el(tag, attrs, children) {
+            const element = document.createElement(tag);
+
+            if (attrs) {
+                Object.keys(attrs).forEach(function (key) {
+                    if (key === 'className') {
+                        element.className = attrs[key];
+                    } else if (key === 'style') {
+                        Object.keys(attrs[key]).forEach(function (styleKey) {
+                            element.style[styleKey] = attrs[key][styleKey];
+                        });
+                    } else if (key.startsWith('on')) {
+                        element.addEventListener(key.substring(2).toLowerCase(), attrs[key]);
+                    } else {
+                        element.setAttribute(key, attrs[key]);
+                    }
+                });
+            }
+
+            if (children) {
+                if (typeof children === 'string') {
+                    element.textContent = children;
+                } else if (Array.isArray(children)) {
+                    children.forEach(function (child) {
+                        if (child) element.appendChild(child);
+                    });
+                } else if (children instanceof HTMLElement) {
+                    element.appendChild(children);
+                }
+            }
+
+            return element;
+        }
+
+        function createTechBackground() {
+            const bg = el('div', { className: 'tech-background' });
+            const grid = el('div', { className: 'tech-grid' });
+            const particles = el('div', { className: 'tech-particles' });
+
+            for (let i = 0; i < 20; i++) {
+                const particle = el('div', {
+                    className: 'tech-particle',
+                    style: {
+                        left: Math.random() * 100 + '%',
+                        top: Math.random() * 100 + '%',
+                        animationDelay: Math.random() * 15 + 's',
+                        animationDuration: (10 + Math.random() * 10) + 's'
+                    }
+                });
+                particles.appendChild(particle);
+            }
+
+            bg.appendChild(grid);
+            bg.appendChild(particles);
+            return bg;
+        }
+
+        function renderLoading() {
+            return el('div', { className: 'min-h-screen flex items-center justify-center' }, [
+                el('div', { className: 'text-center' }, [
+                    el('div', { className: 'mobile-plans-spinner' }),
+                    el('p', { className: 'mobile-plans-subtitle text-white', style: { marginTop: '2rem', textShadow: '0 2px 10px rgba(0,0,0,0.3)' } }, 'Cargando planes móviles...')
+                ])
+            ]);
+        }
+
+        function renderError() {
+            return el('div', { className: 'min-h-screen flex items-center justify-center p-4' }, [
+                el('div', { className: 'glass-card p-8 rounded-2xl shadow-2xl max-w-lg text-center' }, [
+                    el('div', { style: { fontSize: '4rem' } }, '⚠️'),
+                    el('h2', { className: 'mobile-plans-section-title text-red-600 mb-3' }, 'Error al cargar productos'),
+                    el('p', { className: 'mobile-plans-description text-gray-700 mb-4' }, appState.error)
+                ])
+            ]);
+        }
+
+        function renderPhoneIcon(color, productId, type, familyKey) {
+            const imageUrl = getProductImage(productId, type, familyKey);
+
+            const container = el('div', {
+                className: 'relative mx-auto mb-6 mobile-plans-phone-image',
+            });
+
+            const bg = el('div', {
+                className: 'absolute inset-0 rounded-2xl shadow-2xl overflow-hidden',
+                style: {
+                    border: '3px solid ' + color,
+                    boxShadow: '0 10px 40px ' + color + '40, 0 0 20px ' + color + '20'
+                }
+            });
+
+            const img = el('img', {
+                src: imageUrl,
+                alt: 'Smartphone',
+                className: 'w-full h-full object-cover',
+                style: {
+                    filter: 'brightness(1.05) contrast(1.1)'
+                }
+            });
+
+            const overlay = el('div', {
+                className: 'absolute inset-0',
+                style: {
+                    background: 'linear-gradient(180deg, ' + color + '15 0%, transparent 50%, ' + color + '25 100%)'
+                }
+            });
+
+            bg.appendChild(img);
+            bg.appendChild(overlay);
+            container.appendChild(bg);
+
+            return container;
+        }
+
+        function renderProductCard(product, color, type, familyKey) {
+            const card = el('div', { className: 'glass-card rounded-2xl shadow-xl product-card glow-effect overflow-hidden h-full flex flex-col' });
+
+            const topBar = el('div', {
+                className: 'h-3',
+                style: {
+                    background: 'linear-gradient(90deg, ' + color + ' 0%, ' + color + 'AA 100%)'
+                }
+            });
+
+            const iconType = type === 'familiar'
+                ? '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>'
+                : '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>';
+
+            const typeLabel = el('div', { className: 'flex items-center justify-center gap-2 mb-3 md:mb-4' });
+            typeLabel.innerHTML = '<svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="' + color + '" viewBox="0 0 24 24" stroke-width="2.5">' + iconType + '</svg><span class="mobile-plans-type-badge" style="color:' + color + '; text-transform: uppercase; letter-spacing: 0.1em;">' + (type === 'familiar' ? 'Plan Familiar' : 'Plan Individual') + '</span>';
+
+            // Crear precio con decimales en superíndice
+            var fullPrice = (product.price * 1.21).toFixed(2);
+            var priceParts = fullPrice.split('.');
+            var priceSpan = el('span', { className: 'mobile-plans-price', style: { color: color } });
+            priceSpan.textContent = priceParts[0];
+            var decimalsSup = el('sup', { style: { fontSize: '0.4em', marginLeft: '0.1em' } }, ',' + priceParts[1]);
+            priceSpan.appendChild(decimalsSup);
+
+            const content = el('div', { className: 'p-6 md:p-8 flex-1 flex flex-col' }, [
+                renderPhoneIcon(color, product.id, type, familyKey),
+                typeLabel,
+                el('h3', { className: 'mobile-plans-card-title text-gray-800 text-center mb-4' }, product.data),
+                el('div', { className: 'text-center mb-5' }, [
+                    el('div', { className: 'flex items-start justify-center' }, [
+                        priceSpan,
+                        el('span', { className: 'mobile-plans-price-suffix text-gray-500' }, '€/mes')
+                    ])
+                ]),
+                el('div', {
+                    className: 'h-1 mb-5 rounded-full',
+                    style: { background: 'linear-gradient(90deg, transparent, ' + color + ', transparent)' }
+                }),
+                el('p', { className: 'mobile-plans-description text-gray-600 text-center mb-5 flex-1' }, product.description),
+                el('div', {
+                    className: 'rounded-xl p-4 md:p-5 mb-5',
+                    style: { background: 'linear-gradient(135deg, ' + color + '08, ' + color + '15)' }
+                }, [
+                    el('div', { className: 'mobile-plans-includes text-gray-500 mb-3', style: { textTransform: 'uppercase', letterSpacing: '0.1em' } }, 'Incluye'),
+                    el('div', { className: 'mobile-plans-includes text-gray-700 mb-2' }, '✓ Llamadas ilimitadas'),
+                    el('div', { className: 'mobile-plans-includes text-gray-700' }, '✓ ' + product.data + ' de datos')
+                ]),
+                el('a', {
+                    href: 'https://ipv6-informatica.es/configurador?products=' + encodeURIComponent(product.id),
+                    className: 'mobile-plans-cta text-white text-center rounded-xl transition-all duration-300 mt-auto block',
+                    style: {
+                        background: 'linear-gradient(135deg, ' + color + ', ' + color + 'CC)',
+                        textDecoration: 'none',
+                        display: 'block',
+                        boxShadow: '0 10px 30px ' + color + '40'
+                    }
+                }, el('span', {}, 'Contratar ahora'))
+            ]);
+
+            card.appendChild(topBar);
+            card.appendChild(content);
+
+            return card;
+        }
+
+        function render() {
+            const root = document.getElementById('mobile-plans-root-widget');
+            if (!root) {
+                return;
+            }
+
+            root.innerHTML = '';
+
+            if (!document.querySelector('.tech-background')) {
+                document.body.insertBefore(createTechBackground(), document.body.firstChild);
+            }
+
+            if (appState.loading) {
+                root.appendChild(renderLoading());
+                return;
+            }
+
+            if (appState.error) {
+                root.appendChild(renderError());
+                return;
+            }
+
+            const currentFamilyData = {
+                movistar: {
+                    individual: appState.productsData.movistarPlans || [],
+                    familiar: []
+                },
+                vodafone: {
+                    individual: appState.productsData.vodafoneIndividualPlans || [],
+                    familiar: appState.productsData.vodafoneFamiliarPlans || []
+                },
+                orange: {
+                    individual: appState.productsData.orangeIndividualPlans || [],
+                    familiar: appState.productsData.orangeFamiliarPlans || []
+                }
+            };
+
+            const familyColors = {
+                'movistar': '#00579A',
+                'vodafone': '#E60000',
+                'orange': '#FF7900'
+            };
+
+            const currentFamily = families[appState.selectedFamily];
+            const currentColor = familyColors[appState.selectedFamily];
+            const currentData = currentFamilyData[appState.selectedFamily];
+            const hasIndividual = currentData.individual.length > 0;
+            const hasFamiliar = currentData.familiar.length > 0;
+
+            // Para Vodafone y Orange, siempre mostrar ambas opciones
+            const showBothTypes = (appState.selectedFamily === 'vodafone' || appState.selectedFamily === 'orange') ? true : (hasIndividual && hasFamiliar);
+
+            if (hasIndividual && !hasFamiliar && appState.selectedFamily === 'movistar') {
+                appState.selectedType = 'individual';
+            } else if (!hasIndividual && hasFamiliar && appState.selectedFamily === 'movistar') {
+                appState.selectedType = 'familiar';
+            }
+
+            const currentPlans = appState.selectedType === 'individual' ? currentData.individual : currentData.familiar;
+
+            const typeSelector = showBothTypes ? el('div', { className: 'glass-card rounded-2xl shadow-xl p-6 md:p-8 mb-8' }, [
+                el('h2', { className: 'mobile-plans-section-title text-gray-700 text-center mb-6' }, 'Tipo de línea'),
+                el('div', { className: 'flex flex-wrap justify-center gap-4' }, [
+                    (function () {
+                        const btn = el('button', {
+                            className: 'mobile-plans-button rounded-xl glow-effect transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 ' + (appState.selectedType === 'individual' ? 'shadow-2xl scale-105' : 'shadow-lg hover:shadow-xl'),
+                            style: {
+                                background: appState.selectedType === 'individual' ? 'linear-gradient(135deg, ' + currentColor + ', ' + currentColor + 'CC)' : 'white',
+                                color: appState.selectedType === 'individual' ? 'white' : currentColor,
+                                border: '2px solid ' + currentColor,
+                                boxShadow: appState.selectedType === 'individual' ? '0 10px 30px ' + currentColor + '40' : '0 5px 20px rgba(0,0,0,0.1)'
+                            },
+                            onClick: function () {
+                                appState.selectedType = 'individual';
+                                render();
+                            }
+                        });
+                        btn.textContent = 'Líneas Individuales';
+                        return btn;
+                    })(),
+                    (function () {
+                        const btn = el('button', {
+                            className: 'mobile-plans-button rounded-xl glow-effect transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 ' + (appState.selectedType === 'familiar' ? 'shadow-2xl scale-105' : 'shadow-lg hover:shadow-xl'),
+                            style: {
+                                background: appState.selectedType === 'familiar' ? 'linear-gradient(135deg, ' + currentColor + ', ' + currentColor + 'CC)' : 'white',
+                                color: appState.selectedType === 'familiar' ? 'white' : currentColor,
+                                border: '2px solid ' + currentColor,
+                                boxShadow: appState.selectedType === 'familiar' ? '0 10px 30px ' + currentColor + '40' : '0 5px 20px rgba(0,0,0,0.1)'
+                            },
+                            onClick: function () {
+                                appState.selectedType = 'familiar';
+                                render();
+                            }
+                        });
+                        btn.textContent = 'Líneas Familiares';
+                        return btn;
+                    })()
+                ])
+            ]) : null;
+
+            const container = el('div', { className: 'min-h-screen py-12 px-4 md:px-6 relative z-10' }, [
+                el('div', { className: 'max-w-[1000px] mx-auto' }, [
+                    el('div', { className: 'text-center mb-12' }, [
+                        (function () {
+                            const h1 = el('h1', { className: 'mobile-plans-h1' });
+                            const boldSpan = el('span', { className: 'mobile-plans-h1-bold' }, 'LÍNEAS ');
+                            const normalSpan = document.createTextNode('MÓVILES');
+                            h1.appendChild(boldSpan);
+                            h1.appendChild(normalSpan);
+                            return h1;
+                        })(),
+                        el('p', { className: 'mobile-plans-subtitle text-gray-800' }, 'Encuentra el plan perfecto con la mejor tecnología')
+                    ]),
+
+                    el('div', { className: 'glass-card rounded-2xl shadow-xl p-6 md:p-8 mb-8' }, [
+                        el('h2', { className: 'mobile-plans-section-title text-gray-700 text-center mb-6' }, 'Selecciona tu Cobertura'),
+                        el('div', { className: 'flex flex-wrap justify-center gap-4' },
+                            Object.keys(families).map(function (key) {
+                                const family = families[key];
+                                const btnColor = familyColors[key];
+                                const button = el('button', {
+                                    className: 'mobile-plans-button rounded-xl glow-effect transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 ' + (appState.selectedFamily === key ? 'shadow-2xl scale-105' : 'shadow-lg hover:shadow-xl'),
+                                    style: {
+                                        background: appState.selectedFamily === key ? 'linear-gradient(135deg, ' + btnColor + ', ' + btnColor + 'CC)' : 'white',
+                                        color: appState.selectedFamily === key ? 'white' : btnColor,
+                                        border: '2px solid ' + btnColor,
+                                        boxShadow: appState.selectedFamily === key ? '0 10px 30px ' + btnColor + '40' : '0 5px 20px rgba(0,0,0,0.1)'
+                                    },
+                                    onClick: function () {
+                                        appState.selectedFamily = key;
+                                        render();
+                                    }
+                                });
+                                button.textContent = family.name;
+                                return button;
+                            })
+                        )
+                    ]),
+
+                    typeSelector,
+
+                    currentPlans.length > 0
+                        ? el('div', { className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12' },
+                            currentPlans.map(function (product) {
+                                return renderProductCard(product, currentColor, appState.selectedType, appState.selectedFamily);
+                            })
+                        )
+                        : el('div', { className: 'glass-card rounded-2xl shadow-xl p-12 text-center' }, [
+                            el('p', { className: 'mobile-plans-section-title text-gray-600' },
+                                'No hay planes ' + (appState.selectedType === 'individual' ? 'individuales' : 'familiares') + ' disponibles para ' + currentFamily.name
+                            )
+                        ]),
+
+                    el('div', { className: 'glass-card rounded-2xl shadow-xl p-6 text-center' }, [
+                        el('p', {
+                            className: 'mobile-plans-footer text-gray-700 font-semibold'
+                        }, 'Precios con IVA incluido • Llamadas ilimitadas a fijos y móviles nacionales')
+                    ])
+                ].filter(function (item) { return item !== null; }))
+            ]);
+
+            root.appendChild(container);
+            updateShortcodeZone();
+        }
+
+        // FUNCIÓN CRÍTICA: Actualizar zona de shortcode
+        function updateShortcodeZone() {
+            const allZones = document.querySelectorAll('.mobile-plans-shortcode-zone');
+            allZones.forEach(function (zone) {
+                zone.style.display = 'none';
+            });
+
+            // Construir ID según familia y tipo
+            let zoneId = 'mobile-plans-shortcode-' + appState.selectedFamily;
+
+            // Para Vodafone y Orange, añadir tipo
+            if (appState.selectedFamily === 'vodafone' || appState.selectedFamily === 'orange') {
+                zoneId += '-' + (appState.selectedType === 'individual' ? 'individuales' : 'familiares');
+            }
+
+            const activeZone = document.getElementById(zoneId);
+            if (activeZone) {
+                activeZone.style.display = 'block';
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadProducts);
+        } else {
+            loadProducts();
+        }
+    })();
+</script>
