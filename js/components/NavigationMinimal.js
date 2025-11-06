@@ -58,14 +58,6 @@ class NavigationMinimal {
                             ${this.iconSet.compare}
                             <span>Comparar</span>
                         </a>
-                        <a href="#calculator" class="nav-item" data-page="calculator" data-tooltip="Calculadora de Uso">
-                            ${this.iconSet.calculator}
-                            <span>Calculadora</span>
-                        </a>
-                        <a href="#help" class="nav-item" data-page="help" data-tooltip="Ayuda y FAQ">
-                            ${this.iconSet.help}
-                            <span>Ayuda</span>
-                        </a>
                     </div>
 
                     <div class="nav-search">

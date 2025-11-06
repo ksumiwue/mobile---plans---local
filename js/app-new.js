@@ -678,12 +678,6 @@ class MobilePlansApp {
             case 'compare':
                 this.initializeComparePage();
                 break;
-            case 'calculator':
-                this.initializeCalculatorPage();
-                break;
-            case 'help':
-                this.initializeHelpPage();
-                break;
         }
         
         // Scroll al top
@@ -879,31 +873,56 @@ class MobilePlansApp {
 
     // Inicializar página de comparación
     initializeComparePage() {
+        console.log(`🔄 Inicializando página de comparación. Productos: ${this.comparisonStore.size}`);
+        console.log(`📋 IDs en comparación:`, Array.from(this.comparisonStore));
+        
         const container = document.getElementById('comparison-container');
         if (container) {
             this.renderComparisonTable();
+        } else {
+            console.error('❌ Container de comparación no encontrado');
         }
     }
 
     // Renderizar tabla de comparación
     renderComparisonTable() {
+        console.log(`🔄 Renderizando tabla de comparación...`);
+        console.log(`📋 IDs a comparar:`, Array.from(this.comparisonStore));
+        console.log(`📦 Total productos disponibles:`, this.products.length);
+        
         const comparedProducts = Array.from(this.comparisonStore)
-            .map(id => this.products.find(p => p.id === id))
+            .map(id => {
+                const product = this.products.find(p => p.id === id);
+                console.log(`🔍 Buscando producto ${id}:`, product ? '✅ Encontrado' : '❌ No encontrado');
+                if (product) {
+                    console.log(`📦 Datos del producto:`, {
+                        id: product.id,
+                        name: product.name,
+                        operator: product.operator,
+                        price: product.price,
+                        data: product.data
+                    });
+                }
+                return product;
+            })
             .filter(Boolean);
+
+        console.log(`✅ Productos encontrados para comparar:`, comparedProducts.length);
 
         const container = document.getElementById('comparison-container');
         
         if (!container) {
-            console.error('Container de comparación no encontrado');
+            console.error('❌ Container de comparación no encontrado');
             return;
         }
         
         if (comparedProducts.length === 0) {
+            console.log('📝 Mostrando comparación vacía');
             container.innerHTML = this.getEmptyComparisonHTML();
             return;
         }
 
-        console.log('🔄 Renderizando comparación de productos:', comparedProducts);
+        console.log('🎨 Renderizando tabla de comparación con productos:', comparedProducts);
         container.innerHTML = this.getComparisonTableHTML(comparedProducts);
     }
 
@@ -917,8 +936,8 @@ class MobilePlansApp {
                     </svg>
                 </div>
                 <h2>No hay planes para comparar</h2>
-                <p>Agrega planes desde la sección de planes para compararlos aquí.</p>
-                <button class="cta-primary" onclick="window.app.navigation.navigateTo('plans')">
+                <p>Marca los productos que quieres comparar desde la sección de planes.</p>
+                <button class="cta-primary" onclick="window.navigation.navigateTo('plans')">
                     Ver Planes
                 </button>
             </div>
@@ -1238,19 +1257,74 @@ class MobilePlansApp {
 
     // Toggle comparación (nuevo método)
     toggleComparison(productId) {
+        console.log(`🔄 Toggle comparación para producto: ${productId}`);
+        console.log(`📊 Estado ANTES del toggle:`, Array.from(this.comparisonStore), `Size: ${this.comparisonStore.size}`);
+        
         const checkbox = document.getElementById(`compare-${productId}`);
         
-        if (checkbox && checkbox.checked) {
-            if (this.comparisonStore.size >= 3) {
-                alert('Máximo 3 productos para comparar');
-                checkbox.checked = false;
-                return;
+        if (checkbox) {
+            console.log(`📋 Checkbox encontrado. Marcado: ${checkbox.checked}`);
+            
+            // Usar el estado del store para determinar la acción, no el checkbox
+            const estaEnStore = this.comparisonStore.has(productId);
+            console.log(`🔍 ¿Producto está en store?: ${estaEnStore}`);
+            console.log(`🔍 ¿Checkbox marcado?: ${checkbox.checked}`);
+            
+            if (checkbox.checked && !estaEnStore) {
+                console.log(`➕ AÑADIENDO producto ${productId} (checked=true, no está en store)`);
+                if (this.comparisonStore.size >= 3) {
+                    alert('Máximo 3 productos para comparar');
+                    checkbox.checked = false;
+                    return;
+                }
+                
+                this.comparisonStore.add(productId);
+                console.log(`✅ Producto ${productId} añadido. Size después: ${this.comparisonStore.size}`);
+                
+            } else if (!checkbox.checked && estaEnStore) {
+                console.log(`➖ ELIMINANDO producto ${productId} (checked=false, está en store)`);
+                this.comparisonStore.delete(productId);
+                console.log(`❌ Producto ${productId} eliminado. Size después: ${this.comparisonStore.size}`);
+                
+            } else if (checkbox.checked && estaEnStore) {
+                console.log(`⚠️ Producto ${productId} ya está en store y checkbox está marcado - no hacer nada`);
+                
+            } else {
+                console.log(`⚠️ Producto ${productId} no está en store y checkbox no marcado - no hacer nada`);
             }
-            this.comparisonStore.add(productId);
         } else {
-            this.comparisonStore.delete(productId);
+            console.error(`❌ Checkbox no encontrado para producto: ${productId}`);
         }
 
+        console.log(`📊 Estado FINAL del store:`, Array.from(this.comparisonStore), `Size: ${this.comparisonStore.size}`);
+        
+        this.updateComparisonUI();
+        document.dispatchEvent(new CustomEvent('comparison:updated'));
+    }
+
+    // Método directo para comparación (evita problemas de timing)
+    toggleComparisonDirect(productId, shouldAdd) {
+        console.log(`🔄 Toggle DIRECTO para producto: ${productId}, acción: ${shouldAdd ? 'AÑADIR' : 'ELIMINAR'}`);
+        console.log(`📊 Estado ANTES:`, Array.from(this.comparisonStore), `Size: ${this.comparisonStore.size}`);
+        
+        if (shouldAdd) {
+            if (this.comparisonStore.size >= 3) {
+                alert('Máximo 3 productos para comparar');
+                // Desmarcar checkbox
+                const checkbox = document.getElementById(`compare-${productId}`);
+                if (checkbox) checkbox.checked = false;
+                return;
+            }
+            
+            this.comparisonStore.add(productId);
+            console.log(`✅ Producto ${productId} añadido. Size después: ${this.comparisonStore.size}`);
+        } else {
+            this.comparisonStore.delete(productId);
+            console.log(`❌ Producto ${productId} eliminado. Size después: ${this.comparisonStore.size}`);
+        }
+        
+        console.log(`📊 Estado FINAL:`, Array.from(this.comparisonStore), `Size: ${this.comparisonStore.size}`);
+        
         this.updateComparisonUI();
         document.dispatchEvent(new CustomEvent('comparison:updated'));
     }
@@ -1270,19 +1344,46 @@ class MobilePlansApp {
 
     // Actualizar UI de comparación
     updateComparisonUI() {
-        const count = this.comparisonStore.size;
-        
-        // Actualizar botón flotante
-        const floatingBtn = document.querySelector('.compare-floating-btn');
-        if (floatingBtn) {
-            floatingBtn.textContent = `Comparar (${count})`;
-            floatingBtn.style.display = count > 0 ? 'block' : 'none';
-        }
+        // Forzar un pequeño delay para asegurar que el store esté actualizado
+        setTimeout(() => {
+            const count = this.comparisonStore.size;
+            console.log(`🔄 Actualizando UI de comparación. Productos: ${count}`);
+            console.log(`📋 Productos en store:`, Array.from(this.comparisonStore));
+            
+            // Actualizar botón flotante
+            const floatingBtn = document.querySelector('.compare-floating-btn');
+            if (floatingBtn) {
+                floatingBtn.textContent = `Comparar (${count})`;
+                floatingBtn.style.display = count > 0 ? 'block' : 'none';
+                console.log(`📱 Botón flotante actualizado: ${floatingBtn.textContent}, visible: ${count > 0}`);
+            } else {
+                console.error(`❌ Botón flotante no encontrado`);
+            }
 
-        // Actualizar navegación
-        if (this.navigation) {
-            this.navigation.updateComparisonCounter();
-        }
+            // Actualizar navegación con badge
+            const compareNavItem = document.querySelector('[data-page="compare"]');
+            if (compareNavItem) {
+                // Remover badge existente
+                const existingBadge = compareNavItem.querySelector('.nav-badge');
+                if (existingBadge) {
+                    existingBadge.remove();
+                    console.log(`🗑️ Badge anterior removido`);
+                }
+                
+                // Añadir nuevo badge si hay productos
+                if (count > 0) {
+                    const badge = document.createElement('span');
+                    badge.className = 'nav-badge';
+                    badge.textContent = count;
+                    compareNavItem.appendChild(badge);
+                    console.log(`🏷️ Badge añadido al menú: ${count}`);
+                } else {
+                    console.log(`🚫 No se añade badge porque count = ${count}`);
+                }
+            } else {
+                console.error(`❌ Elemento de navegación 'compare' no encontrado`);
+            }
+        }, 10);
     }
 
     // Mostrar loading

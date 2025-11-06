@@ -182,6 +182,16 @@ class ProductCardNew {
 
     // Obtener colores del operador (claro y oscuro)
     getOperatorColors(operator) {
+        // Validar que operator existe y es string
+        if (!operator || typeof operator !== 'string') {
+            console.warn(`⚠️ Operador inválido:`, operator);
+            return {
+                light: 'var(--neutral-400)',
+                dark: 'var(--neutral-600)', 
+                primary: 'var(--neutral-600)'
+            };
+        }
+        
         const colors = {
             movistar: {
                 light: '#4A90E2',    // Azul claro para individual
@@ -200,7 +210,8 @@ class ProductCardNew {
             }
         };
         
-        return colors[operator.toLowerCase()] || {
+        const operatorKey = operator.toLowerCase();
+        return colors[operatorKey] || {
             light: 'var(--neutral-400)',
             dark: 'var(--neutral-600)', 
             primary: 'var(--neutral-600)'
@@ -301,7 +312,7 @@ class ProductCardNew {
                         ${planBadge.text}
                     </div>
                     <div class="comparison-checkbox">
-                        <input type="checkbox" id="compare-${id}" class="compare-checkbox" onchange="window.toggleComparison('${id}')">
+                        <input type="checkbox" id="compare-${id}" class="compare-checkbox" data-product-id="${id}">
                         <label for="compare-${id}" class="compare-label">Comparar</label>
                     </div>
                 </div>
@@ -468,15 +479,31 @@ class ProductCardNew {
 
     // Inicializar eventos
     initializeEvents() {
-        // Evento para comparación
+        console.log('🎯 Inicializando eventos globales de ProductCard');
+        
+        // Evento para comparación usando event delegation 
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('compare-btn')) {
-                e.stopPropagation();
-                const productId = e.target.closest('.product-card-new').dataset.productId;
-                this.toggleComparison(productId);
+            if (e.target.classList.contains('compare-checkbox')) {
+                const productId = e.target.dataset.productId;
+                const checkbox = e.target;
+                
+                console.log(`🎯 Evento click detectado para producto: ${productId}`);
+                console.log(`📋 Estado ANTES del click: ${checkbox.checked}`);
+                
+                // IGNORAR el estado del checkbox y usar solo el store
+                const estaEnStore = window.app.comparisonStore.has(productId);
+                const shouldAdd = !estaEnStore; // Si NO está en store = AÑADIR, si está = ELIMINAR
+                
+                console.log(`🔍 ¿Está en store?: ${estaEnStore}`);
+                console.log(`🎯 Acción a realizar: ${shouldAdd ? 'AÑADIR' : 'ELIMINAR'}`);
+                
+                if (window.app && window.app.toggleComparisonDirect) {
+                    window.app.toggleComparisonDirect(productId, shouldAdd);
+                } else {
+                    console.error('❌ window.app.toggleComparisonDirect no está disponible');
+                }
             }
         });
-
     }
 
     // Toggle comparación

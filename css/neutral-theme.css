@@ -453,17 +453,21 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   border: 1px solid transparent;
+  background: linear-gradient(135deg, var(--neutral-50), var(--neutral-100));
 }
 
 .filter-option:hover {
-  background: var(--neutral-100);
-  border-color: var(--neutral-200);
+  background: linear-gradient(135deg, var(--neutral-100), var(--neutral-200));
+  border-color: var(--neutral-300);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .filter-option.active {
-  background: var(--accent-primary);
+  background: linear-gradient(135deg, var(--neutral-500), var(--neutral-600));
   color: white;
-  border-color: var(--accent-primary);
+  border-color: var(--neutral-500);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 .filter-option-icon {
@@ -528,7 +532,7 @@ body {
   height: 18px;
   width: 18px;
   border-radius: 50%;
-  background: var(--accent-primary);
+  background: var(--neutral-500);
   cursor: pointer;
   pointer-events: all;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -542,7 +546,7 @@ body {
   height: 18px;
   width: 18px;
   border-radius: 50%;
-  background: var(--accent-primary);
+  background: var(--neutral-500);
   cursor: pointer;
   pointer-events: all;
   border: none;
