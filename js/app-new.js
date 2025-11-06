@@ -173,6 +173,9 @@ class MobilePlansApp {
             return this.getFallbackProducts();
         }
         
+        // Actualizar contador en hero section
+        this.updateHeroStats(allProducts.length);
+        
         return allProducts;
     }
 
@@ -761,6 +764,97 @@ class MobilePlansApp {
             const productsToShow = this.filteredProducts.slice(startIndex, endIndex);
             
             this.productCardRenderer.renderProductGrid(productsToShow, container);
+            
+            // Actualizar paginación
+            this.updatePagination();
+        }
+    }
+
+    // Actualizar controles de paginación
+    updatePagination() {
+        const totalProducts = this.filteredProducts.length;
+        const totalPages = Math.ceil(totalProducts / this.productsPerPage);
+        const showPagination = totalProducts > this.productsPerPage;
+        
+        const paginationControls = document.getElementById('pagination-controls');
+        const showingFrom = document.getElementById('showing-from');
+        const showingTo = document.getElementById('showing-to');
+        const totalProductsSpan = document.getElementById('total-products');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const paginationPages = document.getElementById('pagination-pages');
+        
+        if (!paginationControls) return;
+        
+        // Mostrar/ocultar paginación
+        paginationControls.style.display = showPagination ? 'flex' : 'none';
+        
+        if (showPagination) {
+            // Actualizar información
+            const startIndex = (this.currentPage - 1) * this.productsPerPage;
+            const endIndex = Math.min(startIndex + this.productsPerPage, totalProducts);
+            
+            showingFrom.textContent = startIndex + 1;
+            showingTo.textContent = endIndex;
+            totalProductsSpan.textContent = totalProducts;
+            
+            // Actualizar botones
+            prevBtn.disabled = this.currentPage === 1;
+            nextBtn.disabled = this.currentPage === totalPages;
+            
+            // Generar números de página
+            this.generatePageNumbers(totalPages);
+        }
+    }
+
+    // Generar números de página
+    generatePageNumbers(totalPages) {
+        const paginationPages = document.getElementById('pagination-pages');
+        if (!paginationPages) return;
+        
+        let pagesHTML = '';
+        
+        // Mostrar páginas (máximo 5)
+        let startPage = Math.max(1, this.currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 4);
+        
+        if (endPage - startPage < 4) {
+            startPage = Math.max(1, endPage - 4);
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+            const isActive = i === this.currentPage;
+            pagesHTML += `
+                <span class="page-number ${isActive ? 'active' : ''}" 
+                      onclick="window.app.goToPage(${i})">
+                    ${i}
+                </span>
+            `;
+        }
+        
+        paginationPages.innerHTML = pagesHTML;
+    }
+
+    // Navegar a página específica
+    goToPage(page) {
+        this.currentPage = page;
+        this.renderProducts();
+    }
+
+    // Página anterior
+    previousPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.renderProducts();
+        }
+    }
+
+    // Página siguiente
+    nextPage() {
+        const totalPages = Math.ceil(this.filteredProducts.length / this.productsPerPage);
+        if (this.currentPage < totalPages) {
+            this.currentPage++;
+            this.renderProducts();
         }
     }
 
@@ -1228,6 +1322,17 @@ class MobilePlansApp {
     // Obtener productos filtrados
     getFilteredProducts() {
         return this.filteredProducts;
+    }
+
+    // Actualizar estadísticas del hero
+    updateHeroStats(totalProducts) {
+        const plansCountElement = document.getElementById('plans-count');
+        if (plansCountElement) {
+            // Calcular decena inmediatamente menor
+            const lowerDecade = Math.floor(totalProducts / 10) * 10;
+            plansCountElement.textContent = `${lowerDecade}+`;
+            console.log(`📊 Actualizando estadísticas: ${totalProducts} planes → ${lowerDecade}+`);
+        }
     }
 }
 

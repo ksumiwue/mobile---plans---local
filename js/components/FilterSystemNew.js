@@ -91,70 +91,43 @@ class FilterSystemNew {
                             ${this.iconSet.planType}
                             <span class="filter-option-text">Familiar</span>
                         </div>
-                        <div class="filter-option" data-filter="planType" data-value="empresarial">
-                            ${this.iconSet.planType}
-                            <span class="filter-option-text">Empresarial</span>
-                        </div>
                     </div>
 
                     <!-- Rango de Precio -->
                     <div class="filter-group">
                         <div class="filter-group-title">Precio</div>
-                        <div class="filter-option active" data-filter="priceRange" data-value="all">
-                            ${this.iconSet.price}
-                            <span class="filter-option-text">Cualquier precio</span>
-                        </div>
-                        <div class="filter-option" data-filter="priceRange" data-value="0-20">
-                            ${this.iconSet.price}
-                            <span class="filter-option-text">Menos de 20€</span>
-                        </div>
-                        <div class="filter-option" data-filter="priceRange" data-value="20-40">
-                            ${this.iconSet.price}
-                            <span class="filter-option-text">20€ - 40€</span>
-                        </div>
-                        <div class="filter-option" data-filter="priceRange" data-value="40-60">
-                            ${this.iconSet.price}
-                            <span class="filter-option-text">40€ - 60€</span>
-                        </div>
-                        <div class="filter-option" data-filter="priceRange" data-value="60+">
-                            ${this.iconSet.price}
-                            <span class="filter-option-text">Más de 60€</span>
+                        <div class="price-slider-container">
+                            <div class="slider-values">
+                                <span id="price-min-value">0</span>€ - <span id="price-max-value">100</span>€
+                            </div>
+                            <div class="double-slider">
+                                <input type="range" id="price-min" class="slider-range" min="0" max="100" value="0" step="1">
+                                <input type="range" id="price-max" class="slider-range" min="0" max="100" value="100" step="1">
+                                <div class="slider-track"></div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Datos -->
                     <div class="filter-group">
                         <div class="filter-group-title">Datos</div>
-                        <div class="filter-option active" data-filter="dataRange" data-value="all">
-                            ${this.iconSet.data}
-                            <span class="filter-option-text">Cualquier cantidad</span>
-                        </div>
-                        <div class="filter-option" data-filter="dataRange" data-value="0-5">
-                            ${this.iconSet.data}
-                            <span class="filter-option-text">Hasta 5GB</span>
-                        </div>
-                        <div class="filter-option" data-filter="dataRange" data-value="5-20">
-                            ${this.iconSet.data}
-                            <span class="filter-option-text">5GB - 20GB</span>
-                        </div>
-                        <div class="filter-option" data-filter="dataRange" data-value="20-50">
-                            ${this.iconSet.data}
-                            <span class="filter-option-text">20GB - 50GB</span>
-                        </div>
-                        <div class="filter-option" data-filter="dataRange" data-value="unlimited">
-                            ${this.iconSet.data}
-                            <span class="filter-option-text">Ilimitados</span>
+                        <div class="data-slider-container">
+                            <div class="slider-values">
+                                <span id="data-min-value">0</span>GB - <span id="data-max-value">100</span>GB
+                            </div>
+                            <div class="double-slider">
+                                <input type="range" id="data-min" class="slider-range" min="0" max="100" value="0" step="1">
+                                <input type="range" id="data-max" class="slider-range" min="0" max="100" value="100" step="1">
+                                <div class="slider-track"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Botones de acción -->
-                <div class="filter-actions" style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center;">
+                <div class="filter-actions" style="margin-top: 1rem; display: flex; justify-content: center;">
                     <button class="filter-clear-btn" onclick="window.filterSystem.clearFilters()">
                         Limpiar Filtros
-                    </button>
-                    <button class="filter-apply-btn" onclick="window.filterSystem.applyFilters()">
-                        Aplicar Filtros
                     </button>
                 </div>
             </div>
@@ -166,10 +139,151 @@ class FilterSystemNew {
         this.products = products;
         this.filteredProducts = [...products];
         
+        // Calcular rangos de precio y datos
+        this.calculateRanges();
+        
         if (container) {
             container.innerHTML = this.createFilterHTML();
             this.attachEvents();
+            this.initializeSliders();
         }
+    }
+
+    // Calcular rangos dinámicos
+    calculateRanges() {
+        if (this.products.length === 0) return;
+        
+        // Rango de precios
+        const prices = this.products.map(p => p.price).filter(p => p > 0);
+        this.priceRange = {
+            min: Math.floor(Math.min(...prices)),
+            max: Math.ceil(Math.max(...prices))
+        };
+        
+        // Rango de datos (convertir unlimited a número alto)
+        const dataAmounts = this.products.map(p => {
+            if (p.data === 'unlimited' || p.data === 'ilimitado') return 999;
+            return parseInt(p.data) || 0;
+        }).filter(d => d > 0);
+        
+        this.dataRange = {
+            min: Math.min(...dataAmounts),
+            max: Math.max(...dataAmounts.filter(d => d < 999)) // Excluir unlimited
+        };
+        
+        console.log('📊 Rangos calculados:', { 
+            precio: this.priceRange, 
+            datos: this.dataRange 
+        });
+    }
+
+    // Inicializar sliders dobles
+    initializeSliders() {
+        // Configurar sliders de precio
+        this.setupPriceSliders();
+        this.setupDataSliders();
+    }
+
+    // Configurar sliders de precio
+    setupPriceSliders() {
+        const priceMin = document.getElementById('price-min');
+        const priceMax = document.getElementById('price-max');
+        const priceMinValue = document.getElementById('price-min-value');
+        const priceMaxValue = document.getElementById('price-max-value');
+        
+        if (priceMin && priceMax && this.priceRange) {
+            // Configurar rangos
+            priceMin.min = priceMax.min = this.priceRange.min;
+            priceMin.max = priceMax.max = this.priceRange.max;
+            priceMin.value = this.priceRange.min;
+            priceMax.value = this.priceRange.max;
+            
+            // Actualizar valores mostrados
+            priceMinValue.textContent = this.priceRange.min;
+            priceMaxValue.textContent = this.priceRange.max;
+            
+            // Eventos
+            priceMin.addEventListener('input', () => this.updatePriceSlider());
+            priceMax.addEventListener('input', () => this.updatePriceSlider());
+        }
+    }
+
+    // Configurar sliders de datos
+    setupDataSliders() {
+        const dataMin = document.getElementById('data-min');
+        const dataMax = document.getElementById('data-max');
+        const dataMinValue = document.getElementById('data-min-value');
+        const dataMaxValue = document.getElementById('data-max-value');
+        
+        if (dataMin && dataMax && this.dataRange) {
+            // Configurar rangos
+            dataMin.min = dataMax.min = this.dataRange.min;
+            dataMin.max = dataMax.max = this.dataRange.max;
+            dataMin.value = this.dataRange.min;
+            dataMax.value = this.dataRange.max;
+            
+            // Actualizar valores mostrados
+            dataMinValue.textContent = this.dataRange.min;
+            dataMaxValue.textContent = this.dataRange.max;
+            
+            // Eventos
+            dataMin.addEventListener('input', () => this.updateDataSlider());
+            dataMax.addEventListener('input', () => this.updateDataSlider());
+        }
+    }
+
+    // Actualizar slider de precio
+    updatePriceSlider() {
+        const priceMin = document.getElementById('price-min');
+        const priceMax = document.getElementById('price-max');
+        const priceMinValue = document.getElementById('price-min-value');
+        const priceMaxValue = document.getElementById('price-max-value');
+        
+        let minVal = parseInt(priceMin.value);
+        let maxVal = parseInt(priceMax.value);
+        
+        // Evitar que se crucen
+        if (minVal > maxVal) {
+            [minVal, maxVal] = [maxVal, minVal];
+            priceMin.value = minVal;
+            priceMax.value = maxVal;
+        }
+        
+        // Actualizar valores mostrados
+        priceMinValue.textContent = minVal;
+        priceMaxValue.textContent = maxVal;
+        
+        // Aplicar filtros
+        this.filters.priceMin = minVal;
+        this.filters.priceMax = maxVal;
+        this.applyFilters();
+    }
+
+    // Actualizar slider de datos
+    updateDataSlider() {
+        const dataMin = document.getElementById('data-min');
+        const dataMax = document.getElementById('data-max');
+        const dataMinValue = document.getElementById('data-min-value');
+        const dataMaxValue = document.getElementById('data-max-value');
+        
+        let minVal = parseInt(dataMin.value);
+        let maxVal = parseInt(dataMax.value);
+        
+        // Evitar que se crucen
+        if (minVal > maxVal) {
+            [minVal, maxVal] = [maxVal, minVal];
+            dataMin.value = minVal;
+            dataMax.value = maxVal;
+        }
+        
+        // Actualizar valores mostrados
+        dataMinValue.textContent = minVal;
+        dataMaxValue.textContent = maxVal;
+        
+        // Aplicar filtros
+        this.filters.dataMin = minVal;
+        this.filters.dataMax = maxVal;
+        this.applyFilters();
     }
 
     // Adjuntar eventos
@@ -238,21 +352,26 @@ class FilterSystemNew {
             return false;
         }
 
-        // Filtro de precio
-        if (this.filters.priceRange !== 'all') {
-            if (!this.matchesPriceRange(product.price, this.filters.priceRange)) {
-                return false;
-            }
+        // Filtro de precio por slider
+        if (product.price < this.filters.priceMin || product.price > this.filters.priceMax) {
+            return false;
         }
 
-        // Filtro de datos
-        if (this.filters.dataRange !== 'all') {
-            if (!this.matchesDataRange(product.data, this.filters.dataRange)) {
-                return false;
-            }
+        // Filtro de datos por slider
+        const productData = this.getNumericData(product.data);
+        if (productData < this.filters.dataMin || productData > this.filters.dataMax) {
+            return false;
         }
 
         return true;
+    }
+
+    // Convertir datos a número para comparación
+    getNumericData(data) {
+        if (data === 'unlimited' || data === 'ilimitado') {
+            return 999; // Valor alto para unlimited
+        }
+        return parseInt(data) || 0;
     }
 
     // Verificar rango de precio
@@ -310,12 +429,14 @@ class FilterSystemNew {
         this.filters = {
             operator: 'all',
             planType: 'all',
-            priceRange: 'all',
-            dataRange: 'all',
+            priceMin: this.priceRange ? this.priceRange.min : 0,
+            priceMax: this.priceRange ? this.priceRange.max : 100,
+            dataMin: this.dataRange ? this.dataRange.min : 0,
+            dataMax: this.dataRange ? this.dataRange.max : 100,
             features: []
         };
 
-        // Resetear UI
+        // Resetear UI de opciones
         document.querySelectorAll('.filter-option').forEach(option => {
             option.classList.remove('active');
         });
@@ -324,6 +445,9 @@ class FilterSystemNew {
             option.classList.add('active');
         });
 
+        // Resetear sliders
+        this.resetSliders();
+
         // Limpiar búsqueda
         const searchInput = document.querySelector('.search-input');
         if (searchInput) {
@@ -331,6 +455,35 @@ class FilterSystemNew {
         }
 
         this.applyFilters();
+    }
+
+    // Resetear sliders a valores iniciales
+    resetSliders() {
+        // Resetear sliders de precio
+        const priceMin = document.getElementById('price-min');
+        const priceMax = document.getElementById('price-max');
+        const priceMinValue = document.getElementById('price-min-value');
+        const priceMaxValue = document.getElementById('price-max-value');
+        
+        if (priceMin && priceMax && this.priceRange) {
+            priceMin.value = this.priceRange.min;
+            priceMax.value = this.priceRange.max;
+            priceMinValue.textContent = this.priceRange.min;
+            priceMaxValue.textContent = this.priceRange.max;
+        }
+
+        // Resetear sliders de datos
+        const dataMin = document.getElementById('data-min');
+        const dataMax = document.getElementById('data-max');
+        const dataMinValue = document.getElementById('data-min-value');
+        const dataMaxValue = document.getElementById('data-max-value');
+        
+        if (dataMin && dataMax && this.dataRange) {
+            dataMin.value = this.dataRange.min;
+            dataMax.value = this.dataRange.max;
+            dataMinValue.textContent = this.dataRange.min;
+            dataMaxValue.textContent = this.dataRange.max;
+        }
     }
 
     // Actualizar contador de resultados

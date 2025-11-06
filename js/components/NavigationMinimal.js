@@ -121,7 +121,14 @@ class NavigationMinimal {
 
     // Manejar navegación
     handleNavigation(page) {
-        if (this.currentPage === page) return;
+        console.log(`🧭 Navegando de "${this.currentPage}" a "${page}"`);
+        
+        if (this.currentPage === page) {
+            console.log(`ℹ️ Ya estamos en la página "${page}"`);
+            return;
+        }
+
+        const previousPage = this.currentPage;
 
         // Actualizar estado
         this.currentPage = page;
@@ -131,7 +138,7 @@ class NavigationMinimal {
 
         // Emitir evento personalizado
         document.dispatchEvent(new CustomEvent('navigation:change', {
-            detail: { page, previousPage: this.currentPage }
+            detail: { page, previousPage }
         }));
 
         // Manejar vista específica
@@ -155,13 +162,18 @@ class NavigationMinimal {
         // Ocultar todas las secciones
         document.querySelectorAll('.page-section').forEach(section => {
             section.style.display = 'none';
+            section.classList.remove('fade-in');
         });
 
         // Mostrar sección actual
         const currentSection = document.querySelector(`#${page}-section`);
         if (currentSection) {
             currentSection.style.display = 'block';
+            // Forzar reflow antes de agregar la animación
+            currentSection.offsetHeight;
             currentSection.classList.add('fade-in');
+        } else {
+            console.warn(`⚠️ Sección no encontrada: #${page}-section`);
         }
 
         // Acciones específicas por página

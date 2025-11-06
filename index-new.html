@@ -41,12 +41,12 @@
                     
                     <div class="hero-stats">
                         <div class="stat-item">
-                            <span class="stat-number">50+</span>
+                            <span class="stat-number" id="plans-count">10+</span>
                             <span class="stat-label">Planes disponibles</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-number">3</span>
-                            <span class="stat-label">Operadores principales</span>
+                            <span class="stat-label">Coberturas disponibles</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-number">100%</span>
@@ -128,6 +128,24 @@
             
             <!-- Grid de Productos -->
             <div id="products-container"></div>
+            
+            <!-- Paginación -->
+            <div class="pagination-controls" id="pagination-controls" style="display: none;">
+                <div class="pagination-info">
+                    <span>Mostrando <span id="showing-from">1</span>-<span id="showing-to">12</span> de <span id="total-products">0</span> productos</span>
+                </div>
+                <div class="pagination-buttons">
+                    <button class="pagination-btn" id="prev-btn" onclick="window.app.previousPage()">
+                        ← Anterior
+                    </button>
+                    <span class="pagination-pages" id="pagination-pages">
+                        <span class="page-number active">1</span>
+                    </span>
+                    <button class="pagination-btn" id="next-btn" onclick="window.app.nextPage()">
+                        Siguiente →
+                    </button>
+                </div>
+            </div>
             
         </section>
 
@@ -463,6 +481,81 @@
             margin: 0 auto 2rem auto;
             max-width: 1200px;
             box-shadow: var(--shadow-sm);
+        }
+
+        /* Pagination Controls */
+        .pagination-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem;
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: 12px;
+            margin: 2rem auto;
+            max-width: 1200px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .pagination-info {
+            color: var(--neutral-600);
+            font-size: 0.875rem;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--neutral-300);
+            border-radius: 8px;
+            background: white;
+            color: var(--neutral-700);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-pages {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .page-number {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--neutral-300);
+            border-radius: 6px;
+            background: white;
+            color: var(--neutral-700);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .page-number.active {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .page-number:hover:not(.active) {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
         }
 
         .sort-group,

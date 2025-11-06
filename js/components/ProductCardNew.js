@@ -42,7 +42,7 @@ class ProductCardNew {
         };
     }
 
-    // Formatear precio con decimales en superíndice y color del operador
+    // Formatear precio con decimales en superíndice (formato codigo.html mejorado)
     formatPrice(price, operator) {
         const priceStr = price.toString();
         const [euros, cents = '00'] = priceStr.split('.');
@@ -50,9 +50,9 @@ class ProductCardNew {
         
         return `
             <div class="price-section">
-                <span class="price-euros" style="color: ${colors.primary};">${euros}</span>
-                <sup class="price-cents" style="color: ${colors.primary};">,${cents.padEnd(2, '0')}</sup>
-                <span class="price-currency" style="color: ${colors.primary};">€</span>
+                <span class="price-main" style="color: ${colors.primary};">
+                    ${euros}<sup>,${cents.padEnd(2, '0')}<span class="euro-symbol">€</span></sup>
+                </span>
             </div>
         `;
     }
@@ -327,7 +327,7 @@ class ProductCardNew {
 
                 <!-- CTA -->
                 <button class="cta-minimal" onclick="window.location.href='https://ipv6-informatica.es/configurador?product=${id}'">
-                    Contratar Plan
+                    <span>Contratar Plan</span>
                 </button>
 
             </div>
