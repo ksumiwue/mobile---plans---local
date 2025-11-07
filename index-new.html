@@ -68,17 +68,58 @@
             vertical-align: middle !important;
         }
         
-        .comparison-table th.feature-label,
-        .comparison-table td.feature-label {
-            width: 140px !important;
+        /* Asegurar que TODA la primera columna tenga el mismo ancho */
+        .comparison-table th:first-child,
+        .comparison-table td:first-child,
+        .comparison-table .feature-label {
+            width: 120px !important;
+            min-width: 120px !important;
+            max-width: 120px !important;
             text-align: left !important;
-            padding-left: 1rem !important;
+            padding: 0.5rem !important;
             font-size: 0.85em !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
         
-        .comparison-table th:not(.feature-label),
-        .comparison-table td:not(.feature-label) {
-            width: calc((100% - 140px) / var(--products-count)) !important;
+        .comparison-table th:not(:first-child),
+        .comparison-table td:not(:first-child) {
+            width: calc((100% - 120px) / var(--products-count)) !important;
+        }
+        
+        /* Forzar que todas las columnas respeten el ancho */
+        .comparison-table col:first-child {
+            width: 120px !important;
+        }
+        
+        .comparison-table col:not(:first-child) {
+            width: calc((100% - 120px) / var(--products-count)) !important;
+        }
+        
+        /* Hacer la tabla más compacta - ancho exacto del contenido */
+        .comparison-table {
+            width: auto !important;
+            margin: 0 auto !important;
+            table-layout: fixed !important;
+            border-collapse: collapse !important;
+        }
+        
+        /* Contenedor de tabla con el mismo ancho que la tabla */
+        .comparison-table-container,
+        #comparison-container {
+            width: fit-content !important;
+            max-width: none !important;
+            margin: 0 auto !important;
+            overflow-x: auto !important;
+            padding: 0 !important;
+        }
+        
+        /* Sobrescribir estilos del contenedor de comparación */
+        #compare-section #comparison-container {
+            width: fit-content !important;
+            max-width: none !important;
+            padding: 0 !important;
         }
         
         /* Headers más compactos */
@@ -108,8 +149,20 @@
             
             .comparison-table th.feature-label,
             .comparison-table td.feature-label {
-                width: 120px !important;
+                width: 100px !important;
+                min-width: 100px !important;
+                max-width: 100px !important;
                 font-size: 0.75em !important;
+                padding: 0.3rem !important;
+            }
+            
+            .comparison-table th:not(.feature-label),
+            .comparison-table td:not(.feature-label) {
+                width: calc((100% - 100px) / var(--products-count)) !important;
+            }
+            
+            .comparison-table {
+                width: auto !important;
             }
             
             .product-summary h3 {
@@ -302,9 +355,9 @@
         <section id="compare-section" class="page-section" style="display: none;">
             <div class="compare-header" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
                 <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--neutral-800); margin: 0 0 1rem 0;">Comparar Planes</h1>
-                <p style="font-size: 1.125rem; color: var(--neutral-600); margin: 0;">Compara hasta 3 planes lado a lado</p>
+                <p style="font-size: 0.925rem; color: var(--neutral-600); margin: 0;">Compara hasta 3 planes</p>
             </div>
-            <div id="comparison-container" style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;"></div>
+            <div id="comparison-container" style="width: fit-content; max-width: none; margin: 0 auto; padding: 0;"></div>
         </section>
 
 
