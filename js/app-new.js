@@ -1222,6 +1222,14 @@ class MobilePlansApp {
         console.log('🎨 Renderizando tabla de comparación con productos:', comparedProducts);
         container.innerHTML = this.getComparisonTableHTML(comparedProducts);
         
+        // Insertar descripciones con HTML en los headers de comparación
+        comparedProducts.forEach(product => {
+            const headerDescElement = document.querySelector(`[data-header-description="${product.id}"]`);
+            if (headerDescElement && this.productCardRenderer) {
+                headerDescElement.innerHTML = this.productCardRenderer.getProductDescription(product);
+            }
+        });
+        
         // Establecer variable CSS para el ancho de columnas
         document.documentElement.style.setProperty('--products-count', comparedProducts.length);
     }
@@ -1256,8 +1264,7 @@ class MobilePlansApp {
                     <div class="price-comparison">
                         ${this.productCardRenderer.formatPrice(product.price, product.operator)}
                     </div>
-                    <div class="product-description" style="font-size: 0.8rem; color: var(--neutral-800); text-align: justify; margin-top: 0.5rem; line-height: 1.3;">
-                        ${this.productCardRenderer.getProductDescription(product)}
+                    <div class="product-description-header" data-header-description="${product.id}" style="font-size: 0.8rem; color: var(--neutral-800); text-align: justify; margin-top: 0.5rem; line-height: 1.3; width: 100%; word-wrap: break-word;">
                     </div>
                 </div>
             </th>

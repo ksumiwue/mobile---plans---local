@@ -195,9 +195,24 @@ class ProductCardNew {
         return backgroundImages[operator.toLowerCase()] || backgroundImages.movistar;
     }
 
-    // Obtener descripción del producto desde el JSON
+    // Obtener descripción del producto desde el JSON con formato especial para promociones
     getProductDescription(product) {
-        return product.description || "Plan completo con todas las ventajas y servicios incluidos para satisfacer tus necesidades de conectividad.";
+        const description = product.description || "Plan completo con todas las ventajas y servicios incluidos para satisfacer tus necesidades de conectividad.";
+        
+        // Buscar el símbolo "-" para dividir el texto (para cualquier producto, no solo promociones)
+        const dashIndex = description.indexOf('-');
+        
+        if (dashIndex !== -1) {
+            // Parte antes del "-" en negrita (SIN el símbolo "-")
+            const boldText = description.substring(0, dashIndex).trim();
+            // Resto de la descripción (desde después del "-" hasta el final) en línea separada
+            const normalText = description.substring(dashIndex + 1).trim();
+            
+            return `<div style="text-align: center; margin-bottom: 0.5rem;"><span style="font-weight: 700; color: #000000 !important; font-size: 1.05em;">${boldText}</span></div><span style="color: var(--neutral-800);">${normalText}</span>`;
+        }
+        
+        // Si no tiene "-", devolver descripción normal
+        return description;
     }
 
     // Método auxiliar para parsear datos (ya existe pero lo reutilizamos)
@@ -419,8 +434,7 @@ class ProductCardNew {
                 ${formattedData}
 
                 <!-- Descripción del producto -->
-                <div class="product-description">
-                    ${this.getProductDescription(product)}
+                <div class="product-description" data-product-description="${product.id}">
                 </div>
 
                 <!-- Características -->
@@ -488,6 +502,14 @@ class ProductCardNew {
                     ${cardsHTML}
                 </div>
             `;
+
+            // Insertar descripciones con HTML después del renderizado
+            products.forEach(product => {
+                const descriptionElement = document.querySelector(`[data-product-description="${product.id}"]`);
+                if (descriptionElement) {
+                    descriptionElement.innerHTML = this.getProductDescription(product);
+                }
+            });
 
             // Agregar animaciones escalonadas
             this.addStaggeredAnimations();

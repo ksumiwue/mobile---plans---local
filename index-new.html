@@ -219,16 +219,21 @@
         }
         
         /* Estilos para descripción de producto */
-        .product-description {
+        .product-description,
+        #featured-plans-container .product-description {
             font-size: 0.875rem !important; /* Mismo tamaño que las características */
             color: var(--neutral-800) !important; /* Gris aún más oscuro */
             line-height: 1.4 !important;
-            margin: 1.5rem 0 1rem 0 !important; /* Más espacio arriba, mismo abajo */
-            padding: 0 !important;
-            background: none !important;
+            margin: 2rem 0 1.5rem 0 !important; /* Más espacio arriba y abajo */
+            padding: 1rem !important; /* Padding para separar del fondo */
+            background: #ffffff !important; /* Fondo blanco sólido 100% opaco */
+            background-color: #ffffff !important; /* Fuerza fondo blanco */
+            backdrop-filter: none !important; /* Sin filtros de fondo */
             border: none !important;
             font-weight: 400 !important;
             text-align: justify !important; /* Texto justificado */
+            border-radius: 8px !important; /* Bordes redondeados */
+            box-shadow: none !important; /* Sin sombras que puedan afectar */
         }
         
         /* Quitar cualquier pseudo-elemento */
