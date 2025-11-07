@@ -207,10 +207,10 @@ class MobilePlansApp {
             price: this.parsePrice(product.price || product.precio || product.cost || 0),
             originalPrice: this.parsePrice(product.originalPrice || product.precioOriginal || product.old_price),
             data: this.normalizeData(product.data || product.gb || product.datos || product.gigas),
-            calls: this.normalizeCalls(product.calls || product.llamadas || product.minutes || product.minutos),
-            sms: this.normalizeSMS(product.sms || product.messages || product.mensajes),
+            calls: 'unlimited', // Todos tienen llamadas ilimitadas
+            sms: this.detectOperatorSMS(detectedOperator), // SMS según operador
             planType: detectedPlanType,
-            network: this.normalizeNetwork(product.network || product.red || product.tecnologia || '4G'),
+            network: '5G', // Todos tienen 5G
             contractType: product.contractType || product.contract || product.tipo || 'contrato',
             permanencia: product.permanencia || product.commitment || product.duracion || 0,
             featured: Boolean(product.featured || product.destacado || product.popular),
@@ -222,6 +222,18 @@ class MobilePlansApp {
         
         console.log(`🔄 Producto normalizado:`, normalized);
         return normalized;
+    }
+
+    // Detectar SMS según operador
+    detectOperatorSMS(operator) {
+        if (!operator) return '0';
+        const operatorLower = operator.toLowerCase();
+        
+        if (operatorLower.includes('vodafone')) {
+            return '100'; // Vodafone tiene 100 SMS
+        }
+        
+        return '0'; // Movistar y Orange no tienen SMS
     }
 
     // Detectar operador desde el producto
@@ -282,7 +294,7 @@ class MobilePlansApp {
         if (!sms) return '0';
         if (typeof sms === 'string') {
             if (sms.toLowerCase().includes('ilimitado') || sms.toLowerCase().includes('unlimited')) {
-                return 'unlimited';
+                return '0'; // Cambiar unlimited a 0 porque no hay SMS ilimitados
             }
             return sms.replace(/[^\d]/g, '') || '0';
         }
@@ -335,7 +347,7 @@ class MobilePlansApp {
                 price: 24.99,
                 data: '30',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'individual',
                 network: '5G',
                 features: ['Fibra incluida', 'Netflix gratis', 'Roaming EU']
@@ -359,7 +371,7 @@ class MobilePlansApp {
                 price: 29.99,
                 data: 'unlimited',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'familiar',
                 network: '5G',
                 features: ['Datos ilimitados', 'Familia incluida', 'Amazon Prime']
@@ -369,7 +381,10 @@ class MobilePlansApp {
 
     // Datos expandidos de demostración (hasta que la API tenga móviles)
     getExpandedFallbackProducts() {
-        console.log('📱 Usando catálogo expandido de planes móviles...');
+        console.log('📦 Usando catálogo expandido de planes móviles...');
+        
+        // Datos corregidos: Todos con llamadas ilimitadas, Red 5G, Roaming UE
+        // SMS: Vodafone = 100, Movistar/Orange = 0
         return [
             // MOVISTAR - Individual
             {
@@ -380,12 +395,12 @@ class MobilePlansApp {
                 originalPrice: 25.90,
                 data: '5',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'individual',
                 network: '5G',
                 featured: true,
                 popular: false,
-                features: ['Llamadas ilimitadas', 'SMS ilimitados', '5G incluido', 'Roaming UE gratis']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido']
             },
             {
                 id: 'movistar-individual-2',
@@ -395,12 +410,12 @@ class MobilePlansApp {
                 originalPrice: 30.90,
                 data: '15',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'individual',
                 network: '5G',
                 featured: false,
                 popular: true,
-                features: ['Llamadas ilimitadas', 'SMS ilimitados', '5G premium', 'Netflix básico']
+                features: ['Llamadas ilimitadas', 'Sin SMS', '5G premium', 'Netflix básico']
             },
             {
                 id: 'movistar-individual-3',
@@ -410,12 +425,12 @@ class MobilePlansApp {
                 originalPrice: 35.90,
                 data: '30',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'individual',
                 network: '5G',
                 featured: true,
                 popular: true,
-                features: ['Llamadas ilimitadas', 'SMS ilimitados', '5G premium', 'Netflix estándar', 'Amazon Prime']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido', 'Netflix estándar']
             },
             {
                 id: 'movistar-individual-4',
@@ -425,12 +440,12 @@ class MobilePlansApp {
                 originalPrice: 44.90,
                 data: 'unlimited',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'individual',
                 network: '5G',
                 featured: false,
                 popular: false,
-                features: ['Datos ilimitados', 'Llamadas ilimitadas', '5G premium', 'Netflix premium', 'Disney+']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido', 'Datos ilimitados']
             },
 
             // MOVISTAR - Familiar  
@@ -442,12 +457,12 @@ class MobilePlansApp {
                 originalPrice: 52.90,
                 data: '50',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'familiar',
                 network: '5G',
                 featured: false,
                 popular: true,
-                features: ['Hasta 4 líneas', '50GB compartidos', 'Netflix familiar', 'Control parental']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido', 'Hasta 4 líneas']
             },
             {
                 id: 'movistar-familiar-2',
@@ -457,12 +472,12 @@ class MobilePlansApp {
                 originalPrice: 75.90,
                 data: 'unlimited',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'familiar',
                 network: '5G',
                 featured: true,
                 popular: true,
-                features: ['Hasta 5 líneas', 'Datos ilimitados', 'Netflix premium', 'Disney+', 'Amazon Prime']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido', 'Hasta 5 líneas']
             },
 
             // VODAFONE - Individual
@@ -474,12 +489,12 @@ class MobilePlansApp {
                 originalPrice: 22.99,
                 data: '8',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '100',
                 planType: 'individual',
-                network: '4G',
+                network: '5G',
                 featured: false,
                 popular: true,
-                features: ['Solo para jóvenes', 'Gestión 100% digital', 'Apps sociales gratis']
+                features: ['Llamadas ilimitadas', '100 SMS/mes', 'Red 5G', 'Roaming UE incluido', 'Solo para jóvenes']
             },
             {
                 id: 'vodafone-individual-2',
@@ -489,12 +504,12 @@ class MobilePlansApp {
                 originalPrice: 27.99,
                 data: '25',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '100',
                 planType: 'individual',
                 network: '5G',
                 featured: true,
                 popular: true,
-                features: ['Ideal para jóvenes', 'Spotify Premium', '5G incluido', 'Gigas acumulables']
+                features: ['Llamadas ilimitadas', '100 SMS/mes', 'Red 5G', 'Roaming UE incluido', 'Spotify Premium']
             },
             {
                 id: 'vodafone-individual-3',
@@ -504,12 +519,12 @@ class MobilePlansApp {
                 originalPrice: 40.99,
                 data: '40',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '100',
                 planType: 'individual',
                 network: '5G',
                 featured: false,
                 popular: false,
-                features: ['Para todos los públicos', 'TV Vodafone', '5G premium', 'Secure Net']
+                features: ['Llamadas ilimitadas', '100 SMS/mes', 'Red 5G', 'Roaming UE incluido', 'TV Vodafone']
             },
             {
                 id: 'vodafone-individual-4',
@@ -519,12 +534,12 @@ class MobilePlansApp {
                 originalPrice: 54.99,
                 data: 'unlimited',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '100',
                 planType: 'individual',
                 network: '5G',
                 featured: false,
                 popular: false,
-                features: ['Datos sin límite', 'TV premium', 'Todas las plataformas', 'Fibra incluida']
+                features: ['Llamadas ilimitadas', '100 SMS/mes', 'Red 5G', 'Roaming UE incluido', 'Datos ilimitados']
             },
 
             // VODAFONE - Familiar
@@ -536,12 +551,12 @@ class MobilePlansApp {
                 originalPrice: 62.99,
                 data: '60',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '100',
                 planType: 'familiar',
                 network: '5G',
                 featured: false,
                 popular: true,
-                features: ['Hasta 4 líneas', 'TV familiar', 'Control parental', 'Una sola factura']
+                features: ['Llamadas ilimitadas', '100 SMS/mes por línea', 'Red 5G', 'Roaming UE incluido', 'Hasta 4 líneas']
             },
             {
                 id: 'vodafone-familiar-2',
@@ -551,12 +566,12 @@ class MobilePlansApp {
                 originalPrice: 82.99,
                 data: 'unlimited',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '100',
                 planType: 'familiar',
                 network: '5G',
                 featured: true,
                 popular: true,
-                features: ['Hasta 5 líneas', 'Todo ilimitado', 'Fibra 1GB', 'Todas las plataformas']
+                features: ['Llamadas ilimitadas', '100 SMS/mes por línea', 'Red 5G', 'Roaming UE incluido', 'Hasta 5 líneas']
             },
 
             // ORANGE - Individual
@@ -568,12 +583,12 @@ class MobilePlansApp {
                 originalPrice: 19.95,
                 data: '10',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'individual',
-                network: '4G',
+                network: '5G',
                 featured: false,
                 popular: true,
-                features: ['Precio fijo', 'Sin permanencia', 'Perfecto para empezar']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido', 'Sin permanencia']
             },
             {
                 id: 'orange-individual-2',
@@ -583,12 +598,12 @@ class MobilePlansApp {
                 originalPrice: 25.95,
                 data: '25',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'individual',
                 network: '5G',
                 featured: true,
                 popular: true,
-                features: ['5G incluido', 'Música ilimitada', 'Roaming 25GB']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido', 'Música ilimitada']
             },
             {
                 id: 'orange-individual-3',
@@ -598,12 +613,12 @@ class MobilePlansApp {
                 originalPrice: 32.95,
                 data: '50',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'individual',
                 network: '5G',
                 featured: false,
                 popular: false,
-                features: ['5G premium', 'Prime Video', 'Llamadas internacionales']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido', 'Prime Video']
             },
             {
                 id: 'orange-individual-4',
@@ -613,12 +628,12 @@ class MobilePlansApp {
                 originalPrice: 44.95,
                 data: 'unlimited',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'individual',
                 network: '5G',
                 featured: false,
                 popular: false,
-                features: ['Datos sin límite', 'Todas las ventajas', 'Lo mejor de Orange']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido', 'Datos ilimitados']
             },
 
             // ORANGE - Familiar
@@ -630,12 +645,12 @@ class MobilePlansApp {
                 originalPrice: 59.95,
                 data: '80',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'familiar',
                 network: '5G',
                 featured: false,
                 popular: true,
-                features: ['Hasta 4 líneas', 'Netflix incluido', 'Amazon Prime', 'Fibra opcional']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido', 'Hasta 4 líneas']
             },
             {
                 id: 'orange-familiar-2',
@@ -645,12 +660,12 @@ class MobilePlansApp {
                 originalPrice: 79.95,
                 data: 'unlimited',
                 calls: 'unlimited',
-                sms: 'unlimited',
+                sms: '0',
                 planType: 'familiar',
                 network: '5G',
                 featured: true,
                 popular: true,
-                features: ['Hasta 5 líneas', 'Todo incluido', 'Fibra 1GB', 'Todas las plataformas']
+                features: ['Llamadas ilimitadas', 'Sin SMS', 'Red 5G', 'Roaming UE incluido', 'Hasta 5 líneas']
             }
         ];
     }
@@ -937,7 +952,7 @@ class MobilePlansApp {
                 </div>
                 <h2>No hay planes para comparar</h2>
                 <p>Marca los productos que quieres comparar desde la sección de planes.</p>
-                <button class="cta-primary" onclick="window.navigation.navigateTo('plans')">
+                <button class="cta-primary" onclick="window.app.navigation.navigateTo('plans')">
                     Ver Planes
                 </button>
             </div>
@@ -1444,3 +1459,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.app = new MobilePlansApp();
     await window.app.initialize();
 });
+

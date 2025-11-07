@@ -151,11 +151,11 @@
 
         <!-- Página de Comparación -->
         <section id="compare-section" class="page-section" style="display: none;">
-            <div class="compare-header">
-                <h1>Comparar Planes</h1>
-                <p>Compara hasta 3 planes lado a lado</p>
+            <div class="compare-header" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+                <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--neutral-800); margin: 0 0 1rem 0;">Comparar Planes</h1>
+                <p style="font-size: 1.125rem; color: var(--neutral-600); margin: 0;">Compara hasta 3 planes lado a lado</p>
             </div>
-            <div id="comparison-container"></div>
+            <div id="comparison-container" style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;"></div>
         </section>
 
         <!-- Página de Calculadora -->
@@ -244,7 +244,7 @@
     </main>
 
     <!-- Botón flotante de comparación -->
-    <div class="compare-floating-btn" style="display: none;" onclick="window.navigation.navigateTo('compare')">
+    <div class="compare-floating-btn" style="display: none;" onclick="window.app.navigation.navigateTo('compare')">
         Comparar (0)
     </div>
 

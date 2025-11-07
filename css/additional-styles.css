@@ -454,6 +454,11 @@
         min-width: 600px;
     }
     
+    .comparison-table-container {
+        margin: 1rem auto;
+        padding: 0 1rem;
+    }
+    
     .feature-label {
         min-width: 100px;
         font-size: 0.875rem;

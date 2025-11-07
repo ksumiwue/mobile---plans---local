@@ -243,11 +243,37 @@ class ProductCardNew {
         };
     }
 
-    // Generar lista de características
+    // Generar lista de características (filtrar duplicados)
     generateFeaturesList(features) {
+        console.log('🔍 Características recibidas:', features);
+        
         if (!features || features.length === 0) return '';
         
-        return features.slice(0, 4).map(feature => `
+        // Filtrar características que ya aparecen con iconos arriba
+        const excludePatterns = [
+            'Llamadas ilimitadas',
+            'SMS ilimitados', 
+            'Sin SMS',
+            /\d+ SMS/,
+            'Red 5G',
+            'Red 4G', 
+            'Roaming UE incluido'
+        ];
+        
+        let filteredFeatures = features.filter(feature => {
+            return !excludePatterns.some(pattern => {
+                if (typeof pattern === 'string') {
+                    return feature.includes(pattern);
+                }
+                // Para regex
+                return pattern.test(feature);
+            });
+        });
+        
+        console.log('✅ Características filtradas (sin duplicados):', filteredFeatures.slice(0, 2));
+        
+        // Solo mostrar 2 características adicionales para no sobrecargar
+        return filteredFeatures.slice(0, 2).map(feature => `
             <li>${feature}</li>
         `).join('');
     }
@@ -331,8 +357,9 @@ class ProductCardNew {
                 <!-- Características -->
                 <ul class="features-minimal">
                     <li>${this.iconSet.calls} ${calls === 'unlimited' ? 'Llamadas ilimitadas' : calls + ' min'}</li>
-                    <li>${this.iconSet.sms} ${sms === 'unlimited' ? 'SMS ilimitados' : sms + ' SMS'}</li>
+                    <li>${this.iconSet.sms} ${sms === 'unlimited' ? 'SMS ilimitados' : sms === '0' ? 'Sin SMS' : sms + ' SMS'}</li>
                     <li>${this.iconSet.network} Red ${network}</li>
+                    <li>${this.iconSet.unlimited} Roaming UE incluido</li>
                     ${featuresList}
                 </ul>
 
