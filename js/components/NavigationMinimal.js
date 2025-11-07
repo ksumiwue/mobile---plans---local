@@ -60,11 +60,8 @@ class NavigationMinimal {
                         </a>
                     </div>
 
-                    <div class="nav-search">
-                        <div class="search-container">
-                            ${this.iconSet.search}
-                            <input type="text" class="search-input" placeholder="Buscar planes...">
-                        </div>
+                    <div class="nav-right">
+                        <!-- Área derecha libre -->
                     </div>
                 </div>
             </nav>
@@ -90,20 +87,6 @@ class NavigationMinimal {
             }
         });
 
-        // Búsqueda
-        const searchInput = document.querySelector('.search-input');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                this.handleSearch(e.target.value);
-            });
-
-            // Búsqueda con Enter
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    this.handleSearchSubmit(e.target.value);
-                }
-            });
-        }
 
         // Scroll suave para navegación sticky
         window.addEventListener('scroll', () => {

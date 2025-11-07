@@ -68,18 +68,32 @@
                 
                 <div class="hero-visual">
                     <div class="floating-cards">
-                        <!-- Tarjetas flotantes animadas -->
-                        <div class="floating-card" style="--delay: 0s;">
+                        <!-- Tarjetas flotantes animadas - Precios más caros (arriba) -->
+                        <div class="floating-card floating-expensive" style="--delay: 0s;">
                             <div class="mini-operator-logo movistar"></div>
-                            <div class="mini-price">24,99€</div>
+                            <div class="mini-price">45,99€</div>
                         </div>
-                        <div class="floating-card" style="--delay: 0.5s;">
+                        <div class="floating-card floating-expensive" style="--delay: 0.5s;">
                             <div class="mini-operator-logo vodafone"></div>
-                            <div class="mini-price">29,99€</div>
+                            <div class="mini-price">39,99€</div>
                         </div>
-                        <div class="floating-card" style="--delay: 1s;">
+                        <div class="floating-card floating-expensive" style="--delay: 1s;">
                             <div class="mini-operator-logo orange"></div>
+                            <div class="mini-price">42,99€</div>
+                        </div>
+                        
+                        <!-- Tarjetas flotantes animadas - Precios más baratos (abajo) -->
+                        <div class="floating-card floating-cheap" style="--delay: 1.5s;">
+                            <div class="mini-operator-logo movistar"></div>
+                            <div class="mini-price">12,99€</div>
+                        </div>
+                        <div class="floating-card floating-cheap" style="--delay: 2s;">
+                            <div class="mini-operator-logo vodafone"></div>
                             <div class="mini-price">19,99€</div>
+                        </div>
+                        <div class="floating-card floating-cheap" style="--delay: 2.5s;">
+                            <div class="mini-operator-logo orange"></div>
+                            <div class="mini-price">15,99€</div>
                         </div>
                     </div>
                 </div>
@@ -270,18 +284,18 @@
         .hero-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            padding: 4rem 2rem;
+            gap: 2rem;
+            padding: 1.5rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
             align-items: center;
-            min-height: 60vh;
+            min-height: 30vh;
         }
         
         .hero-content {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 1rem;
         }
         
         .hero-title {
@@ -362,7 +376,7 @@
         /* Floating Cards Animation */
         .hero-visual {
             position: relative;
-            height: 400px;
+            height: 300px;
         }
         
         .floating-cards {
@@ -378,23 +392,38 @@
             border-radius: 12px;
             padding: 1rem;
             box-shadow: var(--shadow-lg);
-            animation: float 3s ease-in-out infinite;
-            animation-delay: var(--delay);
         }
         
-        .floating-card:nth-child(1) {
+        /* Posicionamiento de tarjetas caras (arriba) */
+        .floating-card.floating-expensive:nth-child(1) {
+            top: 10%;
+            left: 15%;
+        }
+        
+        .floating-card.floating-expensive:nth-child(2) {
+            top: 15%;
+            right: 10%;
+        }
+        
+        .floating-card.floating-expensive:nth-child(3) {
             top: 20%;
-            left: 10%;
+            left: 50%;
         }
         
-        .floating-card:nth-child(2) {
-            top: 50%;
-            right: 20%;
+        /* Posicionamiento de tarjetas baratas (abajo) */
+        .floating-card.floating-cheap:nth-child(4) {
+            bottom: 10%;
+            left: 20%;
         }
         
-        .floating-card:nth-child(3) {
+        .floating-card.floating-cheap:nth-child(5) {
+            bottom: 15%;
+            right: 15%;
+        }
+        
+        .floating-card.floating-cheap:nth-child(6) {
             bottom: 20%;
-            left: 30%;
+            left: 55%;
         }
         
         .mini-operator-logo {
@@ -424,6 +453,71 @@
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
+        }
+        
+        /* Animaciones independientes para cada tarjeta cara (arriba) */
+        .floating-expensive:nth-child(1) {
+            animation: floatExpensive1 3.2s ease-in-out infinite;
+        }
+        
+        .floating-expensive:nth-child(2) {
+            animation: floatExpensive2 4.1s ease-in-out infinite;
+        }
+        
+        .floating-expensive:nth-child(3) {
+            animation: floatExpensive3 3.7s ease-in-out infinite;
+        }
+        
+        /* Animaciones independientes para cada tarjeta barata (abajo) */
+        .floating-cheap:nth-child(4) {
+            animation: floatCheap1 2.3s ease-in-out infinite;
+        }
+        
+        .floating-cheap:nth-child(5) {
+            animation: floatCheap2 2.8s ease-in-out infinite;
+        }
+        
+        .floating-cheap:nth-child(6) {
+            animation: floatCheap3 2.1s ease-in-out infinite;
+        }
+        
+        /* Keyframes para tarjetas caras - movimientos amplios y lentos */
+        @keyframes floatExpensive1 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-25px) rotate(1deg); }
+            50% { transform: translateY(-35px) rotate(0deg); }
+            75% { transform: translateY(-20px) rotate(-1deg); }
+        }
+        
+        @keyframes floatExpensive2 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(-1deg); }
+            66% { transform: translateY(-40px) rotate(1deg); }
+        }
+        
+        @keyframes floatExpensive3 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            20% { transform: translateY(-15px) rotate(0.5deg); }
+            40% { transform: translateY(-32px) rotate(-0.5deg); }
+            80% { transform: translateY(-25px) rotate(0.5deg); }
+        }
+        
+        /* Keyframes para tarjetas baratas - movimientos rápidos y pequeños */
+        @keyframes floatCheap1 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(0.5deg); }
+        }
+        
+        @keyframes floatCheap2 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(-0.5deg); }
+            75% { transform: translateY(-16px) rotate(0.5deg); }
+        }
+        
+        @keyframes floatCheap3 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            40% { transform: translateY(-14px) rotate(0.3deg); }
+            60% { transform: translateY(-10px) rotate(-0.3deg); }
         }
         
         /* Featured Section */
@@ -748,7 +842,8 @@
             .hero-section {
                 grid-template-columns: 1fr;
                 text-align: center;
-                padding: 2rem 1rem;
+                padding: 1rem 1rem;
+                min-height: 20vh;
             }
             
             .hero-title {
@@ -760,13 +855,20 @@
             }
             
             .hero-visual {
-                height: 300px;
+                height: 400px;
             }
             
             .floating-card {
                 position: static;
-                margin: 1rem;
+                margin: 0.5rem;
                 display: inline-block;
+            }
+            
+            .floating-cards {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                padding: 1rem;
             }
         }
     </style>

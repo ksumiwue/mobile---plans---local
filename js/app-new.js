@@ -88,6 +88,9 @@ class MobilePlansApp {
         
         // Cargar planes destacados
         this.loadFeaturedPlans();
+        
+        // Actualizar tarjetas flotantes con precios dinámicos
+        this.updateFloatingCards();
     }
 
     // Cargar productos desde API real
@@ -875,6 +878,51 @@ class MobilePlansApp {
             const featuredProducts = this.products.slice(0, 3);
             this.productCardRenderer.renderProductGrid(featuredProducts, featuredContainer);
         }
+    }
+
+    // Obtener precios dinámicos para tarjetas flotantes
+    getFloatingCardPrices() {
+        const operators = ['movistar', 'vodafone', 'orange'];
+        const prices = {};
+        
+        operators.forEach(operator => {
+            const operatorProducts = this.products.filter(p => p.operator === operator);
+            if (operatorProducts.length > 0) {
+                const sortedPrices = operatorProducts.map(p => p.price).sort((a, b) => a - b);
+                prices[operator] = {
+                    min: sortedPrices[0],
+                    max: sortedPrices[sortedPrices.length - 1]
+                };
+            } else {
+                // Valores por defecto si no hay productos del operador
+                prices[operator] = { min: 15.99, max: 39.99 };
+            }
+        });
+        
+        return prices;
+    }
+
+    // Actualizar tarjetas flotantes con precios dinámicos
+    updateFloatingCards() {
+        const prices = this.getFloatingCardPrices();
+        
+        // Actualizar tarjetas caras (arriba)
+        const expensiveCards = document.querySelectorAll('.floating-expensive .mini-price');
+        if (expensiveCards.length >= 3) {
+            expensiveCards[0].textContent = `${prices.movistar.max.toFixed(2)}€`;
+            expensiveCards[1].textContent = `${prices.vodafone.max.toFixed(2)}€`;
+            expensiveCards[2].textContent = `${prices.orange.max.toFixed(2)}€`;
+        }
+        
+        // Actualizar tarjetas baratas (abajo)
+        const cheapCards = document.querySelectorAll('.floating-cheap .mini-price');
+        if (cheapCards.length >= 3) {
+            cheapCards[0].textContent = `${prices.movistar.min.toFixed(2)}€`;
+            cheapCards[1].textContent = `${prices.vodafone.min.toFixed(2)}€`;
+            cheapCards[2].textContent = `${prices.orange.min.toFixed(2)}€`;
+        }
+        
+        console.log('✅ Tarjetas flotantes actualizadas con precios dinámicos:', prices);
     }
 
     // Actualizar contador de resultados
