@@ -67,7 +67,7 @@ class FilterSystemNew {
                                 <div class="custom-option active" data-value="all">Todos los operadores</div>
                                 <div class="custom-option" data-value="movistar">Movistar</div>
                                 <div class="custom-option" data-value="vodafone">Vodafone</div>
-                                <div class="custom-option" data-value="orange">Orange</div>
+                                <div class="custom-option" data-value="orange">Orange-Yoigo-Movistar</div>
                             </div>
                         </div>
                     </div>

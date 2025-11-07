@@ -35,6 +35,7 @@
       "permanencia": 12,
       "featured": true,
       "popular": true,
+      "description": "Plan completo que combina fibra 300MB y móvil con 30GB de datos 5G, Netflix incluido durante 6 meses y todas las ventajas de la red premium de Movistar.",
       "features": [
         "Fibra 300MB incluida",
         "Netflix gratis 6 meses",
@@ -67,6 +68,7 @@
       "permanencia": 0,
       "featured": true,
       "popular": false,
+      "description": "Tarifa joven sin permanencia diseñada para menores de 30 años, con gestión 100% digital através de la app Yu y atención al cliente especializada las 24 horas.",
       "features": [
         "Llamadas ilimitadas",
         "SMS gratis",
@@ -99,6 +101,7 @@
       "permanencia": 24,
       "featured": true,
       "popular": true,
+      "description": "Plan familiar con datos ilimitados 5G para hasta 4 líneas, incluye Amazon Prime y Disney+ durante 6 meses, perfecto para familias que quieren compartir datos y entretenimiento.",
       "features": [
         "Datos ilimitados",
         "Hasta 4 líneas incluidas",
@@ -131,6 +134,7 @@
       "permanencia": 24,
       "featured": false,
       "popular": false,
+      "description": "Solución empresarial completa con 100GB de datos 5G, soporte técnico 24/7, Microsoft 365 incluido y gestión centralizada para equipos profesionales.",
       "features": [
         "Soporte técnico 24/7",
         "Gestión centralizada",
@@ -163,6 +167,7 @@
       "permanencia": 18,
       "featured": false,
       "popular": true,
+      "description": "Pack convergente que incluye fibra 1GB, TV Vodafone con contenido premium, múltiples líneas móviles 5G y protección Secure Net, todo en una sola factura.",
       "features": [
         "TV Vodafone incluida",
         "Múltiples líneas móviles",
@@ -195,6 +200,7 @@
       "permanencia": 0,
       "featured": false,
       "popular": false,
+      "description": "Tarifa básica sin permanencia ideal para usuarios con consumo moderado, precio fijo garantizado y posibilidad de cambio de tarifa gratuito en cualquier momento.",
       "features": [
         "Plan básico ideal",
         "Sin permanencia",
@@ -227,6 +233,7 @@
       "permanencia": 0,
       "featured": false,
       "popular": false,
+      "description": "Modalidad prepago con total control del gasto, ideal para uso ocasional sin compromisos de permanencia, recarga solo cuando lo necesites.",
       "features": [
         "Sin compromiso de permanencia",
         "Recarga cuando quieras",
@@ -259,6 +266,7 @@
       "permanencia": 12,
       "featured": false,
       "popular": true,
+      "description": "Tarifa especial para jóvenes hasta 26 años con Spotify Premium incluido, datos extra los fines de semana y uso gratuito de redes sociales sin consumir datos.",
       "features": [
         "Diseñado para jóvenes",
         "Apps sociales gratis",
@@ -291,6 +299,7 @@
       "permanencia": 12,
       "featured": false,
       "popular": false,
+      "description": "Plan internacional perfecto para viajeros con llamadas y roaming mundial incluido, 40GB de datos 5G, almacenamiento en la nube y seguro de móvil integrado.",
       "features": [
         "Llamadas internacionales",
         "Roaming mundial incluido",
@@ -323,6 +332,7 @@
       "permanencia": 0,
       "featured": false,
       "popular": false,
+      "description": "Tarifa especial para mayores de 60 años con descuento permanente, atención personalizada, terminal fácil de usar y botón SOS para mayor tranquilidad familiar.",
       "features": [
         "Tarifa especial +60 años",
         "Atención personalizada",
@@ -355,6 +365,7 @@
       "permanencia": 24,
       "featured": false,
       "popular": false,
+      "description": "Solución empresarial flexible con gestión de flotas móviles, business intelligence, seguridad avanzada y escalabilidad total para empresas en crecimiento.",
       "features": [
         "Flexibilidad total",
         "Gestión de flotas",
@@ -387,6 +398,7 @@
       "permanencia": 24,
       "featured": false,
       "popular": false,
+      "description": "Pack convergente completo con fibra 600MB, TV Orange, múltiples líneas móviles 5G, router WiFi 6 e instalación profesional, todo con una sola factura.",
       "features": [
         "Fibra 600MB incluida",
         "TV Orange incluida",

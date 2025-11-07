@@ -117,7 +117,7 @@ class MobilePlansApp {
             return this.transformAPIData(data);
 
         } catch (error) {
-            console.error('❌ Error cargando productos:', error);
+            console.error('❌ Error cargando productos desde API:', error);
             
             // Fallback a datos expandidos para demostración
             console.log('🔄 Usando datos expandidos de demostración...');
@@ -220,7 +220,8 @@ class MobilePlansApp {
             popular: Boolean(product.popular || product.recomendado || product.bestseller),
             features: this.normalizeFeatures(product.features || product.caracteristicas || product.extras || []),
             benefits: this.normalizeFeatures(product.benefits || product.beneficios || product.ventajas || []),
-            restrictions: this.normalizeFeatures(product.restrictions || product.restricciones || product.limitaciones || [])
+            restrictions: this.normalizeFeatures(product.restrictions || product.restricciones || product.limitaciones || []),
+            description: product.description || product.descripcion || "Plan completo con todas las ventajas y servicios incluidos para satisfacer tus necesidades de conectividad."
         };
         
         console.log(`🔄 Producto normalizado:`, normalized);
@@ -1044,6 +1045,17 @@ class MobilePlansApp {
         return num; // Asumir GB por defecto
     }
 
+    // Obtener nombre de operador para mostrar al usuario
+    getOperatorDisplayName(operator) {
+        const displayNames = {
+            movistar: 'Movistar',
+            vodafone: 'Vodafone',
+            orange: 'Orange-Yoigo-Movistar'
+        };
+        
+        return displayNames[operator.toLowerCase()] || operator.charAt(0).toUpperCase() + operator.slice(1);
+    }
+
     // Obtener el mejor valor para una característica específica
     getBestValueForFeature(feature, allValues) {
         if (!allValues || allValues.length === 0) return null;
@@ -1238,11 +1250,14 @@ class MobilePlansApp {
             <th class="comparison-header">
                 <div class="product-summary">
                     <div class="operator-badge ${product.operator}">
-                        ${product.operator.charAt(0).toUpperCase() + product.operator.slice(1)}
+                        ${this.getOperatorDisplayName(product.operator)}
                     </div>
                     <h3>${product.name}</h3>
                     <div class="price-comparison">
                         ${this.productCardRenderer.formatPrice(product.price, product.operator)}
+                    </div>
+                    <div class="product-description" style="font-size: 0.8rem; color: var(--neutral-800); text-align: justify; margin-top: 0.5rem; line-height: 1.3;">
+                        ${this.productCardRenderer.getProductDescription(product)}
                     </div>
                 </div>
             </th>

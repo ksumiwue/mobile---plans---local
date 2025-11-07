@@ -195,6 +195,37 @@ class ProductCardNew {
         return backgroundImages[operator.toLowerCase()] || backgroundImages.movistar;
     }
 
+    // Obtener descripción del producto desde el JSON
+    getProductDescription(product) {
+        return product.description || "Plan completo con todas las ventajas y servicios incluidos para satisfacer tus necesidades de conectividad.";
+    }
+
+    // Método auxiliar para parsear datos (ya existe pero lo reutilizamos)
+    parseDataToGB(dataString) {
+        if (!dataString || typeof dataString !== 'string') return 0;
+        
+        const lowerData = dataString.toLowerCase();
+        
+        if (lowerData.includes('ilimitad') || lowerData.includes('unlimited')) {
+            return 1000;
+        }
+        
+        const numMatch = dataString.match(/(\d+(?:,\d+)?)/);
+        if (!numMatch) return 0;
+        
+        const num = parseFloat(numMatch[1].replace(',', '.'));
+        
+        if (lowerData.includes('tb')) {
+            return num * 1024;
+        } else if (lowerData.includes('gb')) {
+            return num;
+        } else if (lowerData.includes('mb')) {
+            return num / 1024;
+        }
+        
+        return num;
+    }
+
     // Obtener colores del operador (claro y oscuro)
     getOperatorColors(operator) {
         
@@ -386,6 +417,11 @@ class ProductCardNew {
 
                 <!-- Datos principales -->
                 ${formattedData}
+
+                <!-- Descripción del producto -->
+                <div class="product-description">
+                    ${this.getProductDescription(product)}
+                </div>
 
                 <!-- Características -->
                 <ul class="features-minimal">
