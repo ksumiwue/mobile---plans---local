@@ -874,8 +874,35 @@ class MobilePlansApp {
     loadFeaturedPlans() {
         const featuredContainer = document.getElementById('featured-plans-container');
         if (featuredContainer && this.productCardRenderer) {
-            // Mostrar los 3 planes más populares
-            const featuredProducts = this.products.slice(0, 3);
+            let featuredProducts = [];
+            
+            // Obtener configuración desde Elementor si existe
+            const elementorConfig = window.mobilePlansElementorConfig;
+            const mode = elementorConfig?.featuredPlans?.mode || 'auto';
+            
+            switch(mode) {
+                case 'manual':
+                    featuredProducts = this.getManualSelectedPlans(elementorConfig.featuredPlans.manualPlans);
+                    break;
+                case 'cheapest':
+                    featuredProducts = this.getCheapestPlansByOperator();
+                    break;
+                case 'most_expensive':
+                    featuredProducts = this.getMostExpensivePlansByOperator();
+                    break;
+                case 'best_value':
+                    featuredProducts = this.getBestValuePlans();
+                    break;
+                case 'auto':
+                default:
+                    featuredProducts = this.products.slice(0, 3);
+                    break;
+            }
+            
+            // Asegurar que tenemos máximo 3 planes
+            featuredProducts = featuredProducts.slice(0, 3);
+            
+            console.log('📋 Planes destacados cargados:', { mode, count: featuredProducts.length });
             this.productCardRenderer.renderProductGrid(featuredProducts, featuredContainer);
         }
     }
@@ -923,6 +950,98 @@ class MobilePlansApp {
         }
         
         console.log('✅ Tarjetas flotantes actualizadas con precios dinámicos:', prices);
+    }
+
+    // Obtener planes seleccionados manualmente
+    getManualSelectedPlans(manualPlans) {
+        const selectedPlans = [];
+        
+        if (Array.isArray(manualPlans)) {
+            manualPlans.forEach(planIndex => {
+                if (planIndex !== '' && planIndex !== null && this.products[planIndex]) {
+                    selectedPlans.push(this.products[planIndex]);
+                }
+            });
+        }
+        
+        return selectedPlans;
+    }
+
+    // Obtener el plan más barato de cada operador
+    getCheapestPlansByOperator() {
+        const operators = ['movistar', 'vodafone', 'orange'];
+        const cheapestPlans = [];
+        
+        operators.forEach(operator => {
+            const operatorPlans = this.products.filter(p => p.operator === operator);
+            if (operatorPlans.length > 0) {
+                const cheapest = operatorPlans.reduce((prev, current) => 
+                    prev.price < current.price ? prev : current
+                );
+                cheapestPlans.push(cheapest);
+            }
+        });
+        
+        return cheapestPlans;
+    }
+
+    // Obtener el plan más caro de cada operador
+    getMostExpensivePlansByOperator() {
+        const operators = ['movistar', 'vodafone', 'orange'];
+        const expensivePlans = [];
+        
+        operators.forEach(operator => {
+            const operatorPlans = this.products.filter(p => p.operator === operator);
+            if (operatorPlans.length > 0) {
+                const mostExpensive = operatorPlans.reduce((prev, current) => 
+                    prev.price > current.price ? prev : current
+                );
+                expensivePlans.push(mostExpensive);
+            }
+        });
+        
+        return expensivePlans;
+    }
+
+    // Obtener planes con mejor relación calidad-precio
+    getBestValuePlans() {
+        // Calcular valor = datos / precio (más datos por euro es mejor)
+        const plansWithValue = this.products.map(plan => {
+            const dataGB = this.parseDataToGB(plan.data);
+            const value = dataGB > 0 ? dataGB / plan.price : 0;
+            return { ...plan, value };
+        });
+        
+        // Ordenar por valor descendente y tomar los 3 mejores
+        return plansWithValue
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 3);
+    }
+
+    // Convertir datos a GB para comparación
+    parseDataToGB(dataString) {
+        if (!dataString || typeof dataString !== 'string') return 0;
+        
+        const lowerData = dataString.toLowerCase();
+        
+        if (lowerData.includes('ilimitad') || lowerData.includes('unlimited')) {
+            return 1000; // Valor alto para datos ilimitados
+        }
+        
+        const numMatch = dataString.match(/(\d+(?:,\d+)?)/);
+        if (!numMatch) return 0;
+        
+        const num = parseFloat(numMatch[1].replace(',', '.'));
+        
+        if (lowerData.includes('tb')) {
+            return num * 1024;
+        } else if (lowerData.includes('gb')) {
+            return num;
+        } else if (lowerData.includes('mb')) {
+            return num / 1024;
+        }
+        
+        return num; // Asumir GB por defecto
     }
 
     // Actualizar contador de resultados

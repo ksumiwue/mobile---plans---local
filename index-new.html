@@ -60,9 +60,6 @@
                         <button class="cta-primary" onclick="window.navigation.navigateTo('plans')">
                             Ver Todos los Planes
                         </button>
-                        <button class="cta-secondary" onclick="window.navigation.navigateTo('calculator')">
-                            Calculadora de Uso
-                        </button>
                     </div>
                 </div>
                 
@@ -173,59 +170,6 @@
             <div id="comparison-container" style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;"></div>
         </section>
 
-        <!-- Página de Calculadora -->
-        <section id="calculator-section" class="page-section" style="display: none;">
-            <div class="calculator-header">
-                <h1>Calculadora de Planes</h1>
-                <p>Encuentra el plan perfecto según tu uso</p>
-            </div>
-            
-            <div class="calculator-form">
-                <div class="form-group">
-                    <label>¿Cuántos GB necesitas al mes?</label>
-                    <div class="slider-container">
-                        <input type="range" id="data-slider" min="1" max="100" value="20" class="slider">
-                        <div class="slider-value">
-                            <span id="data-value">20</span> GB
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>¿Cuántas llamadas haces?</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="calls" value="few">
-                            <span>Pocas (menos de 100 min)</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="calls" value="normal" checked>
-                            <span>Normales (100-300 min)</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="calls" value="many">
-                            <span>Muchas (ilimitadas)</span>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>¿Cuál es tu presupuesto máximo?</label>
-                    <div class="slider-container">
-                        <input type="range" id="budget-slider" min="10" max="80" value="40" class="slider">
-                        <div class="slider-value">
-                            <span id="budget-value">40</span> €/mes
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="cta-primary" onclick="calculateBestPlan()">
-                    Encontrar Mi Plan Ideal
-                </button>
-            </div>
-            
-            <div id="calculator-results" class="calculator-results" style="display: none;"></div>
-        </section>
 
         <!-- Página de Ayuda -->
         <section id="help-section" class="page-section" style="display: none;">
@@ -341,15 +285,18 @@
             gap: 1rem;
         }
         
-        .cta-primary, .cta-secondary {
+        .cta-primary, .cta-secondary, .cta-minimal {
             padding: 1rem 2rem;
             border-radius: 8px;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             cursor: pointer;
             border: none;
             font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
         
         .cta-primary {
@@ -357,9 +304,37 @@
             color: white;
         }
         
+        .cta-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: white;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            z-index: -1;
+        }
+        
+        .cta-primary:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+        
         .cta-primary:hover {
-            background: #357ABD;
-            transform: translateY(-2px);
+            color: #4A90E2 !important;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid #4A90E2;
+            z-index: 2;
+        }
+        
+        .cta-primary > * {
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
         }
         
         .cta-secondary {
@@ -371,6 +346,47 @@
         .cta-secondary:hover {
             background: #4A90E2;
             color: white;
+        }
+        
+        .cta-minimal {
+            background: var(--neutral-800);
+            color: white;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .cta-minimal::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: white;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            z-index: -1;
+        }
+        
+        .cta-minimal:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+        
+        .cta-minimal:hover {
+            color: var(--neutral-800) !important;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--neutral-800);
+            z-index: 2;
+        }
+        
+        .cta-minimal > * {
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
         }
         
         /* Floating Cards Animation */
@@ -693,70 +709,6 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
         
-        /* Calculator Styles */
-        .calculator-form {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 16px;
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .form-group {
-            margin-bottom: 2rem;
-        }
-        
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: var(--neutral-700);
-            margin-bottom: 1rem;
-        }
-        
-        .slider-container {
-            position: relative;
-            margin: 1rem 0;
-        }
-        
-        .slider {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--neutral-200);
-            outline: none;
-            -webkit-appearance: none;
-        }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--accent-primary);
-            cursor: pointer;
-        }
-        
-        .slider-value {
-            text-align: center;
-            margin-top: 0.5rem;
-            font-weight: 600;
-            color: var(--accent-primary);
-        }
-        
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
         
         /* FAQ Styles */
         .faq-container {

@@ -29,6 +29,34 @@ class Mobile_Plans_Elementor_Widget extends \Elementor\Widget_Base {
         return ['mobile', 'plans', 'telefonia', 'comparador', 'movil'];
     }
 
+    private function get_available_plans() {
+        // Cargar productos desde el JSON
+        $products_file = get_template_directory() . '/mobile-plans/config/products-enhanced.json';
+        
+        if (!file_exists($products_file)) {
+            return ['none' => __('No hay productos disponibles', 'mobile-plans')];
+        }
+        
+        $products_json = file_get_contents($products_file);
+        $products_data = json_decode($products_json, true);
+        
+        if (!$products_data || !isset($products_data['products'])) {
+            return ['none' => __('Error al cargar productos', 'mobile-plans')];
+        }
+        
+        $options = ['' => __('Seleccionar plan...', 'mobile-plans')];
+        
+        foreach ($products_data['products'] as $index => $product) {
+            $operator_name = ucfirst($product['operator']);
+            $plan_name = $product['name'];
+            $price = number_format($product['price'], 2, ',', '.') . '€';
+            
+            $options[$index] = "{$operator_name} - {$plan_name} ({$price})";
+        }
+        
+        return $options;
+    }
+
     protected function register_controls() {
         
         // Sección General
@@ -148,6 +176,87 @@ class Mobile_Plans_Elementor_Widget extends \Elementor\Widget_Base {
                 'label_off' => __('No', 'mobile-plans'),
                 'return_value' => 'yes',
                 'default' => 'yes',
+            ]
+        );
+
+        $this->end_controls_section();
+
+        // Sección Planes Populares
+        $this->start_controls_section(
+            'featured_plans_section',
+            [
+                'label' => __('Planes Populares', 'mobile-plans'),
+                'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $this->add_control(
+            'featured_plans_mode',
+            [
+                'label' => __('Modo de Selección', 'mobile-plans'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'auto',
+                'options' => [
+                    'auto' => __('Automático (3 primeros)', 'mobile-plans'),
+                    'manual' => __('Selección Manual', 'mobile-plans'),
+                    'cheapest' => __('Más Baratos por Operador', 'mobile-plans'),
+                    'most_expensive' => __('Más Caros por Operador', 'mobile-plans'),
+                    'best_value' => __('Mejor Relación Calidad-Precio', 'mobile-plans'),
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'manual_plan_1',
+            [
+                'label' => __('Plan Popular 1', 'mobile-plans'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => '',
+                'options' => $this->get_available_plans(),
+                'condition' => [
+                    'featured_plans_mode' => 'manual',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'manual_plan_2',
+            [
+                'label' => __('Plan Popular 2', 'mobile-plans'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => '',
+                'options' => $this->get_available_plans(),
+                'condition' => [
+                    'featured_plans_mode' => 'manual',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'manual_plan_3',
+            [
+                'label' => __('Plan Popular 3', 'mobile-plans'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => '',
+                'options' => $this->get_available_plans(),
+                'condition' => [
+                    'featured_plans_mode' => 'manual',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'featured_plans_note',
+            [
+                'type' => \Elementor\Controls_Manager::RAW_HTML,
+                'raw' => __('<p><strong>Modos de selección:</strong></p>
+                <ul>
+                    <li><strong>Automático:</strong> Selecciona los 3 primeros planes del catálogo</li>
+                    <li><strong>Selección Manual:</strong> Elige exactamente qué planes mostrar</li>
+                    <li><strong>Más Baratos:</strong> Selecciona automáticamente el plan más barato de cada operador</li>
+                    <li><strong>Más Caros:</strong> Selecciona automáticamente el plan más caro de cada operador</li>
+                    <li><strong>Mejor Valor:</strong> Selecciona planes con mejor relación datos/precio</li>
+                </ul>', 'mobile-plans'),
             ]
         );
 
@@ -321,6 +430,14 @@ class Mobile_Plans_Elementor_Widget extends \Elementor\Widget_Base {
             'enableSearch' => $settings['enable_search'] === 'yes',
             'apiUrl' => $settings['api_url']['url'],
             'cacheTime' => $settings['cache_time'] * 60000, // Convertir a ms
+            'featuredPlans' => [
+                'mode' => $settings['featured_plans_mode'],
+                'manualPlans' => [
+                    $settings['manual_plan_1'],
+                    $settings['manual_plan_2'],
+                    $settings['manual_plan_3']
+                ]
+            ],
         ];
         
         // Cargar directamente el index.html
@@ -349,6 +466,13 @@ class Mobile_Plans_Elementor_Widget extends \Elementor\Widget_Base {
             </div>
             <?php
         }
+        
+        // Pasar configuración a JavaScript
+        wp_add_inline_script(
+            'mobile-plans-app',
+            'window.mobilePlansElementorConfig = ' . wp_json_encode($widget_config) . ';',
+            'before'
+        );
         
         // Enqueue scripts y styles
         $this->enqueue_widget_assets();
@@ -406,7 +530,7 @@ class Mobile_Plans_Elementor_Widget extends \Elementor\Widget_Base {
         // JavaScript principal
         wp_enqueue_script(
             'mobile-plans-app',
-            get_template_directory_uri() . '/mobile-plans/js/app.js',
+            get_template_directory_uri() . '/mobile-plans/js/app-new.js',
             ['vue3', 'axios'],
             '2.0.0',
             true
