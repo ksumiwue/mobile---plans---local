@@ -271,6 +271,22 @@ export default {
           operator: product.operator
         });
       }
+    },
+    
+    // Nuevo método para obtener clases CSS dinámicas
+    getProductColumnClass(product) {
+      return {
+        'product-column': true,
+        'removing': this.animatingRemoval === product.id
+      };
+    },
+    
+    getValueCellClass(feature, valueObj) {
+      return {
+        'value-cell': true,
+        'best-value': this.isBestValue(feature, valueObj),
+        'removing': this.animatingRemoval === valueObj.product.id
+      };
     }
   },
   
@@ -278,11 +294,9 @@ export default {
     <div class="comparator-container" :class="{ 'theme-dark': theme === 'dark' }">
       <!-- Header -->
       <div class="comparator-header">
-        <div>
-          <h2>Comparación de Planes</h2>
-          <p v-if="hasProducts">Comparando {{ products.length }} de {{ maxProducts }} planes</p>
-          <p v-else>No hay productos en comparación</p>
-        </div>
+        <h2>Comparación de Planes</h2>
+        <p v-if="hasProducts">Comparando {{ products.length }} de {{ maxProducts }} planes</p>
+        <p v-else>No hay productos en comparación</p>
         
         <div v-if="hasProducts" class="header-actions">
           <!-- Exportar -->
@@ -363,13 +377,13 @@ export default {
                 <th 
                   v-for="(product, index) in products" 
                   :key="product.id"
-                  class="product-column"
-                  :class="{ 'removing': animatingRemoval === product.id }"
+                  :class="getProductColumnClass(product)"
                 >
                   <div class="product-header">
                     <button 
                       @click="removeProduct(product.id)"
                       class="remove-product"
+                      :title="'Eliminar ' + product.data"
                     >
                       ×
                     </button>
@@ -385,10 +399,11 @@ export default {
             </thead>
             <tbody>
               <tr 
-                v-for="feature in comparisonTable" 
+                v-for="(feature, index) in comparisonTable" 
                 :key="feature.key"
                 class="comparison-row"
                 :class="{ 'highlight-row': feature.highlight }"
+                :style="{ '--row-index': index }"
               >
                 <td class="feature-cell">
                   <div class="feature-label">
@@ -399,11 +414,7 @@ export default {
                 <td 
                   v-for="valueObj in feature.values"
                   :key="valueObj.product.id"
-                  class="value-cell"
-                  :class="{
-                    'best-value': isBestValue(feature, valueObj),
-                    'removing': animatingRemoval === valueObj.product.id
-                  }"
+                  :class="getValueCellClass(feature, valueObj)"
                 >
                   <!-- Imagen -->
                   <div v-if="feature.type === 'image'" class="product-image">

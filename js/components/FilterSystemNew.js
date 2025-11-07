@@ -126,7 +126,7 @@ class FilterSystemNew {
 
                 <!-- Botones de acción -->
                 <div class="filter-actions" style="margin-top: 1rem; display: flex; justify-content: center;">
-                    <button class="filter-clear-btn" onclick="window.filterSystem.clearFilters()">
+                    <button class="filter-clear-btn" onclick="window.app.filterSystem.clearFilters()">
                         Limpiar Filtros
                     </button>
                 </div>
@@ -426,6 +426,8 @@ class FilterSystemNew {
 
     // Limpiar filtros
     clearFilters() {
+        console.log('🧹 Limpiando todos los filtros...');
+        
         this.filters = {
             operator: 'all',
             planType: 'all',
@@ -454,7 +456,20 @@ class FilterSystemNew {
             searchInput.value = '';
         }
 
-        this.applyFilters();
+        // IMPORTANTE: Forzar reseteo completo
+        console.log('🔄 Reseteando productos filtrados...');
+        this.filteredProducts = [...this.products];
+        
+        // Notificar cambio DIRECTAMENTE a la aplicación principal
+        if (this.onFilterChange) {
+            console.log(`📡 Notificando cambio con ${this.filteredProducts.length} productos`);
+            this.onFilterChange(this.filteredProducts);
+        }
+        
+        // Actualizar contador
+        this.updateResultsCounter();
+        
+        console.log(`✅ Filtros limpiados. Mostrando ${this.filteredProducts.length} productos`);
     }
 
     // Resetear sliders a valores iniciales

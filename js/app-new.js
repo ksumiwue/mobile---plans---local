@@ -1224,6 +1224,54 @@ class MobilePlansApp {
         });
     }
 
+    // Actualizar estado de checkboxes de comparación
+    updateComparisonCheckboxes() {
+        console.log('🔄 Actualizando checkboxes de comparación...');
+        const checkboxes = document.querySelectorAll('.compare-checkbox');
+        
+        checkboxes.forEach(checkbox => {
+            const productId = checkbox.dataset.productId;
+            const shouldBeChecked = this.comparisonStore.has(productId);
+            
+            if (checkbox.checked !== shouldBeChecked) {
+                checkbox.checked = shouldBeChecked;
+                console.log(`✅ Checkbox ${productId}: ${shouldBeChecked}`);
+            }
+        });
+    }
+
+    // Actualizar estado de checkboxes de comparación
+    updateComparisonCheckboxes() {
+        console.log('🔄 Actualizando checkboxes de comparación...');
+        const checkboxes = document.querySelectorAll('.compare-checkbox');
+        
+        checkboxes.forEach(checkbox => {
+            const productId = checkbox.dataset.productId;
+            const shouldBeChecked = this.comparisonStore.has(productId);
+            
+            if (checkbox.checked !== shouldBeChecked) {
+                checkbox.checked = shouldBeChecked;
+                console.log(`✅ Checkbox ${productId}: ${shouldBeChecked}`);
+            }
+        });
+    }
+
+    // Actualizar estado de checkboxes de comparación
+    updateComparisonCheckboxes() {
+        console.log('🔄 Actualizando checkboxes de comparación...');
+        const checkboxes = document.querySelectorAll('.compare-checkbox');
+        
+        checkboxes.forEach(checkbox => {
+            const productId = checkbox.dataset.productId;
+            const shouldBeChecked = this.comparisonStore.has(productId);
+            
+            if (checkbox.checked !== shouldBeChecked) {
+                checkbox.checked = shouldBeChecked;
+                console.log(`✅ Checkbox ${productId}: ${shouldBeChecked}`);
+            }
+        });
+    }
+
     // Configurar stores globales
     setupGlobalStores() {
         window.comparisonStore = this.comparisonStore;
@@ -1346,8 +1394,16 @@ class MobilePlansApp {
 
     // Limpiar comparación
     clearComparison() {
+        console.log('🧹 Limpiando comparación...');
         this.comparisonStore.clear();
+        
+        // Actualizar checkboxes de productos
+        this.updateComparisonCheckboxes();
+        
+        // Actualizar UI de comparación
         this.updateComparisonUI();
+        
+        console.log('✅ Comparación limpiada completamente');
         
         // Si estamos en página de comparación, re-renderizar
         if (this.navigation.getCurrentPage() === 'compare') {

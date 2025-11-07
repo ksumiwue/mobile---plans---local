@@ -1,0 +1,838 @@
+/* ===== ESTILOS MEJORADOS PARA COMPARACIÓN DE PLANES ===== */
+
+/* ==============================================
+   VARIABLES ESPECÍFICAS PARA COMPARACIÓN
+   ============================================== */
+
+:root {
+  /* Colores de operadores mejorados */
+  --movistar-gradient: linear-gradient(135deg, #00579A 0%, #0066CC 100%);
+  --vodafone-gradient: linear-gradient(135deg, #E60000 0%, #FF4444 100%);
+  --orange-gradient: linear-gradient(135deg, #FF7900 0%, #FFB366 100%);
+  
+  /* Colores de estado */
+  --best-value-color: #10B981;
+  --best-value-bg: rgba(16, 185, 129, 0.1);
+  --savings-color: #F59E0B;
+  --savings-bg: rgba(245, 158, 11, 0.1);
+  
+  /* Shadows mejoradas */
+  --comparison-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --card-hover-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --glow-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+}
+
+/* ==============================================
+   CONTENEDOR PRINCIPAL MEJORADO
+   ============================================== */
+
+.comparator-container {
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.02) 0%, 
+    rgba(139, 92, 246, 0.02) 50%, 
+    rgba(236, 72, 153, 0.02) 100%);
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+/* ==============================================
+   HEADER DE COMPARACIÓN MEJORADO
+   ============================================== */
+
+.comparator-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.comparator-header::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  border-radius: 50%;
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+}
+
+.comparator-header h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1e40af 0%, #7c3aed 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.comparator-header p {
+  font-size: 1.125rem;
+  color: var(--neutral-600);
+  margin: 0;
+}
+
+/* ==============================================
+   ACCIONES DEL HEADER MEJORADAS
+   ============================================== */
+
+.header-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.export-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  border: 2px solid var(--neutral-200);
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.export-dropdown:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--glow-shadow);
+}
+
+.export-select {
+  border: none;
+  background: transparent;
+  font-weight: 500;
+  color: var(--neutral-700);
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-export,
+.btn-share,
+.btn-clear {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-export {
+  background: var(--movistar-gradient);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-export:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+.btn-share {
+  background: var(--orange-gradient);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-share:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+.btn-clear {
+  background: var(--neutral-100);
+  color: var(--neutral-700);
+  border: 2px solid var(--neutral-300);
+}
+
+.btn-clear:hover {
+  background: var(--vodafone-gradient);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
+}
+
+/* Menú desplegable de compartir */
+.share-dropdown {
+  position: relative;
+}
+
+.share-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid var(--neutral-200);
+  border-radius: 12px;
+  box-shadow: var(--comparison-shadow);
+  margin-top: 0.5rem;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.share-option {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-weight: 500;
+  color: var(--neutral-700);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.share-option:hover {
+  background: var(--neutral-50);
+}
+
+/* ==============================================
+   ESTADO VACÍO MEJORADO
+   ============================================== */
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 24px;
+  box-shadow: var(--comparison-shadow);
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.empty-state::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  display: block;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.empty-state h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--neutral-800);
+  margin: 0 0 1rem 0;
+}
+
+.empty-state p {
+  font-size: 1.125rem;
+  color: var(--neutral-600);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ==============================================
+   RESUMEN DE COMPARACIÓN MEJORADO
+   ============================================== */
+
+.comparison-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.summary-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--comparison-shadow);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+.price-summary::before {
+  background: var(--best-value-color);
+}
+
+.data-summary::before {
+  background: var(--savings-color);
+}
+
+.summary-card h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  color: var(--neutral-800);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.best-option,
+.savings {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 12px;
+  background: var(--neutral-50);
+}
+
+.best-option {
+  background: var(--best-value-bg);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.savings {
+  background: var(--savings-bg);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.label {
+  font-weight: 500;
+  color: var(--neutral-600);
+}
+
+.value {
+  font-weight: 700;
+  color: var(--neutral-800);
+}
+
+.savings-amount {
+  color: var(--savings-color);
+  font-size: 1.125rem;
+}
+
+/* ==============================================
+   TABLA DE COMPARACIÓN MEJORADA
+   ============================================== */
+
+.comparison-table-container {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--comparison-shadow);
+  margin: 0 auto;
+  max-width: 1200px;
+  position: relative;
+}
+
+.comparison-table-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Header de productos mejorado */
+.product-column {
+  position: relative;
+  min-width: 200px;
+  transition: all 0.3s ease;
+}
+
+.product-column.removing {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.product-header {
+  padding: 2rem 1rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--neutral-50) 0%, var(--neutral-100) 100%);
+  position: relative;
+}
+
+.remove-product {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--vodafone-gradient);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+}
+
+.remove-product:hover {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: var(--card-hover-shadow);
+}
+
+.operator-badge {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: white;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.operator-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.operator-badge:hover::before {
+  left: 100%;
+}
+
+/* Filas de características mejoradas */
+.feature-column {
+  background: var(--neutral-50);
+  font-weight: 600;
+  color: var(--neutral-700);
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--neutral-200);
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  min-width: 180px;
+}
+
+.comparison-row.highlight-row .feature-cell {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  color: white;
+}
+
+.feature-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.value-cell {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--neutral-200);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.value-cell.removing {
+  opacity: 0.3;
+  transform: scale(0.9);
+}
+
+.value-cell.best-value {
+  background: var(--best-value-bg);
+  border-left: 4px solid var(--best-value-color);
+  border-right: 4px solid var(--best-value-color);
+  position: relative;
+}
+
+.value-cell.best-value::before {
+  content: '★';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  color: var(--best-value-color);
+  font-size: 1.2rem;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.2); }
+}
+
+/* Tipos de valores mejorados */
+.product-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.comparison-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.price-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  line-height: 1;
+}
+
+.operator-value {
+  font-weight: 600;
+}
+
+.data-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--neutral-800);
+}
+
+.plan-type-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.boolean-value .check-icon {
+  font-size: 1.5rem;
+}
+
+.text-value {
+  font-weight: 500;
+  color: var(--neutral-700);
+}
+
+/* Fila de acciones mejorada */
+.actions-row {
+  background: var(--neutral-50);
+}
+
+.actions-row .feature-cell {
+  background: var(--neutral-100);
+  font-size: 1.1rem;
+}
+
+.btn-contract-comparison {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn-contract-comparison:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+.btn-contract-comparison::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-contract-comparison:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* ==============================================
+   FOOTER DE COMPARACIÓN MEJORADO
+   ============================================== */
+
+.comparison-footer {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.footer-info {
+  background: var(--neutral-50);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 2px solid var(--neutral-200);
+}
+
+.footer-info p {
+  margin: 0 0 0.5rem 0;
+  color: var(--neutral-600);
+  font-size: 0.9rem;
+}
+
+.footer-info p:last-child {
+  margin-bottom: 0;
+  font-weight: 600;
+  color: var(--neutral-700);
+}
+
+/* ==============================================
+   ANIMACIONES DE ENTRADA
+   ============================================== */
+
+.comparison-content {
+  animation: slideInUp 0.8s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.summary-card {
+  animation: fadeInScale 0.6s ease-out backwards;
+}
+
+.summary-card:nth-child(1) { animation-delay: 0.1s; }
+.summary-card:nth-child(2) { animation-delay: 0.2s; }
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.comparison-row {
+  animation: fadeInLeft 0.5s ease-out backwards;
+}
+
+.comparison-row:nth-child(n) { animation-delay: calc(var(--row-index, 0) * 0.05s); }
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ==============================================
+   RESPONSIVE MEJORADO
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .comparator-header h2 {
+    font-size: 2.5rem;
+  }
+  
+  .header-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .comparison-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .comparison-table {
+    min-width: 800px;
+  }
+}
+
+@media (max-width: 768px) {
+  .comparator-header h2 {
+    font-size: 2rem;
+  }
+  
+  .summary-card {
+    padding: 1.5rem;
+  }
+  
+  .product-header {
+    padding: 1.5rem 1rem;
+  }
+  
+  .feature-column {
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .value-cell {
+    padding: 1rem 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .price-value {
+    font-size: 1.25rem;
+  }
+  
+  .btn-contract-comparison {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .comparator-container {
+    padding: 1rem 0.5rem;
+  }
+  
+  .comparator-header h2 {
+    font-size: 1.75rem;
+  }
+  
+  .comparison-summary {
+    grid-template-columns: 1fr;
+  }
+  
+  .header-actions {
+    gap: 0.75rem;
+  }
+  
+  .btn-export,
+  .btn-share,
+  .btn-clear {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .comparison-table {
+    min-width: 600px;
+  }
+  
+  .operator-badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* ==============================================
+   TEMA OSCURO
+   ============================================== */
+
+.theme-dark .comparator-container {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.8) 0%, 
+    rgba(15, 23, 42, 0.9) 50%, 
+    rgba(2, 6, 23, 0.95) 100%);
+}
+
+.theme-dark .summary-card,
+.theme-dark .comparison-table-container,
+.theme-dark .empty-state {
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.theme-dark .feature-column,
+.theme-dark .product-header,
+.theme-dark .actions-row,
+.theme-dark .footer-info {
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.theme-dark .value-cell {
+  border-bottom-color: rgba(71, 85, 105, 0.3);
+}
+
+.theme-dark .value-cell.best-value {
+  background: rgba(16, 185, 129, 0.2);
+  border-left-color: var(--best-value-color);
+  border-right-color: var(--best-value-color);
+}
+
+/* ==============================================
+   PREFERENCIAS DE MOVIMIENTO REDUCIDO
+   ============================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .empty-icon,
+  .pulse-glow,
+  .sparkle {
+    animation: none;
+  }
+}

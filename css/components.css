@@ -590,24 +590,21 @@
   color: white;
 }
 
-/* ===== COMPARADOR ===== */
+/* ===== COMPARADOR (ESTILOS BASE) ===== */
+/* Los estilos principales del comparador están en comparison-enhanced.css */
+
 .comparator-container {
+  /* Estilos base mantenidos para compatibilidad */
   padding: var(--spacing-xl) var(--spacing-md);
 }
 
-.comparator-header {
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing-xl);
 }
 
-.comparator-header h2 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--color-movistar);
-  margin-bottom: var(--spacing-md);
-}
-
+/* Estilos legacy para compatibilidad */
 .comparison-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -624,48 +621,6 @@
   padding: var(--spacing-xl);
   position: relative;
   box-shadow: var(--shadow-lg);
-}
-
-.comparison-remove {
-  position: absolute;
-  top: var(--spacing-md);
-  right: var(--spacing-md);
-  background: var(--color-vodafone);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: all 0.3s ease;
-}
-
-.comparison-remove:hover {
-  background: #cc0000;
-  transform: scale(1.1);
-}
-
-.comparison-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: var(--spacing-xl);
-}
-
-.comparison-table th,
-.comparison-table td {
-  padding: var(--spacing-sm) var(--spacing-md);
-  text-align: left;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.comparison-table th {
-  background: var(--bg-secondary);
-  font-weight: 600;
-  color: var(--text-primary);
 }
 
 /* ===== CALCULADORA ===== */
