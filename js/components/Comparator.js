@@ -275,19 +275,116 @@ export default {
     
     // Nuevo método para obtener clases CSS dinámicas
     getProductColumnClass(product) {
-      return {
+      const index = this.products.findIndex(p => p.id === product.id);
+      const classes = {
         'product-column': true,
+        'column-alternate': index % 2 === 0, // Columnas 1ª y 3ª
         'removing': this.animatingRemoval === product.id
       };
+      console.log('🔵 getProductColumnClass:', { productId: product.id, index, classes });
+      return classes;
     },
     
     getValueCellClass(feature, valueObj) {
-      return {
+      const index = this.products.findIndex(p => p.id === valueObj.product.id);
+      const isDifferent = this.isDifferentValue(feature, valueObj);
+      const classes = {
         'value-cell': true,
+        'column-alternate': index % 2 === 0, // Columnas 1ª y 3ª
         'best-value': this.isBestValue(feature, valueObj),
+        'different-value': isDifferent,
         'removing': this.animatingRemoval === valueObj.product.id
       };
+      if (isDifferent) {
+        console.log('🟡 Valor diferente detectado:', { 
+          feature: feature.key, 
+          value: valueObj.value, 
+          productId: valueObj.product.id,
+          classes 
+        });
+      }
+      return classes;
+    },
+
+    // Método para detectar si un valor es diferente al resto
+    isDifferentValue(feature, valueObj) {
+      if (this.products.length <= 1) {
+        console.log('🔍 isDifferentValue: Solo 1 producto, no hay diferencias');
+        return false;
+      }
+      
+      const currentValue = this.normalizeValueForComparison(valueObj.value);
+      console.log(`🔍 isDifferentValue para ${feature.key}: valor actual = "${currentValue}"`);
+      
+      const allValues = this.products.map(product => {
+        const productFeature = this.features.find(f => f.key === feature.key);
+        if (productFeature) {
+          const productValue = this.getFeatureValue(product, productFeature);
+          const normalized = this.normalizeValueForComparison(productValue);
+          console.log(`   📦 Producto ${product.id}: "${productValue}" → "${normalized}"`);
+          return normalized;
+        }
+        return null;
+      }).filter(v => v !== null);
+
+      console.log(`🔍 Todos los valores para ${feature.key}:`, allValues);
+
+      // Si hay más de un valor único, marcar las diferencias
+      const uniqueValues = [...new Set(allValues)];
+      console.log(`🔍 Valores únicos para ${feature.key}:`, uniqueValues);
+      
+      if (uniqueValues.length > 1) {
+        // Contar cuántas veces aparece este valor
+        const valueCount = allValues.filter(v => v === currentValue).length;
+        const isDifferent = valueCount < this.products.length;
+        console.log(`🔍 Valor "${currentValue}" aparece ${valueCount}/${this.products.length} veces → diferente: ${isDifferent}`);
+        return isDifferent;
+      }
+      
+      console.log(`🔍 Todos los valores son iguales para ${feature.key}`);
+      return false;
+    },
+
+    // Normalizar valores para comparación
+    normalizeValueForComparison(value) {
+      if (value === null || value === undefined) return 'N/A';
+      if (typeof value === 'string') {
+        return value.toLowerCase().trim();
+      }
+      return String(value);
+    },
+
+    // Clase para celdas de contratación
+    getContractCellClass(product) {
+      const index = this.products.findIndex(p => p.id === product.id);
+      return {
+        'value-cell': true,
+        'column-alternate': index % 2 === 0,
+        'removing': this.animatingRemoval === product.id
+      };
     }
+  },
+  
+  mounted() {
+    console.log('🚀 COMPARATOR MOUNTED - Vue funciona correctamente!');
+    console.log('📊 Productos para comparar:', this.products.length);
+    setTimeout(() => {
+      const cells = document.querySelectorAll('.value-cell');
+      console.log('🔍 Celdas .value-cell encontradas:', cells.length);
+      const alternates = document.querySelectorAll('.column-alternate');
+      console.log('🔍 Elementos .column-alternate encontrados:', alternates.length);
+      const different = document.querySelectorAll('.different-value');
+      console.log('🔍 Elementos .different-value encontrados:', different.length);
+      
+      // Debug específico de clases aplicadas
+      cells.forEach((cell, index) => {
+        console.log(`Celda ${index}:`, {
+          classes: cell.classList.toString(),
+          hasColumnAlternate: cell.classList.contains('column-alternate'),
+          hasDifferentValue: cell.classList.contains('different-value')
+        });
+      });
+    }, 2000);
   },
   
   template: `
@@ -344,11 +441,11 @@ export default {
             <div class="summary-content">
               <div class="best-option">
                 <span class="label">Más económico:</span>
-                <span class="value">{{ priceComparison.cheapest.data }} - {{ formatPrice(priceComparison.cheapest.price * 1.21) }}/mes</span>
+                <span class="value">{{ priceComparison.cheapest.data }} - {{ this.formatPrice(priceComparison.cheapest.price * 1.21) }}/mes</span>
               </div>
               <div v-if="priceComparison.difference > 0" class="savings">
                 <span class="label">Ahorro máximo:</span>
-                <span class="value savings-amount">{{ formatPrice(priceComparison.difference) }}/mes</span>
+                <span class="value savings-amount">{{ this.formatPrice(priceComparison.difference) }}/mes</span>
               </div>
             </div>
           </div>
@@ -377,7 +474,7 @@ export default {
                 <th 
                   v-for="(product, index) in products" 
                   :key="product.id"
-                  :class="getProductColumnClass(product)"
+                  :class="['product-column', { 'column-alternate': index % 2 === 0, 'removing': animatingRemoval === product.id }]"
                 >
                   <div class="product-header">
                     <button 
@@ -412,9 +509,14 @@ export default {
                   </div>
                 </td>
                 <td 
-                  v-for="valueObj in feature.values"
+                  v-for="(valueObj, index) in feature.values"
                   :key="valueObj.product.id"
-                  :class="getValueCellClass(feature, valueObj)"
+                  :class="['value-cell', { 
+                    'column-alternate': index % 2 === 0, 
+                    'different-value': this.isDifferentValue(feature, valueObj),
+                    'best-value': this.isBestValue(feature, valueObj),
+                    'removing': animatingRemoval === valueObj.product.id 
+                  }]"
                 >
                   <!-- Imagen -->
                   <div v-if="feature.type === 'image'" class="product-image">
@@ -427,7 +529,7 @@ export default {
                   
                   <!-- Precio -->
                   <div v-else-if="feature.type === 'price'" class="price-value">
-                    {{ formatPrice(valueObj.value) }}
+                    {{ this.formatPrice(valueObj.value) }}
                     <span v-if="feature.key === 'price'">/mes</span>
                     <span v-else-if="feature.key === 'priceAnnual'">/año</span>
                   </div>
@@ -473,10 +575,9 @@ export default {
                   <strong>Acción</strong>
                 </td>
                 <td 
-                  v-for="product in products" 
+                  v-for="(product, index) in products" 
                   :key="'action-' + product.id"
-                  class="value-cell"
-                  :class="{ 'removing': animatingRemoval === product.id }"
+                  :class="['value-cell', { 'column-alternate': index % 2 === 0, 'removing': animatingRemoval === product.id }]"
                 >
                   <button 
                     @click="contractProduct(product)"

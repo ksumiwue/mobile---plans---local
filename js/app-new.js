@@ -1044,6 +1044,109 @@ class MobilePlansApp {
         return num; // Asumir GB por defecto
     }
 
+    // Obtener el mejor valor para una característica específica
+    getBestValueForFeature(feature, allValues) {
+        if (!allValues || allValues.length === 0) return null;
+        
+        switch(feature) {
+            case 'data':
+                // Para datos: más GB es mejor, ilimitados es lo mejor
+                return allValues.reduce((best, current) => {
+                    if (current.toLowerCase().includes('unlimited') || current.toLowerCase().includes('ilimitad')) {
+                        return current;
+                    }
+                    if (best.toLowerCase().includes('unlimited') || best.toLowerCase().includes('ilimitad')) {
+                        return best;
+                    }
+                    const currentGB = this.parseDataToGB(current);
+                    const bestGB = this.parseDataToGB(best);
+                    return currentGB > bestGB ? current : best;
+                });
+                
+            case 'network':
+                // Para red: 5G es mejor que 4G
+                if (allValues.some(v => v.includes('5G'))) {
+                    return allValues.find(v => v.includes('5G'));
+                }
+                return allValues.find(v => v.includes('4G')) || allValues[0];
+                
+            case 'sms':
+                // Para SMS: más es mejor, pero "0" no se resalta
+                const numericSMS = allValues.map(v => parseInt(v) || 0);
+                const maxSMS = Math.max(...numericSMS);
+                if (maxSMS > 0) {
+                    return allValues.find(v => parseInt(v) === maxSMS);
+                }
+                return null; // No resaltar si todos son 0
+                
+            default:
+                return null; // No resaltar otras características
+        }
+    }
+
+    // Determinar si un valor es el MÁS RELEVANTE (sistema inteligente)
+    isMostRelevantValue(feature, value, allValues) {
+        // Solo resaltar si hay más de un valor único
+        const uniqueValues = [...new Set(allValues)];
+        if (uniqueValues.length <= 1) return false;
+        
+        switch(feature) {
+            case 'data':
+                // Resaltar solo el dato MÁS ALTO o ilimitado
+                if (value.toLowerCase().includes('unlimited') || value.toLowerCase().includes('ilimitad')) {
+                    return true;
+                }
+                const valueGB = this.parseDataToGB(value);
+                const allGB = allValues.map(v => this.parseDataToGB(v));
+                const maxGB = Math.max(...allGB);
+                // Resaltar si es el valor máximo Y es mayor que 0
+                return valueGB === maxGB && valueGB > 0 && maxGB > 0;
+                
+            case 'sms':
+                // Resaltar solo el SMS MÁS ALTO si es mayor que 0
+                const valueNum = parseInt(value) || 0;
+                const allNums = allValues.map(v => parseInt(v) || 0);
+                const maxSMS = Math.max(...allNums);
+                return valueNum === maxSMS && valueNum > 0 && maxSMS > 0;
+                
+            case 'calls':
+                // Resaltar llamadas ilimitadas si hay diferencias
+                if (value.toLowerCase().includes('unlimited') || value.toLowerCase().includes('ilimitad')) {
+                    return !allValues.every(v => v.toLowerCase().includes('unlimited') || v.toLowerCase().includes('ilimitad'));
+                }
+                const callsNum = parseInt(value) || 0;
+                const allCalls = allValues.map(v => parseInt(v) || 0);
+                const maxCalls = Math.max(...allCalls);
+                return callsNum === maxCalls && callsNum > 0 && maxCalls > 0;
+                
+            case 'network':
+                // Resaltar 5G solo si hay diferencias (algunos tienen 4G)
+                return value.includes('5G') && allValues.some(v => !v.includes('5G'));
+                
+            case 'planType':
+                // Lógica especial para tipo de plan: resaltar el que aparece UNA sola vez
+                const valueCounts = {};
+                allValues.forEach(v => {
+                    valueCounts[v] = (valueCounts[v] || 0) + 1;
+                });
+                
+                // Si hay 2 productos: resaltar el primero (ambos diferentes)
+                if (allValues.length === 2) {
+                    return value === allValues[0];
+                }
+                
+                // Si hay 3 productos: resaltar el que aparece solo 1 vez
+                if (allValues.length === 3) {
+                    return valueCounts[value] === 1;
+                }
+                
+                return false;
+                
+            default:
+                return false;
+        }
+    }
+
     // Actualizar contador de resultados
     updateResultsCounter() {
         const counter = document.querySelector('.results-counter');
@@ -1106,6 +1209,9 @@ class MobilePlansApp {
 
         console.log('🎨 Renderizando tabla de comparación con productos:', comparedProducts);
         container.innerHTML = this.getComparisonTableHTML(comparedProducts);
+        
+        // Establecer variable CSS para el ancho de columnas
+        document.documentElement.style.setProperty('--products-count', comparedProducts.length);
     }
 
     // HTML para comparación vacía
@@ -1128,7 +1234,7 @@ class MobilePlansApp {
 
     // HTML para tabla de comparación
     getComparisonTableHTML(products) {
-        const headers = products.map(product => `
+        const headers = products.map((product, index) => `
             <th class="comparison-header">
                 <div class="product-summary">
                     <div class="operator-badge ${product.operator}">
@@ -1136,7 +1242,7 @@ class MobilePlansApp {
                     </div>
                     <h3>${product.name}</h3>
                     <div class="price-comparison">
-                        ${this.productCardRenderer.formatPrice(product.price)}
+                        ${this.productCardRenderer.formatPrice(product.price, product.operator)}
                     </div>
                 </div>
             </th>
@@ -1144,11 +1250,30 @@ class MobilePlansApp {
 
         const features = ['data', 'calls', 'sms', 'network', 'planType'];
         const rows = features.map(feature => {
-            const cells = products.map(product => `
-                <td class="comparison-cell">
-                    ${this.getFeatureValue(product, feature)}
-                </td>
-            `).join('');
+            // Obtener todos los valores para detectar diferencias
+            const allValues = products.map(product => this.getFeatureValue(product, feature));
+            const uniqueValues = [...new Set(allValues)];
+            const hasDifferences = uniqueValues.length > 1;
+            
+            const cells = products.map((product, index) => {
+                const value = this.getFeatureValue(product, feature);
+                const isMostRelevant = this.isMostRelevantValue(feature, value, allValues);
+                const columnAlternate = index % 2 === 0;
+                
+                const classes = [
+                    'comparison-cell',
+                    'value-cell',
+                    columnAlternate ? 'column-alternate' : '',
+                    isMostRelevant ? 'most-relevant' : ''
+                ].filter(Boolean).join(' ');
+                
+                
+                return `
+                    <td class="${classes}">
+                        ${value}
+                    </td>
+                `;
+            }).join('');
             
             return `
                 <tr>
@@ -1158,8 +1283,8 @@ class MobilePlansApp {
             `;
         }).join('');
 
-        const actionCells = products.map(product => `
-            <td class="comparison-cell">
+        const actionCells = products.map((product, index) => `
+            <td class="comparison-cell value-cell ${index % 2 === 0 ? 'column-alternate' : ''}">
                 <button class="cta-minimal" onclick="window.selectPlan('${product.id}')">
                     Contratar
                 </button>
@@ -1178,7 +1303,7 @@ class MobilePlansApp {
                     <tbody>
                         ${rows}
                         <tr>
-                            <td class="feature-label">Contratar</td>
+                            <td class="feature-label">&nbsp;</td>
                             ${actionCells}
                         </tr>
                     </tbody>

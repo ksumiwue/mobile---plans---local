@@ -13,6 +13,143 @@
     <link rel="stylesheet" href="css/additional-styles.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/comparison-enhanced.css">
+    
+    <!-- Estilos para comparación - Empezando de cero -->
+    <style>
+        /* RESET COMPLETO - Quitar todos los colores y efectos */
+        .comparison-table td,
+        .comparison-table th,
+        .comparison-table tbody td,
+        .comparison-table thead th,
+        .value-cell,
+        .comparison-cell,
+        .column-alternate,
+        .different-value,
+        .highlighted-value,
+        .comparison-table td.column-alternate,
+        .comparison-table th.column-alternate,
+        .comparison-table tbody td.column-alternate,
+        .value-cell.column-alternate,
+        .value-cell.different-value,
+        .value-cell.highlighted-value,
+        .comparison-cell.column-alternate,
+        .comparison-table tbody td.column-alternate.different-value,
+        .comparison-table td.value-cell.column-alternate.different-value,
+        .comparison-table td[class*="column-alternate"],
+        .comparison-table td[class*="different-value"],
+        .comparison-table td[class*="highlighted-value"] {
+            background-color: #fafafa !important;
+            background: #fafafa !important;
+            background-image: none !important;
+            color: #666 !important;
+            border: 1px solid #ddd !important;
+            border-left: 1px solid #ddd !important;
+            border-right: 1px solid #ddd !important;
+            border-top: 1px solid #ddd !important;
+            border-bottom: 1px solid #ddd !important;
+            outline: none !important;
+            box-shadow: none !important;
+            font-weight: normal !important;
+            font-size: inherit !important;
+        }
+        
+        /* Tabla más compacta y responsive */
+        .comparison-table {
+            table-layout: fixed !important;
+            width: 100% !important;
+            font-size: 0.9em !important;
+            border-collapse: collapse !important;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.5rem !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+        
+        .comparison-table th.feature-label,
+        .comparison-table td.feature-label {
+            width: 140px !important;
+            text-align: left !important;
+            padding-left: 1rem !important;
+            font-size: 0.85em !important;
+        }
+        
+        .comparison-table th:not(.feature-label),
+        .comparison-table td:not(.feature-label) {
+            width: calc((100% - 140px) / var(--products-count)) !important;
+        }
+        
+        /* Headers más compactos */
+        .comparison-table th.comparison-header {
+            padding: 1rem 0.5rem !important;
+        }
+        
+        .product-summary h3 {
+            font-size: 1em !important;
+            margin: 0.25rem 0 !important;
+        }
+        
+        .price-comparison {
+            font-size: 0.9em !important;
+        }
+        
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+            .comparison-table {
+                font-size: 0.8em !important;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.3rem !important;
+            }
+            
+            .comparison-table th.feature-label,
+            .comparison-table td.feature-label {
+                width: 120px !important;
+                font-size: 0.75em !important;
+            }
+            
+            .product-summary h3 {
+                font-size: 0.9em !important;
+            }
+        }
+        
+        /* Botón limpiar comparación más grande y negrita */
+        .clear-comparison-btn,
+        .comparison-actions .cta-secondary,
+        .comparison-controls .cta-secondary {
+            font-size: 1.1em !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Títulos de características en negrita */
+        .comparison-table .feature-label {
+            font-weight: 700 !important;
+        }
+        
+        /* Estilo para el dato MÁS RELEVANTE */
+        .comparison-table .value-cell.most-relevant,
+        .comparison-table td.most-relevant,
+        .comparison-cell.most-relevant {
+            background-color: rgba(255, 248, 220, 0.8) !important; /* Crema suave */
+            background: rgba(255, 248, 220, 0.8) !important;
+            color: #dc2626 !important; /* Rojo */
+            font-weight: 700 !important; /* Negrita */
+            font-size: 1.1em !important; /* Un poco más grande */
+        }
+        
+        /* Quitar cualquier pseudo-elemento */
+        .value-cell::before,
+        .value-cell::after,
+        .different-value::before,
+        .different-value::after {
+            display: none !important;
+            content: none !important;
+        }
+    </style>
     <link rel="stylesheet" href="css/filter-dropdowns.css">
     
     <!-- Metadatos -->

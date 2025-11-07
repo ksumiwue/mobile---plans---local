@@ -44,6 +44,9 @@ class ProductCardNew {
 
     // Formatear precio con decimales en superíndice (formato codigo.html mejorado)
     formatPrice(price, operator) {
+        if (!operator) {
+            console.error('❌ formatPrice llamado sin operador:', { price, operator });
+        }
         const priceStr = price.toString();
         const [euros, cents = '00'] = priceStr.split('.');
         const colors = this.getOperatorColors(operator);
@@ -194,13 +197,24 @@ class ProductCardNew {
 
     // Obtener colores del operador (claro y oscuro)
     getOperatorColors(operator) {
-        // Validar que operator existe y es string
-        if (!operator || typeof operator !== 'string') {
-            console.warn(`⚠️ Operador inválido:`, operator);
+        
+        // Validación de emergencia - return inmediato si es problemático
+        if (operator === undefined || operator === null || operator === '') {
+            console.error('❌ OPERADOR PROBLEMÁTICO DETECTADO:', operator);
             return {
-                light: 'var(--neutral-400)',
-                dark: 'var(--neutral-600)', 
-                primary: 'var(--neutral-600)'
+                light: '#6B7280',
+                dark: '#374151', 
+                primary: '#4B5563'
+            };
+        }
+        
+        // Validar que operator existe y es string
+        if (typeof operator !== 'string') {
+            console.warn(`⚠️ Operador no es string:`, { operator, type: typeof operator });
+            return {
+                light: '#6B7280',        // Gris neutro
+                dark: '#374151',         // Gris oscuro  
+                primary: '#4B5563'       // Gris principal
             };
         }
         
@@ -222,11 +236,22 @@ class ProductCardNew {
             }
         };
         
-        const operatorKey = operator.toLowerCase();
+        let operatorKey;
+        try {
+            operatorKey = operator.toLowerCase();
+        } catch (error) {
+            console.error('❌ Error al procesar operador:', { operator, error: error.message });
+            return {
+                light: '#6B7280',
+                dark: '#374151', 
+                primary: '#4B5563'
+            };
+        }
+        
         return colors[operatorKey] || {
-            light: 'var(--neutral-400)',
-            dark: 'var(--neutral-600)', 
-            primary: 'var(--neutral-600)'
+            light: '#6B7280',
+            dark: '#374151', 
+            primary: '#4B5563'
         };
     }
 
