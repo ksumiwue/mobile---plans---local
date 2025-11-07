@@ -515,12 +515,12 @@
 
 .btn-compare {
   background: var(--bg-primary);
-  border: 2px solid var(--color-movistar);
-  color: var(--color-movistar);
+  border: 2px solid #4A90E2;
+  color: #4A90E2;
 }
 
 .btn-compare:hover:not(:disabled) {
-  background: var(--color-movistar);
+  background: #4A90E2;
   color: white;
   transform: translateY(-2px);
 }
@@ -531,7 +531,7 @@
 }
 
 .btn-contract {
-  background: linear-gradient(135deg, var(--color-movistar), #0066cc);
+  background: linear-gradient(135deg, #4A90E2, #357ABD);
   border: none;
   color: white;
   box-shadow: var(--shadow-md);

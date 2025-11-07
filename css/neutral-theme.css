@@ -13,7 +13,7 @@
   --neutral-900: #171717;
   
   /* Acento general */
-  --accent-primary: #2563eb;
+  --accent-primary: #4A90E2;
   --accent-success: #059669;
   --accent-warning: #d97706;
   
@@ -179,7 +179,7 @@ body {
   width: 18px;
   height: 18px;
   cursor: pointer;
-  accent-color: var(--accent-primary);
+  accent-color: #00579A;
 }
 
 .compare-label {
@@ -398,7 +398,7 @@ body {
 
 .nav-item.active {
   color: var(--accent-primary);
-  background: rgba(37, 99, 235, 0.1);
+  background: rgba(74, 144, 226, 0.1);
 }
 
 /* SISTEMA DE FILTROS MEJORADO */
