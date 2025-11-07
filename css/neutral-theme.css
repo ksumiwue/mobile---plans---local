@@ -414,7 +414,7 @@ body {
 }
 
 .filter-title {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: var(--neutral-800);
   margin-bottom: 0.75rem;
@@ -438,7 +438,7 @@ body {
 .filter-group-title {
   font-weight: 600;
   color: var(--neutral-700);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.5rem;
@@ -494,7 +494,7 @@ body {
 
 .slider-values {
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--neutral-700);
   margin-bottom: 0.75rem;

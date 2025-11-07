@@ -58,38 +58,33 @@ class FilterSystemNew {
                     <!-- Operadores -->
                     <div class="filter-group">
                         <div class="filter-group-title">Operador</div>
-                        <div class="filter-option active" data-filter="operator" data-value="all">
-                            ${this.iconSet.operator}
-                            <span class="filter-option-text">Todos</span>
-                        </div>
-                        <div class="filter-option" data-filter="operator" data-value="movistar">
-                            ${this.iconSet.operator}
-                            <span class="filter-option-text">Movistar</span>
-                        </div>
-                        <div class="filter-option" data-filter="operator" data-value="vodafone">
-                            ${this.iconSet.operator}
-                            <span class="filter-option-text">Vodafone</span>
-                        </div>
-                        <div class="filter-option" data-filter="operator" data-value="orange">
-                            ${this.iconSet.operator}
-                            <span class="filter-option-text">Orange</span>
+                        <div class="custom-select" data-filter="operator">
+                            <div class="custom-select-trigger">
+                                <div class="custom-select-icon">${this.iconSet.operator}</div>
+                                <span class="custom-select-text">Todos los operadores</span>
+                            </div>
+                            <div class="custom-select-options">
+                                <div class="custom-option active" data-value="all">Todos los operadores</div>
+                                <div class="custom-option" data-value="movistar">Movistar</div>
+                                <div class="custom-option" data-value="vodafone">Vodafone</div>
+                                <div class="custom-option" data-value="orange">Orange</div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Tipo de Plan -->
                     <div class="filter-group">
                         <div class="filter-group-title">Tipo de Plan</div>
-                        <div class="filter-option active" data-filter="planType" data-value="all">
-                            ${this.iconSet.planType}
-                            <span class="filter-option-text">Todos</span>
-                        </div>
-                        <div class="filter-option" data-filter="planType" data-value="individual">
-                            ${this.iconSet.planType}
-                            <span class="filter-option-text">Individual</span>
-                        </div>
-                        <div class="filter-option" data-filter="planType" data-value="familiar">
-                            ${this.iconSet.planType}
-                            <span class="filter-option-text">Familiar</span>
+                        <div class="custom-select" data-filter="planType">
+                            <div class="custom-select-trigger">
+                                <div class="custom-select-icon">${this.iconSet.planType}</div>
+                                <span class="custom-select-text">Todos los tipos</span>
+                            </div>
+                            <div class="custom-select-options">
+                                <div class="custom-option active" data-value="all">Todos los tipos</div>
+                                <div class="custom-option" data-value="individual">Individual</div>
+                                <div class="custom-option" data-value="familiar">Familiar</div>
+                            </div>
                         </div>
                     </div>
 
@@ -288,12 +283,15 @@ class FilterSystemNew {
 
     // Adjuntar eventos
     attachEvents() {
-        // Eventos para opciones de filtro
+        // Eventos para opciones de filtro (legacy)
         document.addEventListener('click', (e) => {
             if (e.target.closest('.filter-option')) {
                 this.handleFilterOptionClick(e.target.closest('.filter-option'));
             }
         });
+
+        // Eventos para selects de filtros
+        this.attachSelectEvents();
 
         // Búsqueda en tiempo real
         const searchInput = document.querySelector('.search-input');
@@ -302,6 +300,78 @@ class FilterSystemNew {
                 this.handleSearch(e.target.value);
             });
         }
+    }
+
+    // Adjuntar eventos a los selects personalizados
+    attachSelectEvents() {
+        this.attachCustomSelectEvents();
+    }
+
+    // Eventos para desplegables personalizados
+    attachCustomSelectEvents() {
+        document.addEventListener('click', (e) => {
+            // Manejar click en trigger del select
+            if (e.target.closest('.custom-select-trigger')) {
+                const customSelect = e.target.closest('.custom-select');
+                this.toggleCustomSelect(customSelect);
+            }
+            // Manejar click en opción
+            else if (e.target.closest('.custom-option')) {
+                const option = e.target.closest('.custom-option');
+                const customSelect = option.closest('.custom-select');
+                this.selectCustomOption(customSelect, option);
+            }
+            // Cerrar todos los selects si se hace click fuera
+            else {
+                this.closeAllCustomSelects();
+            }
+        });
+    }
+
+    // Alternar estado del select personalizado
+    toggleCustomSelect(customSelect) {
+        const isOpen = customSelect.classList.contains('open');
+        
+        // Cerrar todos primero
+        this.closeAllCustomSelects();
+        
+        // Abrir el actual si estaba cerrado
+        if (!isOpen) {
+            customSelect.classList.add('open');
+        }
+    }
+
+    // Seleccionar opción del select personalizado
+    selectCustomOption(customSelect, option) {
+        const value = option.dataset.value;
+        const text = option.textContent;
+        const filter = customSelect.dataset.filter;
+        
+        // Actualizar UI
+        const textElement = customSelect.querySelector('.custom-select-text');
+        textElement.textContent = text;
+        
+        // Actualizar opciones activas
+        customSelect.querySelectorAll('.custom-option').forEach(opt => {
+            opt.classList.remove('active');
+        });
+        option.classList.add('active');
+        
+        // Cerrar select
+        customSelect.classList.remove('open');
+        
+        // Aplicar filtro
+        this.filters[filter] = value;
+        this.applyFilters();
+        
+        console.log(`🔄 ${filter} cambiado a:`, value);
+    }
+
+    // Cerrar todos los selects personalizados
+    closeAllCustomSelects() {
+        document.querySelectorAll('.custom-select.open').forEach(select => {
+            select.classList.remove('open');
+        });
     }
 
     // Manejar clic en opción de filtro
@@ -438,7 +508,7 @@ class FilterSystemNew {
             features: []
         };
 
-        // Resetear UI de opciones
+        // Resetear UI de opciones (legacy)
         document.querySelectorAll('.filter-option').forEach(option => {
             option.classList.remove('active');
         });
@@ -446,6 +516,9 @@ class FilterSystemNew {
         document.querySelectorAll('.filter-option[data-value="all"]').forEach(option => {
             option.classList.add('active');
         });
+
+        // Resetear selects desplegables
+        this.resetSelects();
 
         // Resetear sliders
         this.resetSliders();
@@ -470,6 +543,33 @@ class FilterSystemNew {
         this.updateResultsCounter();
         
         console.log(`✅ Filtros limpiados. Mostrando ${this.filteredProducts.length} productos`);
+    }
+
+    // Resetear selects personalizados a valores por defecto
+    resetSelects() {
+        // Resetear operador
+        const operatorSelect = document.querySelector('.custom-select[data-filter="operator"]');
+        if (operatorSelect) {
+            const textElement = operatorSelect.querySelector('.custom-select-text');
+            textElement.textContent = 'Todos los operadores';
+            
+            operatorSelect.querySelectorAll('.custom-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            operatorSelect.querySelector('.custom-option[data-value="all"]').classList.add('active');
+        }
+
+        // Resetear tipo de plan
+        const planTypeSelect = document.querySelector('.custom-select[data-filter="planType"]');
+        if (planTypeSelect) {
+            const textElement = planTypeSelect.querySelector('.custom-select-text');
+            textElement.textContent = 'Todos los tipos';
+            
+            planTypeSelect.querySelectorAll('.custom-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            planTypeSelect.querySelector('.custom-option[data-value="all"]').classList.add('active');
+        }
     }
 
     // Resetear sliders a valores iniciales
