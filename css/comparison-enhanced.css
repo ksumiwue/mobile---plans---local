@@ -836,3 +836,154 @@
     animation: none;
   }
 }
+
+/* ===== ESTILOS PARA TARJETAS DE PRODUCTO MEJORADAS ===== */
+
+/* Tarjetas más compactas sin imagen */
+.product-card-new {
+  min-height: 420px !important;
+  padding: 1.5rem !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto de dibujo lineal para las imágenes de fondo */
+.product-card-new::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: inherit;
+  background-size: inherit;
+  background-position: inherit;
+  background-repeat: inherit;
+  filter: 
+    grayscale(70%) 
+    contrast(120%) 
+    brightness(110%) 
+    saturate(40%);
+  opacity: 0.6;
+  z-index: 0;
+}
+
+.product-card-new::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 50%;
+  background: 
+    linear-gradient(45deg, transparent 49%, rgba(150,150,150,0.05) 50%, transparent 51%),
+    linear-gradient(-45deg, transparent 49%, rgba(150,150,150,0.05) 50%, transparent 51%);
+  background-size: 8px 8px;
+  opacity: 0.2;
+  z-index: 1;
+}
+
+/* Precios más grandes y visibles - Definición movida más abajo */
+
+.price-main-large {
+  font-size: 3.5rem !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  display: block;
+  letter-spacing: -0.02em;
+}
+
+.price-cents {
+  font-size: 1.8rem !important;
+  font-weight: 600 !important;
+  vertical-align: top;
+  margin-left: 2px;
+}
+
+.euro-symbol-large {
+  font-size: 2.2rem !important;
+  font-weight: 700 !important;
+  margin-left: 4px;
+}
+
+.price-label {
+  font-size: 0.95rem;
+  color: var(--neutral-600);
+  font-weight: 500;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Ajustes para el header con fondo de imagen */
+.product-card-new .card-header {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(8px);
+  margin: -1.5rem -1.5rem 1rem -1.5rem;
+  padding: 1rem 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Ajuste para el contenido sobre la imagen de fondo */
+.product-card-new .data-highlight,
+.product-card-new .features-minimal {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(15px);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  position: relative;
+  z-index: 10;
+  border: 1px solid rgba(200, 200, 200, 0.3);
+}
+
+/* Sección de precio con mayor z-index */
+.price-section-enhanced {
+  text-align: center;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(15px);
+  position: relative;
+  z-index: 10;
+  border: 1px solid rgba(200, 200, 200, 0.3);
+}
+
+/* Botón CTA con mejor contraste */
+.product-card-new .cta-minimal {
+  margin-top: 1.5rem;
+  position: relative;
+  z-index: 10;
+  background: var(--neutral-800) !important;
+  color: white !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .price-main-large {
+    font-size: 2.8rem !important;
+  }
+  
+  .price-cents {
+    font-size: 1.4rem !important;
+  }
+  
+  .euro-symbol-large {
+    font-size: 1.8rem !important;
+  }
+  
+  .product-card-new {
+    min-height: 380px !important;
+    padding: 1rem !important;
+  }
+}

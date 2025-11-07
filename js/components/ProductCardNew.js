@@ -49,10 +49,11 @@ class ProductCardNew {
         const colors = this.getOperatorColors(operator);
         
         return `
-            <div class="price-section">
-                <span class="price-main" style="color: ${colors.primary};">
-                    ${euros}<sup>,${cents.padEnd(2, '0')}<span class="euro-symbol">€</span></sup>
+            <div class="price-section-enhanced">
+                <span class="price-main-large" style="color: ${colors.primary};">
+                    ${euros}<sup class="price-cents">,${cents.padEnd(2, '0')}<span class="euro-symbol-large">€</span></sup>
                 </span>
+                <div class="price-label">por mes</div>
             </div>
         `;
     }
@@ -178,6 +179,17 @@ class ProductCardNew {
         };
         
         return logos[operator.toLowerCase()] || '';
+    }
+
+    // Obtener imagen de fondo específica para cada operador
+    getOperatorBackgroundImage(operator) {
+        const backgroundImages = {
+            movistar: 'https://ipv6-informatica.es/images/galaxy-s25-azul.jpg',
+            orange: 'https://ipv6-informatica.es/images/iphone_17_pro_max_naranja_3_.png',
+            vodafone: 'https://ipv6-informatica.es/images/iphone-14-rojo.png'
+        };
+        
+        return backgroundImages[operator.toLowerCase()] || backgroundImages.movistar;
     }
 
     // Obtener colores del operador (claro y oscuro)
@@ -328,10 +340,10 @@ class ProductCardNew {
         const formattedPrice = this.formatPrice(price, operator);
         const formattedData = this.formatDataAmount(data, operator);
         const featuresList = this.generateFeaturesList(features);
-        const productImage = this.getProductImage(product, allProductsInView);
+        const backgroundImage = this.getOperatorBackgroundImage(operator);
 
         return `
-            <div class="product-card-new fade-in" data-product-id="${id}" data-operator="${operator}">
+            <div class="product-card-new fade-in" data-product-id="${id}" data-operator="${operator}" style="background-image: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%), url('${backgroundImage}'); background-size: cover; background-position: center top; background-repeat: no-repeat;">
                 <!-- Header -->
                 <div class="card-header">
                     <div class="plan-type-badge" style="background: ${planBadge.backgroundColor}; color: white;">
@@ -343,10 +355,6 @@ class ProductCardNew {
                     </div>
                 </div>
 
-                <!-- Imagen del producto -->
-                <div class="product-image">
-                    <img src="${productImage}" alt="${name}" class="product-img" loading="lazy">
-                </div>
 
                 <!-- Precio destacado -->
                 ${formattedPrice}
