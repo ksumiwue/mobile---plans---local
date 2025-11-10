@@ -1056,5 +1056,22 @@
             }
         }
     </style>
+    
+    <!-- JavaScript de la aplicación -->
+    <script src="js/app-new.js"></script>
+    
+    <!-- Auto-ajuste para iframe (solo se carga si está en iframe) -->
+    <script>
+        // Detectar si estamos en iframe y cargar script de auto-ajuste
+        if (window.self !== window.top) {
+            console.log('📱 Mobile Plans: Detectado iframe, cargando auto-ajuste...');
+            const script = document.createElement('script');
+            script.src = './js/iframe-auto-adjust.js';
+            script.async = true;
+            document.head.appendChild(script);
+        } else {
+            console.log('📱 Mobile Plans: Ejecutándose standalone');
+        }
+    </script>
 </body>
 </html>
