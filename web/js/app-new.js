@@ -712,9 +712,6 @@ class MobilePlansApp {
         
         // Configurar ordenamiento
         this.setupSortControls();
-        
-        // Mostrar el botón flotante de comparación si hay productos en comparación
-        this.updateFloatingCompareButton();
     }
 
     // Configurar controles de ordenamiento
@@ -1162,42 +1159,6 @@ class MobilePlansApp {
         }
     }
 
-    // Ocultar el botón flotante de comparación
-    hideFloatingCompareButton() {
-        const floatingBtn = document.querySelector('.compare-floating-btn');
-        if (floatingBtn) {
-            floatingBtn.style.display = 'none';
-            console.log('🔒 Botón flotante de comparación ocultado (estamos en la página de comparación)');
-        }
-    }
-
-    // Mostrar el botón flotante de comparación
-    showFloatingCompareButton() {
-        const floatingBtn = document.querySelector('.compare-floating-btn');
-        if (floatingBtn && this.comparisonStore.size > 0) {
-            floatingBtn.style.display = 'block';
-            console.log('✅ Botón flotante de comparación mostrado');
-        }
-    }
-
-    // Actualizar visibilidad del botón flotante de comparación
-    updateFloatingCompareButton() {
-        const floatingBtn = document.querySelector('.compare-floating-btn');
-        if (floatingBtn) {
-            const currentPage = document.querySelector('.page-section:not([style*="display: none"])')?.id;
-            const isOnComparePage = currentPage === 'compare-page';
-            const hasProductsToCompare = this.comparisonStore.size > 0;
-            
-            // Solo mostrar si hay productos para comparar Y NO estamos en la página de comparación
-            const shouldShow = hasProductsToCompare && !isOnComparePage;
-            
-            floatingBtn.style.display = shouldShow ? 'block' : 'none';
-            floatingBtn.textContent = `Comparar (${this.comparisonStore.size})`;
-            
-            console.log(`🔍 Botón flotante - Página: ${currentPage}, Productos: ${this.comparisonStore.size}, Mostrar: ${shouldShow}`);
-        }
-    }
-
     // Actualizar contador de resultados
     updateResultsCounter() {
         const counter = document.querySelector('.results-counter');
@@ -1209,8 +1170,6 @@ class MobilePlansApp {
 
     // Inicializar página de comparación
     initializeComparePage() {
-        // Ocultar el botón flotante de comparación ya que estamos en la página de comparación
-        this.hideFloatingCompareButton();
         console.log(`🔄 Inicializando página de comparación. Productos: ${this.comparisonStore.size}`);
         console.log(`📋 IDs en comparación:`, Array.from(this.comparisonStore));
         
@@ -1780,11 +1739,7 @@ class MobilePlansApp {
             const floatingBtn = document.querySelector('.compare-floating-btn');
             if (floatingBtn) {
                 floatingBtn.textContent = `Comparar (${count})`;
-                // Obtener la página actual para ocultar el botón en comparación
-                const currentPage = document.querySelector('.page-section:not([style*="display: none"])')?.id;
-                const shouldShow = count > 0 && currentPage !== 'compare-section';
-                // Actualizar visibilidad del botón flotante usando nuestra nueva función centralizada
-                this.updateFloatingCompareButton();
+                floatingBtn.style.display = count > 0 ? 'block' : 'none';
                 console.log(`📱 Botón flotante actualizado: ${floatingBtn.textContent}, visible: ${count > 0}`);
             } else {
                 console.error(`❌ Botón flotante no encontrado`);

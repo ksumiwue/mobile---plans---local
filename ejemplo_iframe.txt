@@ -1,0 +1,31 @@
+<iframe id="iframeOut" style="width:100%; no border;" scrolling="no"></iframe>
+
+<script>
+  function obtenerParametrosURL() {
+    return window.location.search;
+  }
+
+  function ajustarAltura(altura) {
+    const iframe = document.getElementById('iframeOut');
+    iframe.style.height = altura + 'px';
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = obtenerParametrosURL();
+    const iframe = document.getElementById('iframeOut');
+    iframe.src = 'http://localhost/ipv6_elementor/cart/index.html' + params;
+  });
+
+  window.addEventListener('message', function (e) {
+    if (typeof e.data === 'object' && e.data.tipo === 'ajustarAltura') {
+      ajustarAltura(e.data.altura);
+    }
+  });
+
+  setInterval(() => {
+    const iframe = document.getElementById('iframeOut');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ tipo: 'solicitarAltura' }, '*');
+    }
+  }, 1000);
+</script>

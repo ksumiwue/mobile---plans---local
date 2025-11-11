@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Simple - Mobile Plans</title>
+    
+    <style>
+        /* Estilos mínimos para probar */
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-button {
+            background: white;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .nav-button:hover {
+            background: #f0f0f0;
+        }
+        
+        .content-area {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            min-height: 200px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Simple Mobile Plans</h1>
+    <p>Página de prueba para verificar comunicación iframe sin dependencias</p>
+    
+    <!-- Navegación simple -->
+    <div class="section">
+        <h2>Navegación de Prueba</h2>
+        <button class="nav-button" onclick="showSection('home')">Inicio</button>
+        <button class="nav-button" onclick="showSection('plans')">Planes</button>
+        <button class="nav-button" onclick="showSection('compare')">Comparar</button>
+        <button class="nav-button" onclick="addContent()">Agregar Contenido</button>
+        <button class="nav-button" onclick="removeContent()">Quitar Contenido</button>
+    </div>
+    
+    <!-- Secciones de contenido -->
+    <div id="home" class="content-area">
+        <h3>Sección de Inicio</h3>
+        <p>Esta es la página de inicio. Contenido básico para probar el tamaño.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
+    </div>
+    
+    <div id="plans" class="content-area hidden">
+        <h3>Sección de Planes</h3>
+        <p>Aquí están todos los planes móviles disponibles.</p>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0;">
+            <div style="background: rgba(255,255,255,0.3); padding: 15px; border-radius: 8px;">
+                <h4>Plan Básico</h4>
+                <p>10GB - 15€/mes</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.3); padding: 15px; border-radius: 8px;">
+                <h4>Plan Premium</h4>
+                <p>50GB - 35€/mes</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.3); padding: 15px; border-radius: 8px;">
+                <h4>Plan Ilimitado</h4>
+                <p>Datos ilimitados - 50€/mes</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.3); padding: 15px; border-radius: 8px;">
+                <h4>Plan Joven</h4>
+                <p>25GB - 20€/mes</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="compare" class="content-area hidden">
+        <h3>Sección de Comparación</h3>
+        <p>Compara diferentes planes móviles lado a lado.</p>
+        <table style="width: 100%; background: rgba(255,255,255,0.2); border-radius: 8px; padding: 15px; border-collapse: collapse;">
+            <thead>
+                <tr style="background: rgba(255,255,255,0.3);">
+                    <th style="padding: 10px; text-align: left;">Característica</th>
+                    <th style="padding: 10px; text-align: center;">Plan A</th>
+                    <th style="padding: 10px; text-align: center;">Plan B</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 8px;">Datos</td>
+                    <td style="padding: 8px; text-align: center;">10GB</td>
+                    <td style="padding: 8px; text-align: center;">25GB</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">Precio</td>
+                    <td style="padding: 8px; text-align: center;">15€</td>
+                    <td style="padding: 8px; text-align: center;">25€</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="dynamic-content" style="margin: 20px 0;">
+        <!-- Contenido que se agrega/quita dinámicamente -->
+    </div>
+    
+    <div class="section">
+        <p><strong>Estado:</strong> <span id="status">Página cargada</span></p>
+        <p><strong>Altura actual:</strong> <span id="current-height">-</span>px</p>
+        <p><strong>Última comunicación:</strong> <span id="last-communication">-</span></p>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentSection = 'home';
+        let dynamicContentCount = 0;
+        
+        // Función para mostrar secciones
+        function showSection(sectionName) {
+            // Ocultar todas las secciones
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('plans').classList.add('hidden'); 
+            document.getElementById('compare').classList.add('hidden');
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionName).classList.remove('hidden');
+            currentSection = sectionName;
+            
+            updateStatus('Navegando a: ' + sectionName);
+            console.log('📄 Navegando a sección:', sectionName);
+            
+            // Esperar un poco para que se complete el cambio
+            setTimeout(() => {
+                if (window.self !== window.top) {
+                    enviarAltura();
+                }
+            }, 100);
+        }
+        
+        // Función para agregar contenido dinámico
+        function addContent() {
+            dynamicContentCount++;
+            const content = document.createElement('div');
+            content.style.cssText = 'margin: 10px 0; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 8px;';
+            content.innerHTML = `
+                <h4>Contenido Dinámico #${dynamicContentCount}</h4>
+                <p>Este es contenido agregado dinámicamente para probar el cambio de altura del iframe.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            `;
+            
+            document.getElementById('dynamic-content').appendChild(content);
+            updateStatus('Contenido agregado (#' + dynamicContentCount + ')');
+            
+            setTimeout(() => {
+                if (window.self !== window.top) {
+                    enviarAltura();
+                }
+            }, 100);
+        }
+        
+        // Función para quitar contenido dinámico
+        function removeContent() {
+            const dynamicContainer = document.getElementById('dynamic-content');
+            if (dynamicContainer.children.length > 0) {
+                dynamicContainer.removeChild(dynamicContainer.lastElementChild);
+                dynamicContentCount = Math.max(0, dynamicContentCount - 1);
+                updateStatus('Contenido removido (quedan ' + dynamicContentCount + ')');
+                
+                setTimeout(() => {
+                    if (window.self !== window.top) {
+                        enviarAltura();
+                    }
+                }, 100);
+            }
+        }
+        
+        // Función para actualizar status
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+            document.getElementById('last-communication').textContent = new Date().toLocaleTimeString();
+        }
+        
+        // ============ COMUNICACIÓN IFRAME - EXACTA DEL EJEMPLO ============
+        if (window.self !== window.top) {
+            console.log('📱 Test Simple: Detectado iframe - configurando comunicación...');
+            
+            function calcularAlturaContenido() {
+                try {
+                    const body = document.body;
+                    const html = document.documentElement;
+                    
+                    // Método defensivo - verificar que las propiedades existen
+                    const alturas = [];
+                    
+                    if (body && typeof body.scrollHeight === 'number') {
+                        alturas.push(body.scrollHeight);
+                    }
+                    
+                    if (body && typeof body.offsetHeight === 'number') {
+                        alturas.push(body.offsetHeight);
+                    }
+                    
+                    if (html && typeof html.scrollHeight === 'number') {
+                        alturas.push(html.scrollHeight);
+                    }
+                    
+                    if (html && typeof html.offsetHeight === 'number') {
+                        alturas.push(html.offsetHeight);
+                    }
+                    
+                    // Si no tenemos alturas válidas, usar un valor por defecto
+                    if (alturas.length === 0) {
+                        console.warn('⚠️ Test Simple: No se pudieron obtener alturas, usando valor estimado');
+                        return 600; // Valor por defecto razonable
+                    }
+                    
+                    const alturaMaxima = Math.max(...alturas);
+                    
+                    // Log detallado para debug del crecimiento
+                    console.log('📐 Test Simple: Alturas calculadas DETALLADO:', {
+                        bodyScroll: body?.scrollHeight,
+                        bodyOffset: body?.offsetHeight,
+                        htmlScroll: html?.scrollHeight,
+                        htmlOffset: html?.offsetHeight,
+                        alturasArray: alturas,
+                        resultado: alturaMaxima,
+                        ultimaEnviada: ultimaAlturaEnviada,
+                        diferencia: Math.abs(alturaMaxima - ultimaAlturaEnviada),
+                        timestamp: new Date().toLocaleTimeString()
+                    });
+                    
+                    // Verificar si hay algo extraño
+                    if (alturaMaxima > ultimaAlturaEnviada + 50) {
+                        console.warn('🚨 Test Simple: CRECIMIENTO ANÓMALO DETECTADO!', {
+                            anterior: ultimaAlturaEnviada,
+                            actual: alturaMaxima,
+                            incremento: alturaMaxima - ultimaAlturaEnviada,
+                            bodyStyle: body.style.cssText,
+                            htmlStyle: html.style.cssText
+                        });
+                    }
+                    
+                    return alturaMaxima;
+                    
+                } catch (error) {
+                    console.error('❌ Test Simple: Error calculando altura:', error);
+                    return 600; // Valor por defecto en caso de error
+                }
+            }
+            
+            let ultimaAlturaEnviada = 0;
+            const TOLERANCIA_ALTURA = 5; // Solo enviar si cambia más de 5px
+            
+            function enviarAltura() {
+                const altura = calcularAlturaContenido();
+                document.getElementById('current-height').textContent = altura;
+                
+                // Solo enviar si hay cambio significativo
+                const diferencia = Math.abs(altura - ultimaAlturaEnviada);
+                
+                if (diferencia > TOLERANCIA_ALTURA || ultimaAlturaEnviada === 0) {
+                    if (window.parent) {
+                        window.parent.postMessage({
+                            tipo: 'ajustarAltura',
+                            altura: altura
+                        }, '*');
+                        
+                        ultimaAlturaEnviada = altura;
+                        updateStatus('Altura enviada: ' + altura + 'px (cambio: ' + diferencia + 'px)');
+                        console.log('📡 Test Simple: Altura enviada:', altura + 'px', '(diferencia: ' + diferencia + 'px)');
+                    }
+                } else {
+                    updateStatus('Altura estable: ' + altura + 'px (sin cambios)');
+                    console.log('📏 Test Simple: Altura estable, no enviando:', altura + 'px');
+                }
+            }
+            
+            // Escuchar solicitudes del padre
+            window.addEventListener('message', function(e) {
+                if (typeof e.data === 'object' && e.data.tipo === 'solicitarAltura') {
+                    console.log('📡 Test Simple: Solicitud recibida');
+                    enviarAltura();
+                }
+            });
+            
+            // Envío inicial
+            setTimeout(() => {
+                enviarAltura();
+                updateStatus('Comunicación iframe inicializada');
+            }, 500);
+            
+            console.log('✅ Test Simple: Comunicación configurada');
+        } else {
+            console.log('📱 Test Simple: Ejecutándose standalone');
+            updateStatus('Modo standalone (sin iframe)');
+            
+            // En modo standalone, mostrar altura en tiempo real
+            setInterval(() => {
+                const altura = Math.max(
+                    document.body.scrollHeight,
+                    document.body.offsetHeight,
+                    document.documentElement.scrollHeight,
+                    document.documentElement.offsetHeight
+                );
+                document.getElementById('current-height').textContent = altura;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

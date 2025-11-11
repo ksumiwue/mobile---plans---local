@@ -1,0 +1,427 @@
+{
+  "operators": {
+    "movistar": {
+      "name": "Movistar",
+      "color": "#00579A",
+      "logo": "https://www.movistar.es/estaticos/imagenes/iconos-logos/favicon.ico",
+      "website": "https://www.movistar.es"
+    },
+    "vodafone": {
+      "name": "Vodafone",
+      "color": "#E60000",
+      "logo": "https://www.vodafone.es/favicon.ico",
+      "website": "https://www.vodafone.es"
+    },
+    "orange": {
+      "name": "Orange",
+      "color": "#FF7900",
+      "logo": "https://www.orange.es/favicon.ico",
+      "website": "https://www.orange.es"
+    }
+  },
+  "products": [
+    {
+      "id": "movistar-fusion-essential",
+      "name": "Movistar Fusión Essential",
+      "operator": "movistar",
+      "price": 24.99,
+      "originalPrice": 29.99,
+      "data": "30",
+      "calls": "unlimited",
+      "sms": "unlimited",
+      "planType": "individual",
+      "network": "5G",
+      "contractType": "contrato",
+      "permanencia": 12,
+      "featured": true,
+      "popular": true,
+      "description": "Plan completo que combina fibra 300MB y móvil con 30GB de datos 5G, Netflix incluido durante 6 meses y todas las ventajas de la red premium de Movistar.",
+      "features": [
+        "Fibra 300MB incluida",
+        "Netflix gratis 6 meses",
+        "Roaming EU incluido",
+        "Llamadas nacionales ilimitadas",
+        "SMS nacionales ilimitados"
+      ],
+      "benefits": [
+        "Sin límite de velocidad",
+        "Instalación gratuita",
+        "Router WiFi 6 incluido"
+      ],
+      "restrictions": [
+        "Promoción válida 12 meses",
+        "Permanencia mínima 12 meses"
+      ]
+    },
+    {
+      "id": "vodafone-yu-unlimited",
+      "name": "Vodafone Yu Unlimited",
+      "operator": "vodafone",
+      "price": 19.99,
+      "originalPrice": 24.99,
+      "data": "25",
+      "calls": "unlimited",
+      "sms": "unlimited",
+      "planType": "individual",
+      "network": "4G",
+      "contractType": "contrato",
+      "permanencia": 0,
+      "featured": true,
+      "popular": false,
+      "description": "Tarifa joven sin permanencia diseñada para menores de 30 años, con gestión 100% digital através de la app Yu y atención al cliente especializada las 24 horas.",
+      "features": [
+        "Llamadas ilimitadas",
+        "SMS gratis",
+        "App Yu exclusiva",
+        "Gestión 100% digital",
+        "Atención al cliente 24/7"
+      ],
+      "benefits": [
+        "Sin permanencia",
+        "Tarifa joven hasta 30 años",
+        "Gigas acumulables"
+      ],
+      "restrictions": [
+        "Solo disponible online",
+        "Edad máxima 30 años"
+      ]
+    },
+    {
+      "id": "orange-love-familia",
+      "name": "Orange Love Familia",
+      "operator": "orange",
+      "price": 29.99,
+      "originalPrice": 39.99,
+      "data": "unlimited",
+      "calls": "unlimited",
+      "sms": "unlimited",
+      "planType": "familiar",
+      "network": "5G",
+      "contractType": "contrato",
+      "permanencia": 24,
+      "featured": true,
+      "popular": true,
+      "description": "Plan familiar con datos ilimitados 5G para hasta 4 líneas, incluye Amazon Prime y Disney+ durante 6 meses, perfecto para familias que quieren compartir datos y entretenimiento.",
+      "features": [
+        "Datos ilimitados",
+        "Hasta 4 líneas incluidas",
+        "Amazon Prime incluido",
+        "Disney+ 6 meses gratis",
+        "Llamadas internacionales"
+      ],
+      "benefits": [
+        "Compartir datos entre líneas",
+        "Control parental incluido",
+        "Factura única"
+      ],
+      "restrictions": [
+        "Mínimo 2 líneas",
+        "Permanencia 24 meses"
+      ]
+    },
+    {
+      "id": "movistar-empresas-pro",
+      "name": "Movistar Empresas Pro",
+      "operator": "movistar",
+      "price": 45.99,
+      "originalPrice": 55.99,
+      "data": "100",
+      "calls": "unlimited",
+      "sms": "unlimited",
+      "planType": "empresarial",
+      "network": "5G",
+      "contractType": "contrato",
+      "permanencia": 24,
+      "featured": false,
+      "popular": false,
+      "description": "Solución empresarial completa con 100GB de datos 5G, soporte técnico 24/7, Microsoft 365 incluido y gestión centralizada para equipos profesionales.",
+      "features": [
+        "Soporte técnico 24/7",
+        "Gestión centralizada",
+        "Microsoft 365 incluido",
+        "VPN empresarial",
+        "Backup en la nube"
+      ],
+      "benefits": [
+        "Facturación centralizada",
+        "Descuentos por volumen",
+        "Gestor de cuenta dedicado"
+      ],
+      "restrictions": [
+        "Mínimo 5 líneas",
+        "Solo para empresas"
+      ]
+    },
+    {
+      "id": "vodafone-one-completo",
+      "name": "Vodafone One Completo",
+      "operator": "vodafone",
+      "price": 39.99,
+      "originalPrice": 49.99,
+      "data": "50",
+      "calls": "unlimited",
+      "sms": "unlimited",
+      "planType": "familiar",
+      "network": "5G",
+      "contractType": "contrato",
+      "permanencia": 18,
+      "featured": false,
+      "popular": true,
+      "description": "Pack convergente que incluye fibra 1GB, TV Vodafone con contenido premium, múltiples líneas móviles 5G y protección Secure Net, todo en una sola factura.",
+      "features": [
+        "TV Vodafone incluida",
+        "Múltiples líneas móviles",
+        "Secure Net protección",
+        "Fibra 1GB incluida",
+        "Descarga contenido offline"
+      ],
+      "benefits": [
+        "Una sola factura",
+        "Instalación gratuita",
+        "Primer mes gratis"
+      ],
+      "restrictions": [
+        "Permanencia 18 meses",
+        "Instalación sujeta a cobertura"
+      ]
+    },
+    {
+      "id": "orange-go-basico",
+      "name": "Orange Go Básico",
+      "operator": "orange",
+      "price": 15.99,
+      "originalPrice": null,
+      "data": "15",
+      "calls": "300",
+      "sms": "unlimited",
+      "planType": "individual",
+      "network": "4G",
+      "contractType": "contrato",
+      "permanencia": 0,
+      "featured": false,
+      "popular": false,
+      "description": "Tarifa básica sin permanencia ideal para usuarios con consumo moderado, precio fijo garantizado y posibilidad de cambio de tarifa gratuito en cualquier momento.",
+      "features": [
+        "Plan básico ideal",
+        "Sin permanencia",
+        "Precio fijo garantizado",
+        "Activación inmediata",
+        "Gestión online"
+      ],
+      "benefits": [
+        "Sin sorpresas en factura",
+        "Cambio de tarifa gratuito",
+        "Atención personalizada"
+      ],
+      "restrictions": [
+        "Velocidad reducida tras consumo",
+        "Sin servicios adicionales"
+      ]
+    },
+    {
+      "id": "movistar-prepago-flexible",
+      "name": "Movistar Prepago Flexible",
+      "operator": "movistar",
+      "price": 12.99,
+      "originalPrice": null,
+      "data": "10",
+      "calls": "200",
+      "sms": "100",
+      "planType": "individual",
+      "network": "4G",
+      "contractType": "prepago",
+      "permanencia": 0,
+      "featured": false,
+      "popular": false,
+      "description": "Modalidad prepago con total control del gasto, ideal para uso ocasional sin compromisos de permanencia, recarga solo cuando lo necesites.",
+      "features": [
+        "Sin compromiso de permanencia",
+        "Recarga cuando quieras",
+        "Control total del gasto",
+        "Activación instantánea",
+        "App Mi Movistar"
+      ],
+      "benefits": [
+        "Sin cuota mensual fija",
+        "Bonos adicionales disponibles",
+        "Ideal para uso ocasional"
+      ],
+      "restrictions": [
+        "Saldo caduca en 30 días",
+        "Servicios limitados"
+      ]
+    },
+    {
+      "id": "vodafone-bit-joven",
+      "name": "Vodafone Bit Joven",
+      "operator": "vodafone",
+      "price": 22.99,
+      "originalPrice": 27.99,
+      "data": "20",
+      "calls": "unlimited",
+      "sms": "unlimited",
+      "planType": "individual",
+      "network": "4G",
+      "contractType": "contrato",
+      "permanencia": 12,
+      "featured": false,
+      "popular": true,
+      "description": "Tarifa especial para jóvenes hasta 26 años con Spotify Premium incluido, datos extra los fines de semana y uso gratuito de redes sociales sin consumir datos.",
+      "features": [
+        "Diseñado para jóvenes",
+        "Apps sociales gratis",
+        "Precio especial hasta 26 años",
+        "Datos extra fines de semana",
+        "Spotify Premium incluido"
+      ],
+      "benefits": [
+        "Redes sociales sin gastar datos",
+        "Música ilimitada",
+        "Descuentos en tiendas"
+      ],
+      "restrictions": [
+        "Edad máxima 26 años",
+        "Verificación de edad requerida"
+      ]
+    },
+    {
+      "id": "orange-mundo-plus",
+      "name": "Orange Mundo Plus",
+      "operator": "orange",
+      "price": 34.99,
+      "originalPrice": 39.99,
+      "data": "40",
+      "calls": "unlimited",
+      "sms": "unlimited",
+      "planType": "individual",
+      "network": "5G",
+      "contractType": "contrato",
+      "permanencia": 12,
+      "featured": false,
+      "popular": false,
+      "description": "Plan internacional perfecto para viajeros con llamadas y roaming mundial incluido, 40GB de datos 5G, almacenamiento en la nube y seguro de móvil integrado.",
+      "features": [
+        "Llamadas internacionales",
+        "Roaming mundial incluido",
+        "5G premium",
+        "Cloud storage 100GB",
+        "Seguro móvil incluido"
+      ],
+      "benefits": [
+        "Ideal para viajeros",
+        "Cobertura internacional",
+        "Protección total del dispositivo"
+      ],
+      "restrictions": [
+        "Uso justo roaming",
+        "Seguro con franquicia"
+      ]
+    },
+    {
+      "id": "movistar-seniors-60",
+      "name": "Movistar Seniors 60+",
+      "operator": "movistar",
+      "price": 18.99,
+      "originalPrice": null,
+      "data": "8",
+      "calls": "unlimited",
+      "sms": "unlimited",
+      "planType": "individual",
+      "network": "4G",
+      "contractType": "contrato",
+      "permanencia": 0,
+      "featured": false,
+      "popular": false,
+      "description": "Tarifa especial para mayores de 60 años con descuento permanente, atención personalizada, terminal fácil de usar y botón SOS para mayor tranquilidad familiar.",
+      "features": [
+        "Tarifa especial +60 años",
+        "Atención personalizada",
+        "Terminal fácil de usar",
+        "Botón SOS incluido",
+        "Soporte técnico dedicado"
+      ],
+      "benefits": [
+        "Descuento permanente",
+        "Formación gratuita",
+        "Tranquilidad familiar"
+      ],
+      "restrictions": [
+        "Edad mínima 60 años",
+        "Documentación requerida"
+      ]
+    },
+    {
+      "id": "vodafone-empresas-flex",
+      "name": "Vodafone Empresas Flex",
+      "operator": "vodafone",
+      "price": 38.99,
+      "originalPrice": 44.99,
+      "data": "75",
+      "calls": "unlimited",
+      "sms": "unlimited",
+      "planType": "empresarial",
+      "network": "5G",
+      "contractType": "contrato",
+      "permanencia": 24,
+      "featured": false,
+      "popular": false,
+      "description": "Solución empresarial flexible con gestión de flotas móviles, business intelligence, seguridad avanzada y escalabilidad total para empresas en crecimiento.",
+      "features": [
+        "Flexibilidad total",
+        "Gestión de flotas",
+        "BI y Analytics",
+        "Seguridad avanzada",
+        "API integración"
+      ],
+      "benefits": [
+        "Escalabilidad empresarial",
+        "Informes detallados",
+        "Consultor asignado"
+      ],
+      "restrictions": [
+        "Mínimo 10 líneas",
+        "Contrato empresarial requerido"
+      ]
+    },
+    {
+      "id": "orange-fibra-movil",
+      "name": "Orange Fibra + Móvil",
+      "operator": "orange",
+      "price": 42.99,
+      "originalPrice": 52.99,
+      "data": "60",
+      "calls": "unlimited",
+      "sms": "unlimited",
+      "planType": "familiar",
+      "network": "5G",
+      "contractType": "contrato",
+      "permanencia": 24,
+      "featured": false,
+      "popular": false,
+      "description": "Pack convergente completo con fibra 600MB, TV Orange, múltiples líneas móviles 5G, router WiFi 6 e instalación profesional, todo con una sola factura.",
+      "features": [
+        "Fibra 600MB incluida",
+        "TV Orange incluida",
+        "Múltiples líneas móviles",
+        "WiFi 6 router",
+        "Instalación profesional"
+      ],
+      "benefits": [
+        "Precio combinado",
+        "Una sola factura",
+        "Soporte técnico unificado"
+      ],
+      "restrictions": [
+        "Sujeto a cobertura fibra",
+        "Permanencia 24 meses obligatoria"
+      ]
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2024-01-15T10:00:00Z",
+    "version": "2.0",
+    "totalProducts": 12,
+    "featuredCount": 3,
+    "operators": ["movistar", "vodafone", "orange"]
+  }
+}

@@ -1000,53 +1000,25 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Botón flotante de comparación - CENTRADO */
+        /* Botón flotante de comparación */
         .compare-floating-btn {
             position: fixed;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-            background: linear-gradient(135deg, #4A90E2, #357ABD);
+            bottom: 2rem;
+            right: 2rem;
+            background: #4A90E2;
             color: white;
-            padding: 1rem 1.25rem;
-            border-radius: 60px;
-            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.4);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: var(--shadow-xl);
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.9rem;
             z-index: 1000;
             transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            min-width: 140px;
-            text-align: center;
         }
         
         .compare-floating-btn:hover {
-            transform: translateY(-50%) translateX(-5px) scale(1.05);
-            box-shadow: 0 12px 35px rgba(74, 144, 226, 0.6);
-            background: linear-gradient(135deg, #357ABD, #2563EB);
-        }
-        
-        /* Responsive - ajustar posición en móvil */
-        @media (max-width: 768px) {
-            .compare-floating-btn {
-                right: 15px;
-                padding: 0.8rem 1rem;
-                font-size: 0.85rem;
-                min-width: 120px;
-                border-radius: 50px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .compare-floating-btn {
-                right: 10px;
-                padding: 0.7rem 0.9rem;
-                font-size: 0.8rem;
-                min-width: 100px;
-                border-radius: 45px;
-            }
+            transform: translateY(-2px);
+            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15);
         }
         
         /* Responsive */
@@ -1088,15 +1060,91 @@
     <!-- JavaScript de la aplicación -->
     <script src="js/app-new.js"></script>
     
-    <!-- Auto-ajuste para iframe (solo se carga si está en iframe) -->
+    <!-- Comunicación iframe - EXACTO como ejemplo funcional -->
     <script>
-        // Detectar si estamos en iframe y cargar script de auto-ajuste
+        // Solo ejecutar si estamos en iframe
         if (window.self !== window.top) {
-            console.log('📱 Mobile Plans: Detectado iframe, cargando auto-ajuste...');
-            const script = document.createElement('script');
-            script.src = './js/iframe-auto-adjust-minimal.js';
-            script.async = true;
-            document.head.appendChild(script);
+            console.log('📱 Mobile Plans: Detectado iframe - configurando comunicación...');
+            
+            function calcularAlturaContenido() {
+                try {
+                    const body = document.body;
+                    const html = document.documentElement;
+                    
+                    // Método defensivo - verificar que las propiedades existen
+                    const alturas = [];
+                    
+                    if (body && typeof body.scrollHeight === 'number') {
+                        alturas.push(body.scrollHeight);
+                    }
+                    
+                    if (body && typeof body.offsetHeight === 'number') {
+                        alturas.push(body.offsetHeight);
+                    }
+                    
+                    if (html && typeof html.scrollHeight === 'number') {
+                        alturas.push(html.scrollHeight);
+                    }
+                    
+                    if (html && typeof html.offsetHeight === 'number') {
+                        alturas.push(html.offsetHeight);
+                    }
+                    
+                    // Si no tenemos alturas válidas, usar un valor por defecto
+                    if (alturas.length === 0) {
+                        console.warn('⚠️ Mobile Plans: No se pudieron obtener alturas, usando valor estimado');
+                        return 600; // Valor por defecto razonable
+                    }
+                    
+                    return Math.max(...alturas);
+                    
+                } catch (error) {
+                    console.error('❌ Mobile Plans: Error calculando altura:', error);
+                    return 600; // Valor por defecto en caso de error
+                }
+            }
+            
+            let ultimaAlturaEnviada = 0;
+            const TOLERANCIA_ALTURA = 5; // Solo enviar si cambia más de 5px
+            
+            function enviarAltura() {
+                const altura = calcularAlturaContenido();
+                
+                // Solo enviar si hay cambio significativo
+                const diferencia = Math.abs(altura - ultimaAlturaEnviada);
+                const esReduccion = altura < ultimaAlturaEnviada;
+                
+                // SIEMPRE enviar si es una reducción significativa (>20px) para que el iframe se reduzca
+                const debeEnviar = diferencia > TOLERANCIA_ALTURA || 
+                                   ultimaAlturaEnviada === 0 || 
+                                   (esReduccion && diferencia > 20);
+                
+                if (debeEnviar) {
+                    if (window.parent) {
+                        window.parent.postMessage({
+                            tipo: 'ajustarAltura',
+                            altura: altura,
+                            esReduccion: esReduccion
+                        }, '*');
+                        
+                        ultimaAlturaEnviada = altura;
+                        console.log('📡 Mobile Plans: Altura enviada:', altura + 'px', 
+                                   '(diferencia: ' + diferencia + 'px, reducción: ' + esReduccion + ')');
+                    }
+                } else {
+                    console.log('📏 Mobile Plans: Altura estable, no enviando:', altura + 'px');
+                }
+            }
+            
+            // Escuchar solicitudes de altura del padre (EXACTO como ejemplo)
+            window.addEventListener('message', function(e) {
+                if (typeof e.data === 'object' && e.data.tipo === 'solicitarAltura') {
+                    console.log('📡 Mobile Plans: Solicitud de altura recibida');
+                    enviarAltura();
+                }
+            });
+            
+            console.log('✅ Mobile Plans: Comunicación iframe configurada');
         } else {
             console.log('📱 Mobile Plans: Ejecutándose standalone');
         }

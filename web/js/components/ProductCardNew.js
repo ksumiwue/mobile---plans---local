@@ -426,6 +426,7 @@ class ProductCardNew {
                     </div>
                 </div>
 
+
                 <!-- Precio destacado -->
                 ${formattedPrice}
 
