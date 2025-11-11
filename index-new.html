@@ -391,6 +391,7 @@
                 </div>
             </div>
             
+            
         </section>
 
         <!-- Página de Comparación -->
@@ -434,10 +435,7 @@
         </section>
     </main>
 
-    <!-- Botón flotante de comparación -->
-    <div class="compare-floating-btn" style="display: none;" onclick="window.app.navigation.navigateTo('compare')">
-        Comparar (0)
-    </div>
+    <!-- El botón sticky se crea dinámicamente por JavaScript -->
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loading-overlay">
@@ -1006,9 +1004,8 @@
         /* Botón flotante de comparación - CENTRADO */
         .compare-floating-btn {
             position: fixed;
-            top: 50%;
+            bottom: 20px;
             right: 20px;
-            transform: translateY(-50%);
             background: linear-gradient(135deg, #4A90E2, #357ABD);
             color: white;
             padding: 1rem 1.25rem;
@@ -1026,7 +1023,7 @@
         }
         
         .compare-floating-btn:hover {
-            transform: translateY(-50%) translateX(-5px) scale(1.05);
+            transform: translateX(-5px) scale(1.05);
             box-shadow: 0 12px 35px rgba(74, 144, 226, 0.6);
             background: linear-gradient(135deg, #357ABD, #2563EB);
         }
@@ -1051,6 +1048,16 @@
                 border-radius: 45px;
             }
         }
+        
+        /* El botón flotante se posiciona respecto al viewport pero solo en planes */
+        .compare-floating-btn {
+            /* Se mantiene siempre visible mientras haces scroll */
+            position: fixed !important;
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        /* Control de visibilidad del botón - Solo ocultar en páginas específicas */
         
         /* Responsive */
         @media (max-width: 768px) {
@@ -1093,6 +1100,13 @@
     
     <!-- Auto-ajuste para iframe (solo se carga si está en iframe) -->
     <script>
+        // Cargar botón sticky SIEMPRE (tanto iframe como standalone)
+        console.log('📱 Mobile Plans: Cargando botón sticky...');
+        const stickyScript = document.createElement('script');
+        stickyScript.src = './js/sticky-compare-simple.js';
+        stickyScript.async = true;
+        document.head.appendChild(stickyScript);
+        
         // Detectar si estamos en iframe y cargar script de auto-ajuste
         if (window.self !== window.top) {
             console.log('📱 Mobile Plans: Detectado iframe, cargando auto-ajuste...');

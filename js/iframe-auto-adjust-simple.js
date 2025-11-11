@@ -30,8 +30,8 @@
                 seccionVisible.offsetHeight
             );
             
-            // Añadir espacio para header, footer y padding
-            const alturaFinal = alturaSeccion + 300; // padding generoso pero no excesivo
+            // Añadir espacio óptimo para header, footer y padding
+            const alturaFinal = alturaSeccion + 150; // padding perfecto
             
             console.log('📏 Sección visible:', seccionVisible.id, 'Altura:', alturaFinal + 'px');
             return alturaFinal;
