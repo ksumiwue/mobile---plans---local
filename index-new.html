@@ -445,6 +445,9 @@
         <p>Cargando planes...</p>
     </div>
 
+    <!-- Configuración de planes destacados -->
+    <script src="config/featured-plans-config.js"></script>
+    
     <!-- JavaScript -->
     <script src="js/components/ProductCardNew.js"></script>
     <script src="js/components/FilterSystemNew.js"></script>
@@ -1094,7 +1097,7 @@
         if (window.self !== window.top) {
             console.log('📱 Mobile Plans: Detectado iframe, cargando auto-ajuste...');
             const script = document.createElement('script');
-            script.src = './js/iframe-auto-adjust-minimal.js';
+            script.src = './js/iframe-auto-adjust-simple.js';
             script.async = true;
             document.head.appendChild(script);
         } else {
