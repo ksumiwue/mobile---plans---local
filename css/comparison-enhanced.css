@@ -452,17 +452,32 @@
   left: 100%;
 }
 
-/* Filas de características mejoradas */
+/* Filas de características mejoradas - COLORES INVERTIDOS */
 .feature-column {
-  background: var(--neutral-50);
+  background: #1e293b !important;
   font-weight: 600;
-  color: var(--neutral-700);
+  color: white !important;
   padding: 1.5rem 2rem;
   border-bottom: 1px solid var(--neutral-200);
   position: sticky;
   left: 0;
   z-index: 10;
   min-width: 180px;
+}
+
+/* Selector específico para feature-label también */
+.comparison-table .feature-label,
+.feature-column .feature-label {
+  background: #1e293b !important;
+  color: #ffffff !important;
+}
+
+/* Selector más específico para asegurar que se aplique */
+.comparison-table .feature-column,
+.comparison-table td.feature-column,
+.comparison-table th.feature-column {
+  background: #374151 !important;
+  color: #ffffff !important;
 }
 
 .comparison-row.highlight-row .feature-cell {
@@ -475,6 +490,10 @@
   align-items: center;
   gap: 0.75rem;
   font-size: 0.95rem;
+  background: #1e293b !important;
+  color: #ffffff !important;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
 }
 
 .value-cell {
@@ -807,6 +826,12 @@
 .theme-dark .actions-row,
 .theme-dark .footer-info {
   background: rgba(15, 23, 42, 0.8);
+}
+
+/* Mantener colores invertidos también en modo oscuro */
+.theme-dark .feature-column {
+  background: rgba(15, 23, 42, 0.9);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .theme-dark .value-cell {
