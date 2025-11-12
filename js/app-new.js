@@ -1261,7 +1261,12 @@ class MobilePlansApp {
         }
 
         console.log('🎨 Renderizando tabla de comparación con productos:', comparedProducts);
-        container.innerHTML = this.getComparisonTableHTML(comparedProducts);
+        const tableHTML = this.getComparisonTableHTML(comparedProducts);
+        const mobileHTML = this.getMobileComparisonHTML(comparedProducts);
+        container.innerHTML = tableHTML + mobileHTML;
+        
+        // Inicializar navegación móvil
+        this.initializeMobileNavigation();
         
         // Insertar descripciones con HTML en los headers de comparación
         comparedProducts.forEach(product => {
@@ -1863,6 +1868,249 @@ class MobilePlansApp {
             const lowerDecade = Math.floor(totalProducts / 10) * 10;
             plansCountElement.textContent = `${lowerDecade}+`;
             console.log(`📊 Actualizando estadísticas: ${totalProducts} planes → ${lowerDecade}+`);
+        }
+    }
+
+    // Generar vista móvil con swipe
+    getMobileComparisonHTML(products) {
+        if (!products || products.length === 0) return '';
+
+        const features = [
+            { key: null, label: '' }, // Primera fila vacía para header
+            { key: 'data', label: 'Datos' },
+            { key: 'calls', label: 'Llamadas' },
+            { key: 'sms', label: 'SMS' },
+            { key: 'network', label: 'Red' },
+            { key: 'planType', label: 'Tipo de Plan' },
+            { key: 'action', label: 'Acción' } // Fila del botón
+        ];
+
+        return `
+            <div class="mobile-comparison-swipe">
+                <div class="mobile-comparison-layout">
+                    <!-- Columna fija de características -->
+                    <div class="mobile-features-column">
+                        ${features.map(feature => `
+                            <div class="mobile-feature-item">${feature.label}</div>
+                        `).join('')}
+                    </div>
+                    
+                    <!-- Área deslizable de productos -->
+                    <div class="mobile-products-swiper">
+                        <div class="mobile-products-container" id="mobile-products-container">
+                            ${products.map((product, index) => `
+                                <div class="mobile-product-column" data-product-index="${index}">
+                                    <div class="mobile-product-header">
+                                        <div class="mobile-product-name">${product.name}</div>
+                                        <div class="mobile-product-price">${product.price.toFixed(2)}€/mes</div>
+                                    </div>
+                                    <div class="mobile-product-features">
+                                        ${features.map((feature, featureIndex) => {
+                                            if (!feature.key) {
+                                                return `<div class="mobile-product-value">&nbsp;</div>`;
+                                            }
+                                            
+                                            if (feature.key === 'action') {
+                                                return `
+                                                    <div class="mobile-product-value mobile-action-cell">
+                                                        <button class="mobile-contract-btn" style="background: #4A90E2; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600;">
+                                                            Contratar
+                                                        </button>
+                                                    </div>
+                                                `;
+                                            }
+                                            
+                                            // Determinar si este valor es el MEJOR (no solo único)
+                                            const value = this.formatFeatureValue(feature.key, product[feature.key]);
+                                            const rawValue = product[feature.key];
+                                            let isBest = false;
+                                            
+                                            if (feature.key === 'data') {
+                                                // Para datos, el mejor es el que más tiene
+                                                const allDataValues = products.map(p => {
+                                                    if (p.data === 'unlimited' || p.data === 'ilimitados') return Infinity;
+                                                    return parseInt(p.data) || 0;
+                                                });
+                                                const maxData = Math.max(...allDataValues);
+                                                const currentData = rawValue === 'unlimited' || rawValue === 'ilimitados' ? Infinity : (parseInt(rawValue) || 0);
+                                                isBest = currentData === maxData && allDataValues.filter(v => v === maxData).length === 1;
+                                            } else if (feature.key === 'sms') {
+                                                // Para SMS, destacar solo el que SÍ tiene SMS
+                                                const allSmsValues = products.map(p => parseInt(p.sms) || 0);
+                                                const currentSms = parseInt(rawValue) || 0;
+                                                isBest = currentSms > 0 && allSmsValues.filter(v => v > 0).length === 1;
+                                            }
+                                            
+                                            const classes = isBest ? 'mobile-product-value mobile-most-relevant' : 'mobile-product-value';
+                                            
+                                            return `
+                                                <div class="${classes}">
+                                                    ${value}
+                                                </div>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navegación -->
+                <div class="mobile-navigation">
+                    <button class="mobile-nav-arrow" id="mobile-prev-btn" onclick="window.app.previousProduct()">‹</button>
+                    <div class="mobile-nav-dots">
+                        ${products.map((_, index) => `
+                            <div class="mobile-nav-dot ${index === 0 ? 'active' : ''}" 
+                                 data-index="${index}" 
+                                 onclick="window.app.goToProduct(${index})"></div>
+                        `).join('')}
+                    </div>
+                    <button class="mobile-nav-arrow" id="mobile-next-btn" onclick="window.app.nextProduct()">›</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // Variables para la navegación móvil
+    currentMobileIndex = 0;
+    totalMobileProducts = 0;
+
+    // Inicializar navegación móvil después del render
+    initializeMobileNavigation() {
+        this.currentMobileIndex = 0;
+        this.totalMobileProducts = Array.from(this.comparisonStore).length;
+        this.updateMobileNavigation();
+        this.setupMobileSwipeGestures();
+    }
+
+    // Ir al producto anterior
+    previousProduct() {
+        if (this.currentMobileIndex > 0) {
+            this.currentMobileIndex--;
+            this.updateMobileNavigation();
+        }
+    }
+
+    // Ir al producto siguiente
+    nextProduct() {
+        if (this.currentMobileIndex < this.totalMobileProducts - 1) {
+            this.currentMobileIndex++;
+            this.updateMobileNavigation();
+        }
+    }
+
+    // Ir a un producto específico
+    goToProduct(index) {
+        if (index >= 0 && index < this.totalMobileProducts) {
+            this.currentMobileIndex = index;
+            this.updateMobileNavigation();
+        }
+    }
+
+    // Actualizar navegación móvil
+    updateMobileNavigation() {
+        const container = document.getElementById('mobile-products-container');
+        const dots = document.querySelectorAll('.mobile-nav-dot');
+        const prevBtn = document.getElementById('mobile-prev-btn');
+        const nextBtn = document.getElementById('mobile-next-btn');
+
+        if (container) {
+            // Mover el contenedor
+            const translateX = -this.currentMobileIndex * 100;
+            container.style.transform = `translateX(${translateX}%)`;
+        }
+
+        // Actualizar dots
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentMobileIndex);
+        });
+
+        // Actualizar botones
+        if (prevBtn) prevBtn.disabled = this.currentMobileIndex === 0;
+        if (nextBtn) nextBtn.disabled = this.currentMobileIndex === this.totalMobileProducts - 1;
+    }
+
+    // Configurar gestos de swipe
+    setupMobileSwipeGestures() {
+        const swiper = document.querySelector('.mobile-products-swiper');
+        if (!swiper) return;
+
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        swiper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+
+        swiper.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentX = e.touches[0].clientX;
+        });
+
+        swiper.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            isDragging = false;
+
+            const diffX = startX - currentX;
+            const threshold = 50; // Mínimo de píxeles para activar swipe
+
+            if (Math.abs(diffX) > threshold) {
+                if (diffX > 0) {
+                    // Swipe izquierda - siguiente
+                    this.nextProduct();
+                } else {
+                    // Swipe derecha - anterior
+                    this.previousProduct();
+                }
+            }
+        });
+    }
+
+    // Formatear valores de características para vista móvil
+    formatFeatureValue(key, value) {
+        if (!value || value === undefined || value === null) return '-';
+        
+        switch(key) {
+            case 'data':
+                if (typeof value === 'string') {
+                    if (value.toLowerCase().includes('unlimited') || value.toLowerCase().includes('ilimitado')) {
+                        return 'Ilimitados';
+                    }
+                    return value.includes('GB') ? value : `${value}GB`;
+                }
+                return value === 'unlimited' ? 'Ilimitados' : `${value}GB`;
+                
+            case 'calls':
+                if (typeof value === 'string') {
+                    if (value.toLowerCase().includes('unlimited') || value.toLowerCase().includes('ilimitada')) {
+                        return 'Ilimitadas';
+                    }
+                    return value.includes('min') ? value : `${value} min`;
+                }
+                return value === 'unlimited' ? 'Ilimitadas' : `${value} min`;
+                
+            case 'sms':
+                if (typeof value === 'string') {
+                    if (value === '0' || value.toLowerCase().includes('sin')) {
+                        return 'Sin SMS';
+                    }
+                    return value.includes('SMS') ? value : `${value} SMS`;
+                }
+                return value === '0' ? 'Sin SMS' : `${value} SMS`;
+                
+            case 'network':
+                return value || '-';
+                
+            case 'planType':
+                if (value === 'individual') return 'Individual';
+                if (value === 'familiar') return 'Familiar';
+                return value || '-';
+                
+            default:
+                return value || '-';
         }
     }
 }

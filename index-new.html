@@ -146,36 +146,244 @@
         }
         
         /* Responsive para móviles */
+        /* Vista móvil con swipe - títulos fijos y fichas deslizables */
         @media (max-width: 768px) {
-            .comparison-table {
-                font-size: 0.8em !important;
+            .comparison-table-container {
+                display: none !important;
             }
             
-            .comparison-table th,
-            .comparison-table td {
-                padding: 0.3rem !important;
+            .mobile-comparison-swipe {
+                display: block !important;
+                width: 100%;
+                overflow: hidden;
+                max-height: calc(100vh - 200px);
+                margin: 0;
+                padding: 0;
             }
             
-            .comparison-table th.feature-label,
-            .comparison-table td.feature-label {
-                width: 100px !important;
-                min-width: 100px !important;
-                max-width: 100px !important;
-                font-size: 0.75em !important;
-                padding: 0.3rem !important;
+            .mobile-comparison-layout {
+                display: flex;
+                height: auto;
+                max-height: calc(100vh - 250px);
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                border: 1px solid #ddd;
+                width: 100%;
+                max-width: 100vw;
+                margin: 0;
+                box-sizing: border-box;
             }
             
-            .comparison-table th:not(.feature-label),
-            .comparison-table td:not(.feature-label) {
-                width: calc((100% - 100px) / var(--products-count)) !important;
+            .mobile-features-column {
+                flex: 0 0 80px;
+                background: #666;
+                border-right: 1px solid #ddd;
+                display: flex;
+                flex-direction: column;
             }
             
-            .comparison-table {
-                width: auto !important;
+            .mobile-feature-item {
+                padding: 0.25rem 0.25rem;
+                font-weight: normal;
+                font-size: 0.7em;
+                color: #ccc;
+                border-bottom: 1px solid #555;
+                text-align: left;
+                background: #666;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                line-height: 1.1;
             }
             
-            .product-summary h3 {
-                font-size: 0.9em !important;
+            .mobile-feature-item:first-child {
+                height: 50px;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .mobile-products-swiper {
+                flex: 1;
+                overflow: hidden;
+                position: relative;
+                width: calc(100% - 80px);
+            }
+            
+            .mobile-products-container {
+                display: flex;
+                transition: transform 0.3s ease;
+                height: 100%;
+                width: 100%;
+            }
+            
+            .mobile-product-column {
+                flex: 0 0 100%;
+                display: flex;
+                flex-direction: column;
+                background: #fafafa;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .mobile-product-header {
+                text-align: center;
+                padding: 0.25rem;
+                background: #fafafa;
+                border-bottom: 1px solid #ddd;
+                height: 50px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            .mobile-product-name {
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: #666;
+                margin-bottom: 0.25rem;
+                line-height: 1;
+            }
+            
+            .mobile-product-price {
+                font-size: 0.8rem;
+                font-weight: 800;
+                color: #666;
+            }
+            
+            .mobile-product-features {
+                flex: 1;
+            }
+            
+            .mobile-product-value {
+                padding: 0.25rem;
+                font-weight: normal;
+                color: #666;
+                border-bottom: 1px solid #ddd;
+                text-align: center;
+                background: #fafafa;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.75em;
+                line-height: 1.1;
+            }
+            
+            .mobile-product-value:last-child {
+                border-bottom: 1px solid #ddd;
+            }
+            
+            /* Valores destacados en móvil (igual que desktop) */
+            .mobile-product-value.mobile-most-relevant {
+                background: rgba(255, 248, 220, 0.8) !important;
+                color: #dc2626 !important;
+                font-weight: 700 !important;
+                font-size: 0.85em !important;
+            }
+            
+            /* Estilo para botones de acción en móvil */
+            .mobile-action-cell {
+                padding: 0.5rem !important;
+            }
+            
+            .mobile-navigation {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0.5rem;
+                gap: 0.75rem;
+                background: white;
+                border-top: 1px solid #ddd;
+            }
+            
+            .mobile-nav-dots {
+                display: flex;
+                gap: 0.375rem;
+            }
+            
+            .mobile-nav-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: #d1d5db;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .mobile-nav-dot.active {
+                background: #4A90E2;
+                transform: scale(1.2);
+            }
+            
+            .mobile-nav-arrow {
+                background: #4A90E2;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 28px;
+                height: 28px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-size: 0.875rem;
+            }
+            
+            .mobile-nav-arrow:hover {
+                background: #357ABD;
+                transform: scale(1.05);
+            }
+            
+            .mobile-nav-arrow:disabled {
+                background: #d1d5db;
+                cursor: not-allowed;
+                transform: none;
+            }
+        }
+        
+        /* Ocultar vista móvil en desktop */
+        .mobile-comparison-swipe {
+            display: none;
+        }
+        
+        /* Ocultar botón flotante en móvil */
+        @media (max-width: 768px) {
+            .compare-floating-btn,
+            #sticky-compare-btn,
+            .sticky-compare-button,
+            .compare-sticky-btn,
+            .btn-compare,
+            .compare-btn,
+            button[onclick*="compare"],
+            button[onclick*="Comparar"],
+            [class*="compare"][class*="btn"],
+            [class*="compare"][class*="button"],
+            [class*="sticky"][class*="compare"],
+            div[style*="position: fixed"][style*="right"],
+            div[style*="position: absolute"][style*="right"] {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+            
+            /* Ocultar también botones en tarjetas de productos */
+            .product-card .btn-compare,
+            .product-card button[title*="comparar"],
+            .product-card button[title*="Comparar"],
+            .product-card [class*="compare"] {
+                display: none !important;
+                visibility: hidden !important;
+            }
+            
+            /* Ocultar cualquier elemento flotante en la esquina derecha */
+            *[style*="position: fixed"][style*="bottom"][style*="right"] {
+                display: none !important;
             }
         }
         
@@ -1100,6 +1308,45 @@
     
     <!-- Auto-ajuste para iframe (solo se carga si está en iframe) -->
     <script>
+        // SCRIPT PARA OCULTAR BOTONES EN MÓVIL
+        function hideMobileCompareButtons() {
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (!isMobile) return;
+            
+            // Buscar y ocultar todos los posibles botones
+            const selectors = [
+                '.compare-floating-btn',
+                '.sticky-compare-button', 
+                '.compare-sticky-btn',
+                '.btn-compare',
+                '[class*="compare"][class*="btn"]',
+                '[class*="sticky"][class*="compare"]',
+                'div[style*="position: fixed"]',
+                '*[style*="bottom"][style*="right"]'
+            ];
+            
+            selectors.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el && el.style) {
+                        el.style.display = 'none';
+                        el.style.visibility = 'hidden';
+                        el.style.opacity = '0';
+                        el.style.pointerEvents = 'none';
+                    }
+                });
+            });
+        }
+        
+        // Ejecutar cada segundo para eliminar botones que aparezcan
+        setInterval(hideMobileCompareButtons, 1000);
+        
+        // Ejecutar al cambiar tamaño de ventana
+        window.addEventListener('resize', hideMobileCompareButtons);
+        
+        // Ejecutar al cargar
+        document.addEventListener('DOMContentLoaded', hideMobileCompareButtons);
+        
         // Cargar botón sticky SIEMPRE (tanto iframe como standalone)
         console.log('📱 Mobile Plans: Cargando botón sticky...');
         const stickyScript = document.createElement('script');

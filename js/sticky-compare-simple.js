@@ -42,6 +42,19 @@
             pointer-events: auto !important;
         `;
         
+        // OCULTAR EN MÓVIL
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        function handleMobileView(e) {
+            if (e.matches) {
+                button.style.display = 'none !important';
+                button.style.visibility = 'hidden !important';
+            } else {
+                button.style.visibility = 'visible';
+            }
+        }
+        mediaQuery.addListener(handleMobileView);
+        handleMobileView(mediaQuery);
+        
         // Click event
         button.addEventListener('click', function() {
             console.log('👆 Click en botón sticky');

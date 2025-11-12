@@ -20,6 +20,19 @@
         
         stickyButton = document.createElement('div');
         stickyButton.className = 'compare-sticky-btn';
+        
+        // OCULTAR EN MÓVIL INMEDIATAMENTE
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        function handleMobileView(e) {
+            if (e.matches) {
+                stickyButton.style.display = 'none !important';
+                stickyButton.style.visibility = 'hidden !important';
+            } else {
+                stickyButton.style.visibility = 'visible';
+            }
+        }
+        mediaQuery.addListener(handleMobileView);
+        handleMobileView(mediaQuery);
         stickyButton.style.cssText = `
             position: fixed;
             bottom: 20px;
