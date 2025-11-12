@@ -446,9 +446,9 @@ class ProductCardNew {
                 </ul>
 
                 <!-- CTA -->
-                <button class="cta-minimal" onclick="window.location.href='https://ipv6-informatica.es/configurador?product=${id}'">
+                <a href="https://ipv6-informatica.es/configurador/?products=${encodeURIComponent(product.id)}" class="cta-minimal" target="_top" style="text-decoration: none; display: block; text-align: center;">
                     <span>Contratar Plan</span>
-                </button>
+                </a>
 
             </div>
         `;

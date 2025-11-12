@@ -97,7 +97,7 @@ export default {
     },
     
     contractUrl() {
-      return `https://ipv6-informatica.es/configurador?products=${encodeURIComponent(this.product.id)}`;
+      return `https://ipv6-informatica.es/configurador/?products=${encodeURIComponent(this.product.id)}`;
     },
     
     imageUrl() {
@@ -325,7 +325,7 @@ export default {
           <a 
             :href="contractUrl"
             @click="handleContractClick"
-            target="_blank"
+            target="_top"
             class="btn-contract"
             :style="{ 
               background: \`linear-gradient(135deg, \${operatorColor}, \${operatorColor}CC)\`,
