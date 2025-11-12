@@ -1876,80 +1876,95 @@ class MobilePlansApp {
         if (!products || products.length === 0) return '';
 
         const features = [
-            { key: null, label: '' }, // Primera fila vacía para header
+            { key: null, label: '', isHeaderSpace: true }, // Espacio para header del producto
             { key: 'data', label: 'Datos' },
             { key: 'calls', label: 'Llamadas' },
             { key: 'sms', label: 'SMS' },
             { key: 'network', label: 'Red' },
             { key: 'planType', label: 'Tipo de Plan' },
-            { key: 'action', label: 'Acción' } // Fila del botón
+            { key: null, label: '', isActionSpace: true } // Espacio para botón
         ];
 
         return `
             <div class="mobile-comparison-swipe">
                 <div class="mobile-comparison-layout">
-                    <!-- Columna fija de características -->
-                    <div class="mobile-features-column">
-                        ${features.map(feature => `
-                            <div class="mobile-feature-item">${feature.label}</div>
-                        `).join('')}
-                    </div>
-                    
-                    <!-- Área deslizable de productos -->
+                    <!-- Área deslizable completa - cada ficha incluye sus títulos -->
                     <div class="mobile-products-swiper">
                         <div class="mobile-products-container" id="mobile-products-container">
                             ${products.map((product, index) => `
-                                <div class="mobile-product-column" data-product-index="${index}">
-                                    <div class="mobile-product-header">
-                                        <div class="mobile-product-name">${product.name}</div>
-                                        <div class="mobile-product-price">${product.price.toFixed(2)}€/mes</div>
-                                    </div>
-                                    <div class="mobile-product-features">
-                                        ${features.map((feature, featureIndex) => {
-                                            if (!feature.key) {
-                                                return `<div class="mobile-product-value">&nbsp;</div>`;
-                                            }
-                                            
-                                            if (feature.key === 'action') {
-                                                return `
-                                                    <div class="mobile-product-value mobile-action-cell">
-                                                        <button class="mobile-contract-btn" style="background: #4A90E2; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600;">
-                                                            Contratar
+                                <div class="mobile-product-with-titles" data-product-index="${index}">
+                                    <!-- TABLA REAL HTML -->
+                                    <table class="mobile-comparison-table">
+                                        <tbody>
+                                            ${features.map((feature, featureIndex) => {
+                                                // Generar cada fila de la tabla
+                                                let titleContent = '';
+                                                let dataContent = '';
+                                                
+                                                if (featureIndex === 0) {
+                                                    // Primera fila: header
+                                                    titleContent = '&nbsp;';
+                                                    dataContent = `
+                                                        <div class="mobile-operator-badge ${product.operator}">${product.operator.toUpperCase()}</div>
+                                                        <div class="mobile-product-name">${product.name}</div>
+                                                        <div class="mobile-product-price ${product.operator}">
+                                                            <span class="mobile-price-number">${Math.floor(product.price)}</span>
+                                                            <sup class="mobile-price-decimal">.${(product.price % 1).toFixed(2).slice(2)}</sup>
+                                                            <span class="mobile-price-currency">€</span>
+                                                        </div>
+                                                        <div class="mobile-price-period">POR MES</div>
+                                                        <div class="mobile-product-description">Plan con llamadas ilimitadas y datos para uso moderado</div>
+                                                    `;
+                                                } else if (feature.isActionSpace) {
+                                                    // Última fila: botón
+                                                    titleContent = '&nbsp;';
+                                                    dataContent = `
+                                                        <button class="mobile-contract-btn ${product.operator}" onclick="window.selectPlan('${product.id}')">
+                                                            CONTRATAR
                                                         </button>
-                                                    </div>
+                                                    `;
+                                                } else {
+                                                    // Filas de datos
+                                                    titleContent = feature.label;
+                                                    const value = this.formatFeatureValue(feature.key, product[feature.key]);
+                                                    const rawValue = product[feature.key];
+                                                    let isHighlighted = false;
+                                                    if (feature.key === 'data') {
+                                                        // Para datos, destacar solo el que más tiene
+                                                        const allDataValues = products.map(p => {
+                                                            if (p.data === 'unlimited' || p.data === 'ilimitados') return Infinity;
+                                                            return parseInt(p.data) || 0;
+                                                        });
+                                                        const maxData = Math.max(...allDataValues);
+                                                        const currentData = rawValue === 'unlimited' || rawValue === 'ilimitados' ? Infinity : (parseInt(rawValue) || 0);
+                                                        isHighlighted = currentData === maxData && allDataValues.filter(v => v === maxData).length === 1;
+                                                    } else if (feature.key === 'sms') {
+                                                        // Para SMS, destacar solo si es el único que tiene SMS
+                                                        const allSmsValues = products.map(p => parseInt(p.sms) || 0);
+                                                        const currentSms = parseInt(rawValue) || 0;
+                                                        isHighlighted = currentSms > 0 && allSmsValues.filter(v => v > 0).length === 1;
+                                                    } else if (feature.key === 'calls' || feature.key === 'network') {
+                                                        // Para llamadas y red, destacar si es diferente/único
+                                                        const allValues = products.map(p => p[feature.key]);
+                                                        const uniqueValues = [...new Set(allValues)];
+                                                        isHighlighted = uniqueValues.length > 1 && allValues.filter(v => v === rawValue).length === 1;
+                                                    }
+                                                    
+                                                    dataContent = isHighlighted ? 
+                                                        `<span class="mobile-highlighted">${value}</span>` : 
+                                                        value;
+                                                }
+                                                
+                                                // Generar la fila de la tabla
+                                                return `
+                                                    <tr>
+                                                        <td class="mobile-title-cell ${featureIndex === 0 || feature.isActionSpace ? 'mobile-title-empty' : ''}">${titleContent}</td>
+                                                        <td class="mobile-data-cell ${featureIndex === 0 ? 'mobile-header-cell' : ''} ${feature.isActionSpace ? 'mobile-action-cell' : ''}">${dataContent}</td>
+                                                    </tr>
                                                 `;
-                                            }
-                                            
-                                            // Determinar si este valor es el MEJOR (no solo único)
-                                            const value = this.formatFeatureValue(feature.key, product[feature.key]);
-                                            const rawValue = product[feature.key];
-                                            let isBest = false;
-                                            
-                                            if (feature.key === 'data') {
-                                                // Para datos, el mejor es el que más tiene
-                                                const allDataValues = products.map(p => {
-                                                    if (p.data === 'unlimited' || p.data === 'ilimitados') return Infinity;
-                                                    return parseInt(p.data) || 0;
-                                                });
-                                                const maxData = Math.max(...allDataValues);
-                                                const currentData = rawValue === 'unlimited' || rawValue === 'ilimitados' ? Infinity : (parseInt(rawValue) || 0);
-                                                isBest = currentData === maxData && allDataValues.filter(v => v === maxData).length === 1;
-                                            } else if (feature.key === 'sms') {
-                                                // Para SMS, destacar solo el que SÍ tiene SMS
-                                                const allSmsValues = products.map(p => parseInt(p.sms) || 0);
-                                                const currentSms = parseInt(rawValue) || 0;
-                                                isBest = currentSms > 0 && allSmsValues.filter(v => v > 0).length === 1;
-                                            }
-                                            
-                                            const classes = isBest ? 'mobile-product-value mobile-most-relevant' : 'mobile-product-value';
-                                            
-                                            return `
-                                                <div class="${classes}">
-                                                    ${value}
-                                                </div>
-                                            `;
-                                        }).join('')}
-                                    </div>
+                                            }).join('')}
+                                        </tbody>
+                                    </table>
                                 </div>
                             `).join('')}
                         </div>
