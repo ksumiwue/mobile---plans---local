@@ -568,7 +568,8 @@
 }
 
 .actions-row .feature-cell {
-  background: var(--neutral-100);
+  background: #374151 !important;
+  color: #ffffff !important;
   font-size: 1.1rem;
 }
 
