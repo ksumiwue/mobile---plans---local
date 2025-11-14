@@ -1394,9 +1394,9 @@ class MobilePlansApp {
 
         const actionCells = products.map((product, index) => `
             <td class="comparison-cell value-cell ${index % 2 === 0 ? 'column-alternate' : ''}">
-                <button class="cta-minimal" onclick="window.selectPlan('${product.id}')">
+                <a href="https://ipv6-informatica.es/configurador/?products=${encodeURIComponent(product.id)}&step=2&carrier=${encodeURIComponent(product.operator)}" target="_top" class="cta-minimal" style="display: inline-block; text-decoration: none; text-align: center;">
                     Contratar
-                </button>
+                </a>
             </td>
         `).join('');
 
@@ -1960,9 +1960,9 @@ class MobilePlansApp {
                                                     // Última fila: botón
                                                     titleContent = '&nbsp;';
                                                     dataContent = `
-                                                        <button class="mobile-contract-btn ${product.operator}" onclick="window.selectPlan('${product.id}')">
+                                                        <a href="https://ipv6-informatica.es/configurador/?products=${encodeURIComponent(product.id)}&step=2&carrier=${encodeURIComponent(product.operator)}" target="_top" class="mobile-contract-btn ${product.operator}" style="display: inline-block; text-decoration: none; text-align: center;">
                                                             CONTRATAR
-                                                        </button>
+                                                        </a>
                                                     `;
                                                 } else {
                                                     // Filas de datos
