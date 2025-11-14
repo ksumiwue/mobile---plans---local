@@ -446,7 +446,7 @@ class ProductCardNew {
                 </ul>
 
                 <!-- CTA -->
-                <a href="https://ipv6-informatica.es/configurador/?products=${encodeURIComponent(product.id)}" class="cta-minimal" target="_top" style="text-decoration: none; display: block; text-align: center;">
+                <a href="https://ipv6-informatica.es/configurador/?products=${encodeURIComponent(id)}&step=2&carrier=${encodeURIComponent(operator)}" target="_top" class="cta-minimal" style="display: inline-block; text-decoration: none; text-align: center;">
                     <span>Contratar Plan</span>
                 </a>
 

@@ -247,35 +247,10 @@ export function createFilterStore() {
       filtered = filtered.filter(product => product.isPopular);
     }
     
-    // Aplicar ordenamiento
+    // **APLICAR ORDENAMIENTO SIEMPRE POR PRECIO ASCENDENTE**
     filtered.sort((a, b) => {
-      let aValue, bValue;
-      
-      switch (state.sortBy) {
-        case 'price':
-          aValue = a.price;
-          bValue = b.price;
-          break;
-        case 'data':
-          aValue = parseInt(a.data) || 0;
-          bValue = parseInt(b.data) || 0;
-          break;
-        case 'name':
-          aValue = a.data.toLowerCase();
-          bValue = b.data.toLowerCase();
-          break;
-        case 'popularity':
-          aValue = a.isPopular ? 1 : 0;
-          bValue = b.isPopular ? 1 : 0;
-          break;
-        default:
-          return 0;
-      }
-      
-      if (state.sortOrder === 'desc') {
-        return bValue > aValue ? 1 : -1;
-      }
-      return aValue > bValue ? 1 : -1;
+      // Forzar ordenación por precio de menor a mayor
+      return a.price - b.price;
     });
     
     return filtered;

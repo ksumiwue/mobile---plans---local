@@ -260,8 +260,10 @@ export default {
     },
     
     contractProduct(product) {
-      const url = `https://ipv6-informatica.es/configurador?products=${encodeURIComponent(product.id)}`;
-      window.open(url, '_blank');
+      const productId = encodeURIComponent(product.id);
+      const carrier = encodeURIComponent(product.operator);
+      const url = `https://ipv6-informatica.es/configurador/?products=${productId}&step=2&carrier=${carrier}`;
+      window.open(url, '_top');
       
       // Analytics
       if (window.gtag) {

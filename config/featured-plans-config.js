@@ -5,15 +5,15 @@ window.mobilePlansElementorConfig = {
     featuredPlans: {
         // MODOS DISPONIBLES:
         // 'auto' - Primeros 3 planes automáticamente
-        // 'manual' - Seleccionar planes específicos por índice
+        // 'manual' - Seleccionar planes específicos por ID de producto
         // 'cheapest' - Plan más barato de cada operador
         // 'most_expensive' - Plan más caro de cada operador  
         // 'best_value' - Mejores por relación calidad/precio
         mode: 'manual', // 👈 CAMBIAR AQUÍ EL MODO
         
         // SELECCIÓN MANUAL (solo funciona con mode: 'manual')
-        // Índices de los productos que quieres destacar (0 = primer producto, 1 = segundo, etc.)
-        manualPlans: [2, 7, 10], // 👈 CAMBIAR AQUÍ LOS ÍNDICES
+        // IDs de los productos que quieres destacar de la API real
+        manualPlans: ['MO100GB', 'VO75GBN+', 'CMJ120GB_2'], // 👈 CAMBIAR AQUÍ LOS IDs
         
         // CONFIGURACIÓN ADICIONAL
         maxPlans: 3, // Máximo 3 planes destacados
@@ -22,51 +22,65 @@ window.mobilePlansElementorConfig = {
     }
 };
 
-// GUÍA DE ÍNDICES DE PRODUCTOS (actualizada automáticamente):
-// Para usar el modo 'manual', consulta estos índices:
+// GUÍA DE IDs DE PRODUCTOS (actualizada con datos reales de la API):
+// Para usar el modo 'manual', consulta estos IDs reales:
 
-/* ÍNDICES ACTUALES DE PRODUCTOS:
+/* IDs ACTUALES DE PRODUCTOS DE LA API:
    
-   MOVISTAR:
-   0: Movistar Fusión Selección 5GB (20.90€)
-   1: Movistar Fusión Selección 15GB (25.90€)  
-   2: Movistar Fusión Selección 30GB (30.90€) ⭐ MUY POPULAR
-   3: Movistar Fusión Ilimitada (39.90€)
-   4: Movistar Fusión Familia 50GB (45.90€)
-   5: Movistar Fusión Familia Ilimitada (65.90€)
+   MOVISTAR (movistarPlans):
+   MO10GB: Movistar - Llamadas Ilimitadas - 10GB (4.92€)
+   MO40GB+: Movistar - Llamadas Ilimitadas - 40GB (6.57€)  
+   MO100GB: Movistar - Llamadas Ilimitadas - 100GB (8.22€) ⭐ RECOMENDADO
+   OP25GB: Movistar - Llamadas Ilimitadas - 25GB (8.22€) + 100GB PROMO
+   MO250GB: Movistar - Llamadas Ilimitadas - 250GB (10.70€)
+   MOGBILI: Movistar - Llamadas Ilimitadas - Datos Ilimitados (16.49€)
    
-   VODAFONE:
-   6: Vodafone Yu 8GB (17.99€)
-   7: Vodafone Yu 25GB (22.99€) ⭐ MUY POPULAR
-   8: Vodafone One 40GB (35.99€)
-   9: Vodafone One Ilimitada (49.99€)
-   10: Vodafone One Familia 60GB (52.99€)
-   11: Vodafone One Familia Ilimitada (72.99€)
+   VODAFONE INDIVIDUAL (vodafoneIndividualPlans):
+   VO10GBN+: Vodafone - Llamadas Ilimitadas - 10GB (4.05€) ⭐ MÁS BARATO
+   VO35GBN+: Vodafone - Llamadas Ilimitadas - 35GB (6.53€)
+   VO75GBN+: Vodafone - Llamadas Ilimitadas - 75GB (8.18€) ⭐ EQUILIBRADO
+   VO150GBN+: Vodafone - Llamadas Ilimitadas - 150GB (11.49€)
+   VO250GBN+: Vodafone - Llamadas Ilimitadas - 250GB (12.31€)
    
-   ORANGE:
-   12: Orange Go Walk 10GB (15.95€) ⭐ MUY ECONÓMICO
-   13: Orange Go Walk 25GB (20.95€) ⭐ MUY POPULAR
-   14: Orange Go Walk 50GB (27.95€)
-   15: Orange Love Ilimitada (39.95€)
-   16: Orange Love Familia 80GB (49.95€)
-   17: Orange Love Familia Ilimitada (69.95€)
+   VODAFONE FAMILIAR (vodafoneFamiliarPlans):
+   VO-COMPAR75: Vodafone - 75GB - Hasta 3 líneas (18.93€)
+   VO-COMPAR150: Vodafone - 150GB - Hasta 3 líneas (22.23€)
+   VO-COMPAR300: Vodafone - 300GB - Hasta 3 líneas (25.54€)
+   
+   ORANGE INDIVIDUAL (orangeIndividualPlans):
+   CMJ30GB: Orange-Yoigo-Movistar - 30GB (5.70€) ⭐ MUY ECONÓMICO
+   CMJ60GB_2: Orange-Yoigo-Movistar - 60GB (6.53€)
+   CM80GB: Orange-Yoigo-Movistar - 80GB (7.36€)
+   CMJ120GB_2: Orange-Yoigo-Movistar - 120GB (9.01€) ⭐ BUEN VALOR
+   CM150GBN: Orange-Yoigo-Movistar - 150GB (9.83€)
+   CM300GB: Orange-Yoigo-Movistar - 300GB (10.66€)
+   CMJ400GB: Orange-Yoigo-Movistar - 400GB (20.58€)
+   CM800GBN: Orange-Yoigo-Movistar - 800GB (21.40€)
+   
+   ORANGE FAMILIAR (orangeFamiliarPlans):
+   CMDOBLA120: Orange - 120GB - Hasta 3 líneas (18.10€)
+   CMDOBLA160: Orange - 160GB - Hasta 3 líneas (22.23€)
+   CMDOBLA300: Orange - 300GB - Hasta 3 líneas (30.49€)
 */
 
-// EJEMPLOS DE USO:
+// EJEMPLOS DE USO CON IDs REALES:
 
 // 1. DESTACAR LOS MÁS POPULARES DE CADA OPERADOR:
-// manualPlans: [2, 7, 13] // Movistar 30GB + Vodafone Yu 25GB + Orange Go Walk 25GB
+// manualPlans: ['MO100GB', 'VO75GBN+', 'CMJ120GB_2'] // Movistar 100GB + Vodafone 75GB + Orange 120GB (ACTUAL)
 
-// 2. DESTACAR LOS MÁS BARATOS:
-// manualPlans: [0, 6, 12] // Movistar 5GB + Vodafone Yu 8GB + Orange 10GB  
+// 2. DESTACAR LOS MÁS BARATOS DE CADA OPERADOR:
+// manualPlans: ['MO10GB', 'VO10GBN+', 'CMJ30GB'] // Movistar 10GB (4.92€) + Vodafone 10GB (4.05€) + Orange 30GB (5.70€)
 
-// 3. DESTACAR PLANES PREMIUM:
-// manualPlans: [3, 9, 15] // Planes ilimitados individuales
+// 3. DESTACAR PLANES CON DATOS ILIMITADOS/ALTOS:
+// manualPlans: ['MOGBILI', 'VO250GBN+', 'CM800GBN'] // Movistar Ilimitado + Vodafone 250GB + Orange 800GB
 
-// 4. DESTACAR PLANES FAMILIA:
-// manualPlans: [5, 11, 17] // Planes familia ilimitados
+// 4. DESTACAR PLANES FAMILIARES:
+// manualPlans: ['VO-COMPAR150', 'CMDOBLA160', 'MO250GB'] // Planes compartidos y familiares
 
-// CONFIGURACIÓN RECOMENDADA PARA MÁXIMO ATRACTIVO:
-// manualPlans: [2, 7, 12] // Mix: Premium Movistar + Popular Vodafone + Económico Orange
+// 5. DESTACAR MEJOR RELACIÓN CALIDAD-PRECIO:
+// manualPlans: ['OP25GB', 'VO75GBN+', 'CMJ120GB_2'] // Movistar promocional + Vodafone equilibrado + Orange valor
+
+// CONFIGURACIÓN RECOMENDADA PARA MÁXIMO ATRACTIVO (ACTUAL):
+// manualPlans: ['MO100GB', 'VO75GBN+', 'CMJ120GB_2'] // Mix equilibrado: económico, popular y buen valor
 
 console.log('📋 Configuración de planes destacados cargada:', window.mobilePlansElementorConfig);

@@ -97,7 +97,9 @@ export default {
     },
     
     contractUrl() {
-      return `https://ipv6-informatica.es/configurador/?products=${encodeURIComponent(this.product.id)}`;
+      const productId = encodeURIComponent(this.product.id);
+      const carrier = encodeURIComponent(this.product.operator);
+      return `https://ipv6-informatica.es/configurador/?products=${productId}&step=2&carrier=${carrier}`;
     },
     
     imageUrl() {

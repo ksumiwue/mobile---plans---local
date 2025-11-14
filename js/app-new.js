@@ -76,6 +76,10 @@ class MobilePlansApp {
         // Simular carga de API (reemplazar con llamada real)
         this.products = await this.loadProductsFromAPI();
         
+        // **ORDENAR TODOS LOS PRODUCTOS POR PRECIO DESDE EL INICIO**
+        this.products.sort((a, b) => a.price - b.price);
+        console.log('💰 Productos ordenados globalmente por precio:', this.products.map(p => `${p.name}: ${p.price}€`));
+        
         // Configurar filtros con productos
         const filtersContainer = document.getElementById('filters-container');
         this.filterSystem.initialize(filtersContainer, this.products);
@@ -705,6 +709,9 @@ class MobilePlansApp {
 
     // Inicializar página de planes
     initializePlansPage() {
+        // Aplicar ordenación por defecto (precio de menor a mayor)
+        this.applyDefaultSorting();
+        
         // Renderizar productos si no están ya renderizados
         if (!document.querySelector('.products-grid-new')) {
             this.renderProducts();
@@ -748,6 +755,27 @@ class MobilePlansApp {
         this.updateResultsCounter();
     }
 
+    // Aplicar ordenación por defecto (precio de menor a mayor)
+    applyDefaultSorting() {
+        console.log('💰 Aplicando ordenación por defecto: precio de menor a mayor');
+        
+        // Ordenar productos por precio ascendente
+        this.filteredProducts.sort((a, b) => a.price - b.price);
+        
+        // Actualizar el selector visual si existe
+        const sortSelect = document.getElementById('sort-select');
+        if (sortSelect) {
+            sortSelect.value = 'price-asc';
+        }
+        
+        // Actualizar el sistema de filtros si está disponible
+        if (this.filterSystem && this.filterSystem.setSorting) {
+            this.filterSystem.setSorting('price', 'asc');
+        }
+        
+        console.log('✅ Productos ordenados por precio:', this.filteredProducts.map(p => `${p.name}: ${p.price}€`));
+    }
+
     // Manejar ordenamiento
     handleSort(sortType) {
         const [field, order] = sortType.split('-');
@@ -762,7 +790,13 @@ class MobilePlansApp {
     // Manejar cambio de filtros
     handleFilterChange(filteredProducts) {
         this.filteredProducts = filteredProducts;
+        
+        // **MANTENER ORDENACIÓN POR PRECIO DESPUÉS DE FILTRAR**
+        this.filteredProducts.sort((a, b) => a.price - b.price);
+        
         console.log(`🔄 Filtros aplicados: ${filteredProducts.length} productos encontrados`);
+        console.log('💰 Productos filtrados ordenados por precio:', this.filteredProducts.map(p => `${p.name}: ${p.price}€`));
+        
         this.renderProducts();
         this.updateResultsCounter();
     }
@@ -961,9 +995,16 @@ class MobilePlansApp {
         const selectedPlans = [];
         
         if (Array.isArray(manualPlans)) {
-            manualPlans.forEach(planIndex => {
-                if (planIndex !== '' && planIndex !== null && this.products[planIndex]) {
-                    selectedPlans.push(this.products[planIndex]);
+            manualPlans.forEach(planId => {
+                if (planId !== '' && planId !== null) {
+                    // Buscar producto por ID en lugar de por índice
+                    const product = this.products.find(p => p.id === planId);
+                    if (product) {
+                        selectedPlans.push(product);
+                        console.log(`✅ Plan destacado encontrado: ${planId} - ${product.name}`);
+                    } else {
+                        console.warn(`⚠️ Plan destacado no encontrado: ${planId}`);
+                    }
                 }
             });
         }
@@ -1353,9 +1394,9 @@ class MobilePlansApp {
 
         const actionCells = products.map((product, index) => `
             <td class="comparison-cell value-cell ${index % 2 === 0 ? 'column-alternate' : ''}">
-                <a href="https://ipv6-informatica.es/configurador/?products=${encodeURIComponent(product.id)}" class="cta-minimal" target="_top">
+                <button class="cta-minimal" onclick="window.selectPlan('${product.id}')">
                     Contratar
-                </a>
+                </button>
             </td>
         `).join('');
 
@@ -1919,9 +1960,9 @@ class MobilePlansApp {
                                                     // Última fila: botón
                                                     titleContent = '&nbsp;';
                                                     dataContent = `
-                                                        <a href="https://ipv6-informatica.es/configurador/?products=${encodeURIComponent(product.id)}" class="mobile-contract-btn ${product.operator}" target="_top">
+                                                        <button class="mobile-contract-btn ${product.operator}" onclick="window.selectPlan('${product.id}')">
                                                             CONTRATAR
-                                                        </a>
+                                                        </button>
                                                     `;
                                                 } else {
                                                     // Filas de datos
