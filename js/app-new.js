@@ -2013,6 +2013,13 @@ class MobilePlansApp {
                 </div>
                 
                 <!-- Navegación -->
+                <!-- Botón limpiar comparación en móvil -->
+                <div class="mobile-clear-comparison">
+                    <button class="mobile-clear-btn" onclick="window.app.clearComparison()">
+                        Limpiar comparación
+                    </button>
+                </div>
+                
                 <div class="mobile-navigation">
                     <button class="mobile-nav-arrow" id="mobile-prev-btn" onclick="window.app.previousProduct()">‹</button>
                     <div class="mobile-nav-dots">
