@@ -1,0 +1,55 @@
+/* Estilos para Promo Badge (Titular Llamativo) */
+.promo-badge-container {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    z-index: 10;
+    transform: rotate(10deg);
+    animation: float-badge 3s ease-in-out infinite;
+}
+
+.promo-badge {
+    background: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 2px solid white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.promo-icon {
+    font-size: 1.2em;
+}
+
+@keyframes float-badge {
+
+    0%,
+    100% {
+        transform: rotate(10deg) translateY(0);
+    }
+
+    50% {
+        transform: rotate(10deg) translateY(-5px);
+    }
+}
+
+/* Ajuste para móvil */
+@media (max-width: 768px) {
+    .promo-badge-container {
+        top: -8px;
+        right: -5px;
+        transform: rotate(5deg);
+    }
+
+    .promo-badge {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.75rem;
+    }
+}
