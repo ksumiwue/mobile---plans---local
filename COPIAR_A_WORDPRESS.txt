@@ -1,0 +1,25 @@
+INSTRUCCIONES: Copia SOLO el codigo entre las lineas de guiones, SIN incluir las lineas de guiones
+
+----- INICIO DEL CODIGO -----
+
+<?php
+if (!defined('ABSPATH')) exit;
+
+function mobile_plans_shortcode_simple($atts) {
+    $atts = shortcode_atts(array('height' => '800', 'width' => '100%'), $atts);
+    $app_url = get_template_directory_uri() . '/mobile-plans-web/index-new.html';
+    if (empty($app_url)) return '<div>Mobile Plans no encontrado</div>';
+    $iframe_id = 'mobile-plans-' . uniqid();
+    ob_start();
+    echo '<div class="mobile-plans-wrapper"><iframe id="' . $iframe_id . '" src="' . $app_url . '?wp_integration=1" style="width:100%;height:' . $atts['height'] . 'px;border:none;" frameborder="0"></iframe></div>';
+    echo '<script>(function(){var i=document.getElementById("' . $iframe_id . '"),b=null;function c(){if(b)return b;b=document.createElement("div");b.innerHTML="Comparar (0)";b.style.cssText="position:fixed!important;top:50%!important;right:20px!important;transform:translateY(-50%)!important;background:#4A90E2!important;color:white!important;padding:0.8rem 1rem!important;border-radius:50px!important;cursor:pointer!important;z-index:99999!important;display:none!important";b.onclick=function(){if(i&&i.contentWindow)i.contentWindow.postMessage({tipo:"navegarAComparacion"},"*")};document.body.appendChild(b);return b}window.addEventListener("message",function(e){if(e.source===i.contentWindow&&e.data.tipo==="updateStickyButton"){var t=c();if(e.data.mostrar&&e.data.contador>0){t.style.display="block";t.innerHTML="Comparar ("+e.data.contador+")"}else{t.style.display="none"}}});i.addEventListener("load",function(){setTimeout(function(){i.contentWindow.postMessage({tipo:"stickyButtonCreated"},"*")},500)})})();</script>';
+    return ob_get_clean();
+}
+add_shortcode('mobile_plans', 'mobile_plans_shortcode_simple');
+
+----- FIN DEL CODIGO -----
+
+NOTA: Si sigue dando error nonce_failure, el problema NO es el codigo sino:
+1. Tu sesion de WordPress expiro - Cierra sesion y vuelve a entrar
+2. Hay un plugin de seguridad bloqueando - Desactiva temporalmente plugins de seguridad
+3. El editor de WordPress tiene un timeout - Usa FTP para subir el archivo directamente

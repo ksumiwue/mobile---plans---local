@@ -1,0 +1,143 @@
+COPIAR ESTE CODIGO COMPLETO A functions.php de WordPress
+================================================================
+
+<?php
+if (!defined('ABSPATH')) exit;
+
+function mobile_plans_shortcode_simple($atts) {
+    $atts = shortcode_atts(array('height' => '800', 'width' => '100%'), $atts);
+    
+    $app_urls = array(
+        get_template_directory_uri() . '/mobile-plans-web/index-new.html',
+        get_stylesheet_directory_uri() . '/mobile-plans-web/index-new.html'
+    );
+    
+    $app_url = '';
+    foreach ($app_urls as $url) {
+        $path = str_replace(site_url(), ABSPATH, $url);
+        if (file_exists($path)) {
+            $app_url = $url;
+            break;
+        }
+    }
+    
+    if (empty($app_url)) {
+        return '<div style="padding:20px;background:#ffebee;color:#c62828;">Mobile Plans no encontrado</div>';
+    }
+    
+    $iframe_id = 'mobile-plans-' . uniqid();
+    
+    ob_start();
+    ?>
+    <div class="mobile-plans-wrapper" id="wrapper-<?php echo $iframe_id; ?>">
+        <iframe 
+            id="<?php echo $iframe_id; ?>"
+            src="<?php echo $app_url; ?>?wp_integration=1"
+            style="width:<?php echo $atts['width']; ?>;height:<?php echo $atts['height']; ?>px;border:none;border-radius:12px;background:white;display:block;max-width:100%;"
+            frameborder="0"
+            scrolling="no">
+        </iframe>
+    </div>
+    
+    <style>
+        .mobile-plans-wrapper { margin: 20px 0; position: relative; }
+        .mobile-plans-wrapper iframe { transition: height 0.3s ease; }
+    </style>
+    
+    <script>
+    console.log('=== WORDPRESS SCRIPT CARGADO ===');
+    (function() {
+        var iframe = document.getElementById('<?php echo $iframe_id; ?>');
+        var stickyButton = null;
+        
+        console.log('WP: Iframe encontrado:', !!iframe);
+        console.log('WP: Iframe ID:', '<?php echo $iframe_id; ?>');
+        
+        function crearBotonSticky() {
+            if (stickyButton) {
+                console.log('WP: Boton ya existe');
+                return stickyButton;
+            }
+            
+            console.log('WP: CREANDO BOTON STICKY');
+            
+            stickyButton = document.createElement('div');
+            stickyButton.innerHTML = 'Comparar (0)';
+            stickyButton.style.cssText = 'position:fixed!important;top:50%!important;right:20px!important;transform:translateY(-50%)!important;background:linear-gradient(135deg,#4A90E2,#357ABD)!important;color:white!important;padding:0.8rem 1rem!important;border-radius:50px!important;box-shadow:0 6px 20px rgba(74,144,226,0.4)!important;cursor:pointer!important;font-weight:600!important;font-size:0.85rem!important;z-index:99999!important;min-width:130px!important;text-align:center!important;display:none!important;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif!important';
+            
+            stickyButton.onclick = function() {
+                console.log('WP: Click en boton');
+                if (iframe && iframe.contentWindow) {
+                    iframe.contentWindow.postMessage({ tipo: 'navegarAComparacion' }, '*');
+                }
+            };
+            
+            document.body.appendChild(stickyButton);
+            console.log('WP: Boton anadido al body');
+            console.log('WP: Boton en DOM:', document.body.contains(stickyButton));
+            
+            return stickyButton;
+        }
+        
+        function actualizarBotonSticky(mostrar, contador) {
+            console.log('WP: actualizarBotonSticky llamado - mostrar:', mostrar, 'contador:', contador);
+            
+            var boton = crearBotonSticky();
+            
+            if (mostrar && contador > 0) {
+                boton.style.display = 'block';
+                boton.innerHTML = 'Comparar (' + contador + ')';
+                console.log('WP: BOTON MOSTRADO - display:', boton.style.display);
+            } else {
+                boton.style.display = 'none';
+                console.log('WP: Boton ocultado');
+            }
+        }
+        
+        window.addEventListener('message', function(e) {
+            console.log('WP: Mensaje recibido:', e.data);
+            console.log('WP: Source es iframe?', e.source === iframe.contentWindow);
+            
+            if (e.source === iframe.contentWindow) {
+                console.log('WP: Mensaje del iframe correcto');
+                
+                if (e.data && e.data.tipo === 'ajustarAltura') {
+                    console.log('WP: Ajustando altura:', e.data.altura);
+                    iframe.style.height = e.data.altura + 'px';
+                }
+                
+                if (e.data && e.data.tipo === 'updateStickyButton') {
+                    console.log('WP: PROCESANDO updateStickyButton');
+                    actualizarBotonSticky(e.data.mostrar, e.data.contador);
+                }
+            } else {
+                console.log('WP: Mensaje ignorado (no es del iframe)');
+            }
+        });
+        
+        iframe.addEventListener('load', function() {
+            console.log('WP: Iframe cargado');
+            setTimeout(function() {
+                console.log('WP: Enviando stickyButtonCreated');
+                iframe.contentWindow.postMessage({ tipo: 'stickyButtonCreated' }, '*');
+            }, 500);
+        });
+        
+        setInterval(function() {
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ tipo: 'solicitarAltura' }, '*');
+            }
+        }, 1000);
+        
+        console.log('WP: Script configurado completamente');
+    })();
+    </script>
+    <?php
+    
+    return ob_get_clean();
+}
+
+add_shortcode('mobile_plans', 'mobile_plans_shortcode_simple');
+
+================================================================
+FIN DEL CODIGO - No copies esta linea

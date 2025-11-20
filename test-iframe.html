@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Iframe - WordPress Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .wordpress-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196F3;
+        }
+
+        iframe {
+            width: 100%;
+            height: 1200px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+
+        .instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+        }
+
+        .instructions h3 {
+            margin-top: 0;
+        }
+
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wordpress-container">
+        <h1>🧪 Simulación de WordPress con iframe</h1>
+
+        <div class="info">
+            <strong>📍 Contexto:</strong> Esta página simula cómo se vería tu aplicación de planes móviles
+            cuando está embebida en WordPress mediante un iframe.
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Instrucciones de prueba:</h3>
+            <ol>
+                <li>Selecciona uno o más planes usando los checkboxes</li>
+                <li>Observa que el botón "Comparar" aparece</li>
+                <li><strong>Haz scroll hacia abajo</strong> en esta página</li>
+                <li>Verifica que el botón se mantiene visible y centrado en tu pantalla</li>
+                <li>El botón debería moverse con el scroll para mantenerse siempre visible</li>
+            </ol>
+        </div>
+
+        <iframe src="index-new.html" id="mobile-plans-iframe"></iframe>
+
+        <div style="height: 500px; background: #f9f9f9; margin-top: 20px; padding: 20px; border-radius: 5px;">
+            <h3>Contenido adicional de WordPress</h3>
+            <p>Este es contenido adicional que simula una página de WordPress con más contenido debajo del iframe.</p>
+            <p>Haz scroll para verificar que el botón de comparación se mantiene visible.</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('📄 Página de prueba de iframe cargada');
+        console.log('🎯 El iframe debería detectar que está dentro de un iframe y usar position: sticky');
+    </script>
+</body>
+
+</html>
